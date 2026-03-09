@@ -6,7 +6,7 @@ require 'recipe/laravel.php';
 
 // Config
 set('writable_mode', 'chmod');
-set('repository', 'https://github.com/prantobiswas51/tappayz.git');
+set('repository', 'https://github.com/prantobiswas51/lanocard.git');
 set('keep_releases', 1);
 
 
