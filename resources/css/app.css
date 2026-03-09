@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Tappayz UI Theme (HTML/CSS only)
+  - Clean, modern dashboard look inspired by fintech UIs
+  - Colors tuned to be distinct from vcc.agency but familiar
+*/
+
+/* CSS Reset (lightweight) */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+  border-radius: 999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.notification-panel {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-frozen {
+  position: relative;
+}
+
+.card-frozen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(40, 47, 65, 0.75);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.card-frozen .card-frozen-badge {
+  display: flex !important;
+}
+
+.card-frozen .card-frozen-lock {
+  display: flex !important;
+}
+
+.card-frozen-badge {
+  display: none !important;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+}
+
+.card-frozen-lock {
+  display: none !important;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.virtualpay-card {
+  background-color: #282F41;
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  color: #fff;
+}
+
+.virtualpay-card .virtualpay-chip {
+  width: 2rem;
+  height: 1.5rem;
+  border-radius: 0.3rem;
+  background: linear-gradient(135deg, #d4af37 0%, #b8960c 100%);
+}
