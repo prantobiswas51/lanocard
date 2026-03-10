@@ -69,7 +69,9 @@ class DashboardController extends Controller
     public function notifications()
     {
         $notifications = Auth::user()->notifications()->latest()->get();
-        return view('dashboard.notifications', compact('notifications'));
+        // count unread notifications of this user
+        $unreadNotificationsCount = Auth::user()->notifications()->where('is_read', false)->count();
+        return view('dashboard.notifications', compact('notifications', 'unreadNotificationsCount'));
     }
 
     public function mark_as_read(Request $request, $id)

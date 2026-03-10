@@ -16,7 +16,7 @@
                 </div>
 
                 <span class="text-[11px] text-slate-500">
-                    3 unread
+                    {{ $unreadNotificationsCount }} unread
                 </span>
             </div>
 
@@ -53,7 +53,7 @@
 
                 </div>
                 @empty
-                <p class="text-sm text-slate-500 dark:text-slate-400">
+                <p class="text-sm text-slate-500 p-2 dark:text-slate-400">
                     No notifications found. Check back later for updates.
                 </p>
                 @endforelse
