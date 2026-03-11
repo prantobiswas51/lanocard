@@ -104,7 +104,7 @@
                             </label>
 
                             <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                @foreach ($bins as $bin)
+                                @foreach ($bins->where('bin', '!=', '45492416') as $bin)
                                 <button type="button" data-onetime-card="classic" data-onetime-bin="{{ $bin->bin }}"
                                     class="card-option-onetime group relative rounded-xl border border-emerald-200 dark:border-emerald-800 bg-gradient-to-br from-emerald-50 via-white to-emerald-50 dark:from-emerald-900/20 dark:via-slate-800 dark:to-emerald-900/20 p-3 text-left shadow-sm">
 
@@ -206,12 +206,6 @@
                         <!-- Email -->
                         <div class="space-y-1.5">
 
-                            <label class="text-xs font-medium text-slate-800 dark:text-slate-300">
-                                Email for 3D Secure OTP
-                            </label>
-
-                            <input id="onetimeEmail" name="email" type="email" placeholder="email@example.com" required
-                                class="w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-200 focus:ring-emerald-500" />
                             <div class="grid sm:grid-cols-2 gap-3">
                                 <div class="space-y-1.5">
                                     <label class="text-xs font-medium text-slate-800 dark:text-slate-300">Card
@@ -261,7 +255,7 @@
                             </label>
 
                             <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                @foreach ($bins as $bin)
+                                @foreach ($bins->where('bin', '45492416') as $bin)
                                 <button type="button" data-reload-card="classic" data-reload-bin="{{ $bin->bin }}"
                                     class="card-option-reload group relative rounded-xl border border-emerald-200 dark:border-emerald-800 bg-gradient-to-br from-emerald-50 via-white to-emerald-50 dark:from-emerald-900/20 dark:via-slate-800 dark:to-emerald-900/20 p-3 text-left shadow-sm">
 

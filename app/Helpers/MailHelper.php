@@ -10,8 +10,8 @@ if (!function_exists('sendCustomMail')) {
     {
         $payload = [
             "from" => [
-                "address" => "no-reply@tappayz.com",
-                "display_name" => "Tappayz",
+                "address" => "no-reply@lanocard.com",
+                "display_name" => "Lanocard",
             ],
             "to" => [
                 [

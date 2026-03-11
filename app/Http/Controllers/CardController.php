@@ -106,16 +106,19 @@ class CardController extends Controller
     public function open_card(Request $request)
     {
 
+
         $timestamp = (string) round(microtime(true) * 1000);
 
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'nullable|email',
             'type' => 'required|string',
             'bin' => 'required|numeric',
             'amount' => 'required|numeric|min:10',
             'card_holder' => 'required|string',
             'remark' => 'nullable|string|max:50',
         ]);
+
+        // dd($request->all());
 
         // get balance info
         $balance = Auth::user()->balance;
@@ -179,7 +182,7 @@ class CardController extends Controller
             $transaction->save();
 
             sendCustomMail(
-                'tappayzlimited@gmail.com',
+                'lanocardservice@gmail.com',
                 'Virtual Card Requested',
                 '
                 <p>Hello CEO</p>
@@ -192,9 +195,9 @@ class CardController extends Controller
                 'We Received Your Virtual Card Request',
                 '
                 <p>Dear ' . Auth::user()->name . ',</p>
-                <p>Thank you for choosing Tappayz for your virtual card needs. We have received your request to create a new virtual card.</p>
+                <p>Thank you for choosing Lanocard for your virtual card needs. We have received your request to create a new virtual card.</p>
                 <p>Our team is currently processing your request, and we will notify you once your virtual card is ready for use. This typically takes up to 30 minutes.</p>
-                <p>If you have any questions or need further assistance, please do not hesitate to contact our support team at support@tappayz.com.</p>
+                <p>If you have any questions or need further assistance, please do not hesitate to contact our support team at support@lanocard.com.</p>
             '
             );
 
