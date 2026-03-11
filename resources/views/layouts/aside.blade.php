@@ -1,5 +1,5 @@
 <div
-  class="p-3 pt-[17px] pl-4 border-b border-slate-200 dark:border-slate-700 flex items-center dark:bg-slate-800/80 backdrop-blur text-slate-800 dark:text-slate-100">
+  class="p-3 pt-[17px] pl-4 border-b border-r border-slate-200 dark:border-slate-700 flex items-center dark:bg-slate-800/80 backdrop-blur text-slate-800 dark:text-slate-100">
 
   {{-- card icon --}}
   <a href="{{ route('home') }}" class="flex items-center gap-3 text-slate-800">
