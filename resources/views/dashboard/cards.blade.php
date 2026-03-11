@@ -1,4 +1,128 @@
 <x-app-layout>
+    <style>
+        /* Custom styles that can't be easily replaced with Tailwind */
+        .card-3d {
+            transform-style: preserve-3d;
+        }
+
+        .large-cloud {
+            position: absolute;
+            top: -20px;
+            right: -30px;
+            width: 120px;
+            height: 80px;
+            border-radius: 60px 60px 60px 60px / 40px 40px 40px 40px;
+            opacity: 0.8;
+        }
+
+        .tap-text {
+            background: linear-gradient(90deg, #10b981, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+
+    {{-- Cashout Modal --}}
+    <div id="cashoutModal" class="fixed inset-0 bg-gray-600 bg-opacity-50   hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-2xl h-[270px] bg-white">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Cash Out</h3>
+                <button id="closeCashoutModal" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">
+                    &times;
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <form action="{{ route('card_cashout') }}" method="post" class="space-y-4">
+                @csrf
+                <div>
+                    <label for="cashout_amount" class="block text-sm font-medium text-gray-700 mb-2">
+                        Withdrawal Amount
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                        <input type="number" id="cashout_amount" name="amount" placeholder="0.00" min="1"
+                            max="{{ $card->cardBalance ?? 0 }}" step="0.01" required
+                            class="w-full pl-8 pr-3 py-2 border text-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <p class=" text-sm text-black ">
+                        <span class="text-green-600">Available: B</span>
+                        <br>
+                        You will get: <span class="text-red-500">$HH (Card Balance - 20%)</span>
+                    </p>
+                </div>
+
+                <input type="hidden" name="card_id" value="">
+
+                <!-- Modal Footer -->
+                <div class="flex space-x-3 pt-4">
+                    <button type="button" id="cancelCashout"
+                        class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        Cash Out
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- Recharge Modal --}}
+    <div id="rechargeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-2xl h-[270px] bg-white">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Recharge</h3>
+                <button id="closeRechargeModal" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">
+                    &times;
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <form action="{{ route('card_recharge') }}" method="post" class="space-y-4">
+                @csrf
+
+                <div>
+                    <label for="recharge_amount" class="block text-sm font-medium text-gray-700 mb-2">
+                        Recharge Amount
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+
+                        <input type="number" name="amount" min="10" value="10" max="{{ Auth::user()->balance }}"
+                            required id="recharge_amount" onchange="updateRechargeTotal()"
+                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
+                            class="w-full pl-8 pr-3 py-2 border text-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+
+                    </div>
+                    <p class=" text-sm text-black ">
+                        <span class="text-green-600">Available: ${{ number_format(Auth::user()->balance ?? 0, 2)
+                            }}</span>
+                        | Total: <span class="text-red-500" id="total_amount">$11.00 (Fee 10%)</span>
+                    </p>
+
+                </div>
+
+                <input type="hidden" name="card_id" value="">
+
+                <!-- Modal Footer -->
+                <div class="flex space-x-3 pt-4">
+                    <button type="button" id="cancelRechargeModal"
+                        class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        Recharge
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <section class="flex-1 w-full">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-5">
@@ -25,7 +149,7 @@
                 </div>
             </div>
 
-            <div class="grid lg:grid-cols-[1.6fr,1.2fr] gap-5 items-start">
+            <div class="grid lg:grid-cols-[1.6fr,1.2fr] gap-5 items-start scroll-smooth">
                 <!-- Left: search + filters + list -->
                 <div
                     class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 sm:p-5 space-y-4 shadow-sm">
@@ -92,9 +216,11 @@
                                 </div>
                                 <div class="text-right text-sm flex items-center ">
 
-                                    <div class="orga mr-2">
+                                    <div class="orga">
                                         <div
-                                            class="h-12 w-16 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-600 bg-gradient-to-br from-emerald-50 via-white to-emerald-50 dark:from-emerald-900/20 dark:via-slate-800 dark:to-emerald-900/20 shadow-sm">
+                                            class="h-12 w-16 flex items-center justify-center rounded-xl border border-slate-200
+                                             dark:border-slate-600 bg-gradient-to-br from-emerald-50 via-white to-emerald-50
+                                              dark:from-emerald-900/20 dark:via-slate-800 dark:to-emerald-900/20 shadow-sm">
 
                                             @if ($card->organization == "VISA")
                                             <img class="h-5 object-contain" src="{{ asset('images/visa-a.png') }}"
@@ -109,31 +235,48 @@
 
                                         </div>
                                     </div>
-
-                                    <div class="">
-                                        <p class="font-semibold mr-1 text-emerald-700">${{
-                                            number_format($card->cardBalance, 2) }}</p>
-                                        <button
-                                            class="inline-flex px-2 text-xs rounded-full border border-emerald-300 bg-emerald-50 p-1 text-emerald-700 hover:bg-emerald-100">
-                                            Refresh
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
 
                             <div class="flex flex-wrap items-center justify-between gap-2">
                                 <div class="flex items-center gap-2 text-[11px] text-slate-500">
                                     <span class="inline-flex items-center gap-1">
-                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Active
+                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                        @if ($card->state == 1)
+                                        Active
+                                        @elseif ($card->state == 2)
+                                        Frozen
+                                        @else
+                                        Pending
+                                        @endif
                                     </span>
-                                    <span>Last top‑up · $100 (2d ago)</span>
+                                    <span>Last top‑up · $(FLAG-4) (2d ago)</span>
                                 </div>
                                 <div class="flex items-center gap-1.5 text-[11px]">
-                                    
+
+                                    @if ($card->state == 4)
+                                    <div
+                                        class="bg-yellow-600 text-white text-sm font-medium border border-yellow-600 px-3 py-1 rounded-lg flex items-center space-x-2 cursor-not-allowed">
+                                        <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                                stroke-width="4">
+                                            </circle>
+                                            <path class="opacity-75" fill="currentColor"
+                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                            </path>
+                                        </svg>
+                                        <span>Processing</span>
+                                    </div>
+                                    @endif
+
+                                    @if ($card->state != 4)
                                     <button type="button"
                                         class="btn-card-details inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-slate-700 hover:border-slate-400/80">
                                         Details
                                     </button>
+                                    @endif
+
 
                                 </div>
                             </div>
@@ -172,18 +315,23 @@
                 <!-- Right: selected card summary -->
                 {{-- Flag-3 --}}
                 <div id="details_pan"
-                    class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 sm:p-4 space-y-3 shadow-sm">
-                    <div>
-                        <p
-                            class="text-[11px] uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 font-semibold">
-                            Selected card</p>
-                        <h3 id="selectedCardTitle" class="text-sm font-semibold text-slate-900">
-                            Reload · Online Shopping
-                        </h3>
+                    class="bg-white border-slate-200 rounded-2xl p-3 sm:p-4 space-y-3 shadow-sm max-h-[calc(85vh-4rem)] overflow-y-auto overscroll-contain lg:sticky lg:top-5">
+                    
+                    {{-- header details --}}
+                    <div class="space-y-0.5  flex justify-between rounded-lg  px-3 py-2 text-red-800 items-center">
+                        <div class="">
+                            <p
+                                class="text-[11px] uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 font-semibold">
+                                Selected card</p>
+                            <h3 id="selectedCardTitle" class="text-sm font-semibold text-slate-900">
+                                Reload · Online Shopping
+                            </h3>
+                        </div>
+                        <span id="hideSelectedCard" class="p-2 text-md cursor-pointer rounded-md">X</span>
                     </div>
 
                     <div id="selectedCardBox"
-                        class="virtualpay-card px-3.5 py-3.5 space-y-2.5 relative overflow-hidden">
+                        class="virtualpay-card px-3.5 py-3.5 space-y-2.5 bg-amber-500 relative overflow-hidden">
                         <div class="card-frozen-lock">
                             <span class="flex flex-col items-center gap-1 rounded-full bg-slate-600/95 p-3 shadow-lg">
                                 <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2"
@@ -225,16 +373,16 @@
                                     class="font-semibold text-[15px] text-emerald-300">$0.00</span>
 
                                 {{-- refresh btn --}}
-                                <button type="button" id="btnRefreshSelectedBalance"
-                                    class="p-0.5 rounded text-white/70 hover:text-white hover:bg-white/10 transition"
-                                    title="Refresh balance">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2"
+                                <a class=" ml-2" href="{{ route('update_balance', $card->id) }}">
+
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
                                         </path>
                                     </svg>
-                                </button>
+
+                                </a>
                             </span>
                         </div>
                         <div class="flex items-end justify-between pt-1 border-t border-white/10">
@@ -259,6 +407,7 @@
                         </div>
                     </div>
 
+
                     <!-- Billing address for the selected card (demo) -->
                     <div class="rounded-2xl border border-slate-200 bg-slate-50 px-3.5 py-3 space-y-1 text-[11px]">
                         <p class="font-medium text-slate-700 dark:text-slate-300">Billing address</p>
@@ -275,10 +424,30 @@
                     <div class="space-y-2 text-[11px]">
                         <p class="font-medium text-slate-700">Quick actions</p>
                         <div class="flex flex-wrap gap-2">
-                            <button id="btnFreezeSelectedCard"
-                                class="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] text-slate-700 hover:border-amber-400/80 hover:text-amber-600">
-                                Freeze card
-                            </button>
+
+
+                            @if($card->state == 2)
+
+                            <form
+                                class="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] text-slate-700 hover:border-amber-400/80 hover:text-amber-600"
+                                action="{{ route('unfreeze_card') }}" method="post">
+
+                                @csrf
+
+                                <input type="hidden" name="card_id" value="{{ $card->id }}">
+                                <button type="submit">Unfreeze</button>
+                            </form>
+                            @else
+
+                            <form
+                                class="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] text-slate-700 hover:border-amber-400/80 hover:text-amber-600"
+                                action="{{ route('freeze_card') }}" method="post">
+                                @csrf
+                                <input type="hidden" name="card_id" value="{{ $card->id }}">
+                                <button type="submit">Freeze</button>
+                            </form>
+                            @endif
+
                             <button id="btnTopupSelectedCard"
                                 class="inline-flex items-center gap-1 rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-[11px] text-emerald-700 hover:bg-emerald-100">
                                 Top‑up from balance <span class="text-[10px] opacity-80">(10% fee)</span>
@@ -290,8 +459,8 @@
                         </div>
                     </div>
 
-                    {{-- transactions --}}
-                    <div class="space-y-2 text-[11px]">
+                    {{-- transactions FLAG-5 --}}
+                    <div class="space-y-2 text-[11px] overflow-y-auto">
                         <p class="font-medium text-slate-700 dark:text-slate-300">Recent activity (demo)</p>
                         <div id="selectedCardRecentActivity"
                             class="space-y-1.5 max-h-64 overflow-y-auto pr-1 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/30 px-3 py-2">
@@ -584,6 +753,13 @@
                 detailsPanel.classList.add('hidden');
             }
 
+            var hideSelectedCard = document.getElementById('hideSelectedCard');
+            hideSelectedCard.addEventListener('click', () => {
+                if (detailsPanel) {
+                    detailsPanel.classList.add('hidden');
+                }
+            });
+
             cardRows.forEach((card) => {
                 card.addEventListener('click', () => {
                     updateSelectedCardFromRow(card);
@@ -604,6 +780,83 @@
             updateActiveFilterStyles();
             applyCardFilters();
 
+        });
+
+        // Previous js
+        function copyCard() {
+            const cardNumber = document.getElementById('card_number').value;
+            navigator.clipboard.writeText(cardNumber)
+                .then(() => alert('Card number copied!'))
+                .catch(err => alert('Failed to copy'));
+        }
+
+         function updateRechargeTotal() {
+            let amountInput = document.getElementById('recharge_amount');
+            fee_percent = amountInput.value * 0.10;
+            total_amount = parseFloat(amountInput.value) + fee_percent;
+            document.getElementById('total_amount').innerText = "$" + total_amount.toFixed(2);
+        }
+
+        // Cashout Modal functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('cashoutModal');
+            const openButton = document.getElementById('openCashoutModal');
+            const closeButton = document.getElementById('closeCashoutModal');
+            const cancelButton = document.getElementById('cancelCashout');
+
+            openButton.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            });
+
+            closeButton.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            });
+
+            cancelButton.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            });
+
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            });
+        });
+
+        // Recharge Modal functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('rechargeModal');
+            const openButton = document.getElementById('openRechargeModal');
+            const closeButton = document.getElementById('closeRechargeModal');
+            const cancelButton = document.getElementById('cancelRechargeModal');
+
+            openButton.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            });
+
+            closeButton.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            });
+
+            cancelButton.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            });
+
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            });
         });
     </script>
 </x-app-layout>

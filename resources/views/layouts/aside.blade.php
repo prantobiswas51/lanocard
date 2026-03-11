@@ -1,16 +1,10 @@
 <div
-  class="px-6 py-4  border-b border-slate-200 dark:border-slate-700 flex items-center dark:bg-slate-800/80 backdrop-blur text-slate-800 dark:text-slate-100">
+  class="p-2 pl-4 border-b border-slate-200 dark:border-slate-700 flex items-center dark:bg-slate-800/80 backdrop-blur text-slate-800 dark:text-slate-100">
 
   {{-- card icon --}}
-  <svg class="h-8 w-10  flex-shrink-0" viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true">
-    <rect x="1" y="1" width="34" height="26" rx="4" stroke="currentColor" stroke-width="2" />
-    <rect x="5" y="5" width="8" height="6" rx="1" fill="currentColor" />
-  </svg>
-  <div class="ml-3">
-    <p class="text-sm font-bold tracking-wide">Entrocard</p>
-    <p class="text-[11px] text-slate-500 dark:text-slate-400">User Control Panel</p>
-  </div>
+  <a href="{{route('home')}}">
+    <img class="max-h-[53px]" src="{{asset('images/logo.png')}}" alt="">
+  </a>
 </div>
 
 <nav class="flex-1 px-3 py-4 space-y-1 text-sm bg-white dark:bg-slate-800">
@@ -65,7 +59,7 @@
     Add Balance
   </a>
 
-  <a href="{{ route('transactions') }}"
+  {{-- <a href="{{ route('transactions') }}"
     @class([ 'w-full flex items-center gap-3 rounded-lg px-3 py-2 font-medium border transition'
     , 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800'=>
     request()->routeIs('transactions'),
@@ -80,7 +74,7 @@
       </svg>
     </span>
     Transactions
-  </a>
+  </a> --}}
 
   <a href="{{ route('notifications') }}"
     @class([ 'w-full flex items-center gap-3 rounded-lg px-3 py-2 font-medium border transition' , 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-100 

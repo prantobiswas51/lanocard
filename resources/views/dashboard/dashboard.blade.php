@@ -624,7 +624,7 @@
             setupBinSelection('.card-option-onetime', 'onetimeBin', 'onetimeSummaryBin');
             setupBinSelection('.card-option-reload', 'reloadBin', 'reloadSummaryBin');
 
-            setupQuickAmounts('.quick-amount-onetime', 'onetimeAmount', 'onetimeSummaryAmount', 'onetimeSummaryFee', 'onetimeSummaryTotal', 2);
+            setupQuickAmounts('.quick-amount-onetime', 'onetimeAmount', 'onetimeSummaryAmount', 'onetimeSummaryFee', 'onetimeSummaryTotal', 3);
             setupQuickAmounts('.quick-amount-reload', 'reloadAmount', 'reloadSummaryAmount', 'reloadSummaryFee', 'reloadSummaryTotal', 5);
 
             setupMinAmountValidation('panelOnetime', 'onetimeAmount');

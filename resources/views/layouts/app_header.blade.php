@@ -78,7 +78,7 @@
 
 
                         @forelse ($notifications as $notification)
-                        <div 
+                        <div
                             class=" flex gap-3 px-4 py-3 border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50/80 dark:hover:bg-slate-700/50 transition">
                             <span
                                 class="flex-shrink-0 h-9 w-9 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
@@ -116,9 +116,23 @@
                             @endif
                         </div>
                         @empty
-                        <p
-                            class="gap-3 px-4 py-3 border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50/80 dark:hover:bg-slate-700/50">
-                            No Notifications</p>
+                        <div id="notificationDropdownEmptyState"
+                            class="px-4 py-6 text-center text-[11px] text-slate-500 dark:text-slate-400 flex flex-col items-center gap-2">
+                            <div
+                                class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                                    </path>
+                                </svg>
+                            </div>
+                            <p class="text-xs font-semibold text-slate-900 dark:text-slate-100">No new notifications</p>
+                            <p class="max-w-xs">
+                                You’re all caught up. When something important happens with your cards, you’ll see it
+                                here first.
+                            </p>
+                        </div>
                         @endforelse
 
                         <div class="px-4 py-2 text-center">

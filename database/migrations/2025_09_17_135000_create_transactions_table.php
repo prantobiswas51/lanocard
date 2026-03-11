@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('transactionId')->unique()->nullable();
             $table->string('cardNum')->nullable();
             $table->string('clientId')->nullable();
-            $table->string('type')->nullable();
+            $table->string('type')->nullable(); //topup, refund, cashout
             $table->string('status')->nullable();
             $table->decimal('amount', 10, 2);
             $table->string('merchantName')->nullable();

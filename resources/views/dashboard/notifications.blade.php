@@ -53,9 +53,27 @@
 
                 </div>
                 @empty
-                <p class="text-sm text-slate-500 p-2 dark:text-slate-400">
-                    No notifications found. Check back later for updates.
-                </p>
+                <div id="notificationHistoryEmptyState"
+                    class="px-6 py-10 flex flex-col items-center justify-center text-center gap-3">
+                    <div
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 6.75a4.5 4.5 0 00-4.5 4.5v.75m9 0v-.75a4.5 4.5 0 00-4.5-4.5m-7.5 9.75h15a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 16.5z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-sm font-semibold text-slate-900">You’re all caught up</p>
+                        <p class="text-[11px] text-slate-500 max-w-xs mx-auto">
+                            There are no notifications yet. New card payments, top‑ups and security alerts will appear
+                            here in real time.
+                        </p>
+                    </div>
+                    <p class="text-[10px] text-slate-400">
+                        Tip: You can manage notification preferences from Settings.
+                    </p>
+                </div>
                 @endforelse
 
             </div>
