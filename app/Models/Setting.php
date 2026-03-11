@@ -14,5 +14,7 @@ class Setting extends Model
         'paypal_email',
         'payoneer_email',
         'skrill_email',
+        'bkash_number',
+        'bkash_rate',
     ];
 }

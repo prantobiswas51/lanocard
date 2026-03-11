@@ -18,10 +18,12 @@ class FundController extends Controller
     public function index()
     {
         $trx_address = Setting::value('main_deposit_address');
+        $bkash_rate = Setting::value('bkash_rate');
+        $bkash_number = Setting::value('bkash_number');
 
         $deposits = Deposit::where('user_id', Auth::id())->get();
 
-        return view('dashboard/funding', compact('trx_address', 'deposits'));
+        return view('dashboard/funding', compact('trx_address', 'bkash_rate', 'bkash_number', 'deposits'));
     }
 
     public function check_deposit(Request $request)
@@ -56,6 +58,8 @@ class FundController extends Controller
     }
 
 
+
+
     public function manual_payment(Request $request)
     {
 
@@ -80,8 +84,9 @@ class FundController extends Controller
 
         $ss_path = $request->file('screenshot')->store('manual_deposits', 'public');
 
-        $payment_method = $request->input('payment_method');
+        $payment_method = "Payoneer";
         $amount = $request->input('amount');
+        $final_amount = $amount -1;
         $currency = $request->input('currency');
         $tx_id = $request->input('tx_id');
         $notes = $request->input('notes');
@@ -90,13 +95,13 @@ class FundController extends Controller
         Deposit::create([
             'user_id' => Auth::id(),
             'tx_id' => $tx_id,
-            'amount' => $amount,
+            'amount' => $final_amount,
             'currency' => $currency,
             'notes' => $notes,
             'method' => $payment_method,
             'screenshot_path' => $ss_path,
             'type' => 'Manual',
-            'status' => 'Pending',
+            'status' => 'PENDING',
         ]);
 
         $html = '
@@ -122,7 +127,7 @@ class FundController extends Controller
                             You will receive another email once our team verifies and approves your payment. 
                             Please allow some time for processing.
                         </p>
-                        <a href="https://tappayz.com/dashboard"
+                        <a href="https://lanocard.com/dashboard"
                         style="display: inline-block; background-color: #4a90e2; color: #ffffff;
                                 padding: 12px 25px; border-radius: 6px; text-decoration: none;
                                 font-weight: bold; margin-top: 15px;">
@@ -132,17 +137,66 @@ class FundController extends Controller
                     <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                         <p>If you have already made the transfer, please upload proof of payment or contact support.</p>
                         <p>Need help? Email us at 
-                            <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                            <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
                         </p>
-                        <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                        <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                     </div>
                 </div>
             </div>
         ';
 
-        sendCustomMail(Auth::user()->email, 'Tappayz - Manual Payment Request Received', $html);
+        sendCustomMail(Auth::user()->email, 'Lanocard - Manual Payment Request Received', $html);
 
 
         return redirect()->route('fundings')->with('status', '✅ Manual payment submitted. Awaiting admin approval.');
+    }
+
+    public function bkash_manual_deposit(Request $request)
+    {
+        // "payment_method" => "bkash"
+        //   "currency" => "USD"
+        //   "amount_bdt" => "43436546.00"
+        //   "equivalent_usd" => "342020.05"
+        //   "deposit_fee" => "1.00"
+        //   "amount" => "342019.05"
+        //   "amount_bdt_input" => "43436546"
+        //   "tx_id" => "ergrt6vb546b5"
+        //  "user_id" => "1"
+
+        $request->validate([
+            'amount_bdt_input' => 'required|numeric|min:1500',
+            'tx_id' => 'required|string',
+            'user_id' => 'required|integer',
+        ]);
+
+        $amount_bdt = $request->input('amount_bdt_input');
+        $tx_id = $request->input('tx_id');
+
+        $user = User::find($request->user_id);
+
+        if (!$user || $user->id !== Auth::id()) {
+            return redirect()->route('fundings')->with('status', 'Invalid user.');
+        }
+
+        if (Deposit::where('tx_id', $tx_id)->exists()) {
+            return redirect()->route('fundings')->with('status', 'This transaction already exists.');
+        }
+
+        $bkash_rate = Setting::value('bkash_rate') ?? 125;
+        $amount_usd = round($amount_bdt / $bkash_rate, 2);
+        $amount_after_fee = $amount_usd - 1; // Deducting a flat fee of $1
+
+        Deposit::create([
+            'user_id' => Auth::id(),
+            'tx_id' => $tx_id,
+            'amount' => $amount_after_fee,
+            'currency' => 'USD',
+            'bdt_amount' => $amount_bdt,
+            'method' => 'Bkash',
+            'type' => 'Manual',
+            'status' => 'PENDING',
+        ]);
+
+        return back()->with('status', 'Transaction submitted. Should take a minute to update. Waiting for confirmation.');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Deposits\Tables;
 
 use App\Models\User;
+use Dom\Text;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
@@ -33,9 +34,7 @@ class DepositsTable
                         default => 'secondary',
                     })
                     ->searchable(),
-                TextColumn::make('sender_id')
-                    ->searchable(),
-                TextColumn::make('receiver_id')
+                TextColumn::make('method')
                     ->searchable(),
                 TextColumn::make('token')
                     ->searchable(),
@@ -51,7 +50,7 @@ class DepositsTable
             ])
             ->defaultSort(function ($query) {
                 $query->orderByRaw("CASE 
-                    WHEN status = 'Pending' THEN 1 
+                    WHEN status = 'PENDING' THEN 1 
                     WHEN status = 'Approved' THEN 2 
                     WHEN status = 'Rejected' THEN 3 
                     ELSE 4 
@@ -73,7 +72,7 @@ class DepositsTable
                         $user->save();
                         $record->status = 'Approved';
                         $record->save();
-                    })->visible(fn($record) => $record->status == 'Pending')
+                    })->visible(fn($record) => $record->status == 'PENDING')
                     ->requiresConfirmation()
                     ->color('success'),
 
@@ -82,7 +81,7 @@ class DepositsTable
                     ->action(function ($record) {
                         $record->status = 'Rejected';
                         $record->save();
-                    })->visible(fn($record) => $record->status == 'Pending')
+                    })->visible(fn($record) => $record->status == 'PENDING')
                     ->requiresConfirmation()
                     ->color('danger'),
 

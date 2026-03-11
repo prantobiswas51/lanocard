@@ -18,6 +18,8 @@ class SettingForm
                 TextInput::make('paypal_email'),
                 TextInput::make('payoneer_email'),
                 TextInput::make('skrill_email'),
+                TextInput::make('bkash_number'),
+                TextInput::make('bkash_rate'),
             ]);
     }
 }

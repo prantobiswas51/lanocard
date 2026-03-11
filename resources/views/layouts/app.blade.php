@@ -26,7 +26,7 @@
 <body class="font-sans antialiased">
 
     @if (session('status'))
-    <div class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
+    <div class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 mt-20">
         <style>
             @keyframes fade-in {
                 from {

@@ -22,6 +22,8 @@ return new class extends Migration
             $table->enum('type', ['Manual', 'Auto']);
             $table->string('method')->nullable();
             $table->string('currency')->nullable();
+            $table->string('trx_amount')->nullable();
+            $table->string('bdt_amount')->nullable();
             $table->string('status')->default('PENDING');
             $table->string('screenshot_path')->nullable();
             $table->text('notes')->nullable();

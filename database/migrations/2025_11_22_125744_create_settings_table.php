@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('paypal_email')->nullable();
             $table->string('payoneer_email')->nullable();
             $table->string('skrill_email')->nullable();
+            $table->string('bkash_number')->nullable();
+            $table->string('bkash_rate')->nullable();
             $table->timestamps();
         });
     }

@@ -48,7 +48,7 @@ class GetTransactions extends Command
             return;
         }
 
-        // Log::channel('dev_error')->info('line 51');
+        Log::channel('dev_error')->info('line 51');
 
         $usdAmount = null;
         $tokenName = null;
@@ -70,7 +70,8 @@ class GetTransactions extends Command
 
 
             $trxAmount = $tx['contractData']['amount'] / 1000000;
-            $usdAmount = $trxAmount * $this->trxUsdPrice();
+            $before_fee_amount = $trxAmount * $this->trxUsdPrice();
+            $usdAmount = $before_fee_amount -1;
             $tokenName = 'TRX';
         }
 
@@ -98,7 +99,8 @@ class GetTransactions extends Command
                 return;
             }
 
-            $usdAmount = $transfer['amount_str'] / 1_000_000; // USDT = USD
+            $before_fee = $transfer['amount_str'] / 1_000_000;
+            $usdAmount = $before_fee - 1;
 
             $tokenName = 'USDT';
         }

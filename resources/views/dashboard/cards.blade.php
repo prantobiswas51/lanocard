@@ -71,7 +71,7 @@
                     <div class="space-y-3 max-h-[360px] overflow-y-auto pr-1">
                         <!-- Sample card rows (same style as dashboard list) -->
 
-                        @foreach ($mycards as $card)
+                        @forelse ($mycards as $card)
                         <div class="card-row group @if($card->state == 2) grayscale @endif rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-100 dark:bg-slate-700/50 px-3 py-3 flex flex-col gap-2 cursor-pointer hover:border-emerald-300 dark:hover:border-emerald-600 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20"
                             data-cardNumber="{{ $card->number }}" data-expiry="{{ $card->expiryDate }}"
                             data-cvv="{{ $card->cvv }}" data-holder="{{ Auth::user()->name }}"
@@ -129,37 +129,49 @@
                                     <span>Last top‑up · $100 (2d ago)</span>
                                 </div>
                                 <div class="flex items-center gap-1.5 text-[11px]">
-                                    @if ($card->state == 1)
-                                    <button
-                                        class="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-slate-700 hover:border-amber-400/80 hover:text-amber-600">
-                                        Freeze
-                                    </button>
-
-                                    @if ($card->type == "reloadable")
-                                    <button
-                                        class="inline-flex items-center gap-1 rounded-full border border-emerald-300 bg-emerald-50 px-2.5 py-1 text-emerald-700 hover:bg-emerald-100">
-                                        Top‑up
-                                    </button>
-                                    @endif
-                                    @endif
-
-
-
-                                    <button
-                                        class="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-slate-700 hover:border-slate-400/80">
+                                    
+                                    <button type="button"
+                                        class="btn-card-details inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-slate-700 hover:border-slate-400/80">
                                         Details
                                     </button>
 
                                 </div>
                             </div>
                         </div>
-                        @endforeach
+                        @empty
+                        <div id="cardListEmptyState"
+                            class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-600 bg-slate-50/80 dark:bg-slate-800/70 px-5 py-7 flex flex-col items-center justify-center text-center gap-3">
+                            <div
+                                class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-900/40 border border-emerald-100 dark:border-emerald-800 text-emerald-600 dark:text-emerald-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M3 8.25A2.25 2.25 0 015.25 6h13.5A2.25 2.25 0 0121 8.25v7.5A2.25 2.25 0 0118.75 18H5.25A2.25 2.25 0 013 15.75v-7.5z">
+                                    </path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 11.25h6M7 14.25h3.5">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">You don’t have any
+                                    virtual cards yet</p>
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400 max-w-xs mx-auto">
+                                    Create your first one‑time or reloadable card to start making secure online
+                                    payments. Your cards will appear here in a simple list.
+                                </p>
+                            </div>
+                            <p class="text-[10px] text-slate-400 dark:text-slate-500">
+                                Tip: You can close cards anytime, and only active cards can be charged.
+                            </p>
+                        </div>
+                        @endforelse
 
                     </div>
                 </div>
 
                 <!-- Right: selected card summary -->
-                <div
+                {{-- Flag-3 --}}
+                <div id="details_pan"
                     class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 sm:p-4 space-y-3 shadow-sm">
                     <div>
                         <p
@@ -464,6 +476,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -480,6 +493,7 @@
             const selectedSpent = document.getElementById('selectedCardSpent');
             const selectedTitle = document.getElementById('selectedCardTitle');
             const selectedStatus = document.getElementById('selectedCardStatus');
+            const detailsPanel = document.getElementById('details_pan');
             const searchInput = document.getElementById('cardSearchInput');
             const filterButtons = document.querySelectorAll('.mycards-filter');
             const showingCount = document.getElementById('cardsShowingCount');
@@ -539,31 +553,50 @@
 
             searchInput?.addEventListener('input', applyCardFilters);
 
-            cardRows.forEach(card => {
-                card.addEventListener('click', function() {
-                    const number = this.dataset.cardnumber || '•••• •••• •••• 0000';
-                    const expiry = this.dataset.expiry || '--/--';
-                    const cvv = this.dataset.cvv || '000';
-                    const holder = this.dataset.holder || 'USER';
-                    const balance = this.dataset.balance || '0.00';
-                    const type = this.dataset.type || 'Card';
-                    const status = this.dataset.status || '0';
-                    const totalconsume = this.dataset.totalconsume || '0.00';
+            const updateSelectedCardFromRow = (cardRow) => {
+                if (!cardRow) return;
 
-                    // Update card info
-                    if(selectedNumber) selectedNumber.innerText = number;
-                    if(selectedBalance) selectedBalance.innerText = '$' + balance;
-                    if(selectedExpiry) selectedExpiry.innerText = expiry;
-                    if(selectedCvv) selectedCvv.innerText = cvv;
-                    if(selectedHolder) selectedHolder.innerText = holder;
-                    if(selectedSpent) selectedSpent.innerText = '$' + totalconsume;
-                    if(selectedTitle) selectedTitle.innerText = type.charAt(0).toUpperCase() + type.slice(1) + ' Card';
+                const number = cardRow.dataset.cardnumber || '•••• •••• •••• 0000';
+                const expiry = cardRow.dataset.expiry || '--/--';
+                const cvv = cardRow.dataset.cvv || '000';
+                const holder = cardRow.dataset.holder || 'USER';
+                const balance = cardRow.dataset.balance || '0.00';
+                const type = cardRow.dataset.type || 'Card';
+                const status = cardRow.dataset.status || '0';
+                const totalconsume = cardRow.dataset.totalconsume || '0.00';
 
-                    // Update status
-                    if(selectedStatus) {
-                        selectedStatus.innerHTML = status == 1
-                            ? `<span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Active`
-                            : `<span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span> Frozen`;
+                if (selectedNumber) selectedNumber.innerText = number;
+                if (selectedBalance) selectedBalance.innerText = '$' + balance;
+                if (selectedExpiry) selectedExpiry.innerText = expiry;
+                if (selectedCvv) selectedCvv.innerText = cvv;
+                if (selectedHolder) selectedHolder.innerText = holder;
+                if (selectedSpent) selectedSpent.innerText = '$' + totalconsume;
+                if (selectedTitle) selectedTitle.innerText = type.charAt(0).toUpperCase() + type.slice(1) + ' Card';
+
+                if (selectedStatus) {
+                    selectedStatus.innerHTML = status == 1
+                        ? `<span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Active`
+                        : `<span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span> Frozen`;
+                }
+            };
+
+            if (detailsPanel) {
+                detailsPanel.classList.add('hidden');
+            }
+
+            cardRows.forEach((card) => {
+                card.addEventListener('click', () => {
+                    updateSelectedCardFromRow(card);
+                });
+
+                const detailsButton = card.querySelector('.btn-card-details');
+                detailsButton?.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    updateSelectedCardFromRow(card);
+
+                    if (detailsPanel) {
+                        detailsPanel.classList.remove('hidden');
+                        detailsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                 });
             });

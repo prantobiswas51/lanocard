@@ -15,6 +15,8 @@ class Deposit extends Model
         'type',
         'method',
         'currency',
+        'trx_amount',
+        'bdt_amount',
         'status',
         'screenshot_path',
         'notes',

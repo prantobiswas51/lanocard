@@ -65,27 +65,22 @@
     Add Balance
   </a>
 
-  <button id="navApiDocs"
-    class="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200 transition">
+  <a href="{{ route('transactions') }}"
+    @class([ 'w-full flex items-center gap-3 rounded-lg px-3 py-2 font-medium border transition'
+    , 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800'=>
+    request()->routeIs('transactions'),
+    'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700
+    dark:hover:text-slate-200 border-transparent' => !request()->routeIs('transactions'),
+    ])>
     <span
       class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">
       <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        <rect x="2" y="5" width="20" height="14" rx="2" ry="2" />
+        <line x1="2" y1="10" x2="22" y2="10" />
       </svg>
     </span>
-    API Docs
-  </button>
-
-  <button id="navGetApi"
-    class="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200 transition">
-    <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-violet-100 text-violet-600">
-      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-      </svg>
-    </span>
-    Get API Access
-  </button>
+    Transactions
+  </a>
 
   <a href="{{ route('notifications') }}"
     @class([ 'w-full flex items-center gap-3 rounded-lg px-3 py-2 font-medium border transition' , 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-100 
@@ -102,6 +97,19 @@
     </span>
     Notification History
   </a>
+
+
+  <button id="navGetApi"
+    class="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200 transition">
+    <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-violet-100 text-violet-600">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    </span>
+    Get API Access
+  </button>
+
+
 
   <button id="navSettings"
     class="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200 transition">

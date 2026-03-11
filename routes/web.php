@@ -77,6 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/fundings/deposit', [FundController::class, 'check_deposit'])->name('check_deposit');
 
     Route::post('/fundings/manual/deposit', [FundController::class, 'manual_payment'])->name('manual_payment');
+    Route::post('/fundings/bkash/deposit', [FundController::class, 'bkash_manual_deposit'])->name('bkash_manual_deposit');
 
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
 
