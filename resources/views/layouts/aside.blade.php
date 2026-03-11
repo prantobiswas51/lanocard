@@ -1,10 +1,26 @@
 <div
-  class="p-2 pl-4 border-b border-slate-200 dark:border-slate-700 flex items-center dark:bg-slate-800/80 backdrop-blur text-slate-800 dark:text-slate-100">
+  class="p-3 pt-[17px] pl-4 border-b border-slate-200 dark:border-slate-700 flex items-center dark:bg-slate-800/80 backdrop-blur text-slate-800 dark:text-slate-100">
 
   {{-- card icon --}}
-  <a href="{{route('home')}}">
-    <img class="max-h-[53px]" src="{{asset('images/logo.png')}}" alt="">
+  <a href="{{ route('home') }}" class="flex items-center gap-3 text-slate-800">
+    <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+      <svg class="w-full h-full" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="40" height="40" rx="8" fill="url(#lanocard-grad-header)"></rect>
+        <path d="M10 10v20h16v-4H14V10H10z" fill="white"></path>
+        <circle cx="30" cy="10" r="2.5" fill="white" opacity="0.9"></circle>
+        <defs>
+          <linearGradient id="lanocard-grad-header" x1="0" y1="0" x2="40" y2="0" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#1e3a5f"></stop>
+            <stop offset="1" stop-color="#22c55e"></stop>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
   </a>
+  <div class="ml-3">
+    <p class="text-sm font-bold tracking-wide">Lanocard</p>
+    <p class="text-[11px] text-slate-500 dark:text-slate-400">User Control Panel</p>
+  </div>
 </div>
 
 <nav class="flex-1 px-3 py-4 space-y-1 text-sm bg-white dark:bg-slate-800">
