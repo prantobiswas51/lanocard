@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Deposit;
+use App\Models\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -47,7 +48,7 @@ class DepositConfirmedJob implements ShouldQueue
                         <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
                                     padding: 15px; max-width: 400px; text-align: left; color: #222;">
                             <p><strong>Transaction ID:</strong> ' . $this->deposit->tx_id . '</p>
-                            <p><strong>Deposit Amount:</strong> $' . number_format($this->usdAmount , 2) . '</p>
+                            <p><strong>Deposit Amount:</strong> $' . number_format($this->usdAmount, 2) . '</p>
                             <p><strong>Current Wallet Balance:</strong> $' . number_format($user->balance, 2) . '</p>
                             <p><strong>Date:</strong> ' . now()->format("F j, Y, g:i A") . '</p>
                         </div>
@@ -55,6 +56,12 @@ class DepositConfirmedJob implements ShouldQueue
                 </div>
             </div>';
 
-            sendCustomMail($user->email, 'Tappayz - Deposit Successful', $html);
+        sendCustomMail($user->email, 'Tappayz - Deposit Successful', $html);
+
+        Notification::create([
+            'user_id' => $user->id,
+            'title' => 'Deposit Successful',
+            'message' => 'Your deposit of $' . number_format($this->usdAmount, 2) . ' has been processed successfully and added to your wallet.',
+        ]);
     }
 }

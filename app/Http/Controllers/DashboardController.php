@@ -77,8 +77,7 @@ class DashboardController extends Controller
     public function mark_as_read(Request $request, $id)
     {
         Auth::user()->notifications()->where('id', $id)->update(['is_read' => true]);
-        $notifications = Auth::user()->notifications()->latest()->get();
 
-        return view('dashboard.notifications', compact('notifications'));
+        return redirect()->route('notifications');
     }
 }

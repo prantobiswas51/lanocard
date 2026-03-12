@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Bin;
 use App\Models\Card;
+use App\Models\Notification;
 use App\Models\Setting;
 use App\Models\Transaction;
 use Illuminate\Support\Arr;
@@ -354,7 +355,11 @@ class CardController extends Controller
 
         Card::create($payload);
 
-
+        Notification::create([
+            'user_id' => Auth::id(),
+            'title' => 'New Virtual Card Created',
+            'message' => 'Your new virtual card ' . $card_number . ' has been created successfully.',
+        ]);
 
         $html = '
             <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
@@ -528,6 +533,12 @@ class CardController extends Controller
             $card->cardBalance -= $request_amount;
             $card->save();
 
+            Notification::create([
+                'user_id' => Auth::id(),
+                'title' => 'Cashout Successful',
+                'message' => 'Your cashout request ' . $card->number . ' has been processed successfully.',
+            ]);
+
             $html = '
                 <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
                     <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
@@ -615,6 +626,12 @@ class CardController extends Controller
         if ($response->successful()) {
 
             Auth::user()->balance -= $total_balance_to_cut;
+
+            Notification::create([
+                'user_id' => Auth::id(),
+                'title' => 'Card Recharge Successful',
+                'message' => 'Your card ' . $card->number . ' has been recharged ' . $request->amount . ' successfully.',
+            ]);
 
             // After recharge is successful
             $html = '
@@ -735,6 +752,12 @@ class CardController extends Controller
             $card->state = '0';
             $card->save();
 
+            Notification::create([
+                'user_id' => Auth::id(),
+                'title' => 'Card Canceled',
+                'message' => 'Your card ' . $card->number . ' has been canceled successfully.',
+            ]);
+
             $html = '
                 <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
                     <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
@@ -806,6 +829,12 @@ class CardController extends Controller
         if ($response->successful()) {
             $card->state = '2';
             $card->save();
+
+            Notification::create([
+                'user_id' => Auth::id(),
+                'title' => 'Card Frozen',
+                'message' => 'Your card ' . $card->number . ' has been temporarily frozen.',
+            ]);
 
             $html = '
                 <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
@@ -880,6 +909,12 @@ class CardController extends Controller
         if ($response->successful()) {
             $card->state = '1';
             $card->save();
+
+            Notification::create([
+                'user_id' => Auth::id(),
+                'title' => 'Card Reactivated',
+                'message' => 'Your card ' . $card->number . ' has been reactivated and is now active again.',
+            ]);
 
             $html = '
                 <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">

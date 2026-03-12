@@ -46,7 +46,7 @@
                             action="{{ route('mark_as_read', $notification->id) }}" method="post">
                             @csrf
                             @method('POST')
-                            <button>Mark As Read</button>
+                            <button>Mark as read</button>
                         </form>
                         @endif
                     </div>

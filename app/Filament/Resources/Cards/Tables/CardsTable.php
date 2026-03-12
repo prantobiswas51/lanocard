@@ -11,6 +11,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Notifications\Notification;
+use Mockery\Matcher\Not;
 
 class CardsTable
 {
@@ -98,6 +99,12 @@ class CardsTable
                         // Get card owner's email + card number
                         $email = $record->email;
                         $card_number = $record->number;
+
+                        \App\Models\Notification::create([
+                            'user_id' => $record->user_id,
+                            'title' => 'New Virtual Card Created',
+                            'message' => "Congratulations! Your new virtual card ($card_number) has been created successfully.",
+                        ]);
 
                         $html = '
                                 <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
