@@ -397,108 +397,85 @@
                 </div>
 
 
-                <!-- user Card list / details -->
+                <!-- Transactions goes here -->
                 <div
-                    class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 sm:p-5 space-y-4 text-sm shadow-sm">
+                    class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 space-y-4 text-sm shadow-sm">
 
-                    {{-- header --}}
-                    <div class="flex items-center justify-between gap-2">
-                        <div>
-                            <p
-                                class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 font-semibold">
-                                Your virtual cards</p>
-                            <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100">Card list &amp; actions
-                            </h3>
-                        </div>
-                        <div class="flex gap-1.5 text-[11px]">
-                            <span
-                                class="inline-flex items-center gap-1 rounded-full bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400">
-                                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Active
-                            </span>
-                            <span
-                                class="inline-flex items-center gap-1 rounded-full bg-slate-50 dark:bg-slate-700 px-2 py-0.5 border border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400">
-                                <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span> Frozen
-                            </span>
-                        </div>
-                    </div>
+                    <section id="viewTransactions" class="flex-1 w-full">
 
+                        <div class="max-w-6xl mx-auto ">
 
-                    <div id="cardList" class="space-y-3 max-h-72 overflow-y-auto pr-1">
+                            <!-- Header -->
+                            <div class="">
 
-                        @forelse($myCards as $card)
-
-                        <!-- One-time card 1 -->
-                        <div
-                            class="card-row group rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 px-3 py-3 flex flex-col gap-2">
-                            <div class="flex items-center justify-between gap-2">
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="h-9 w-14 rounded-lg bg-gradient-to-br from-emerald-400 to-cyan-400 flex items-center justify-center text-[10px] font-semibold text-white shadow-sm">
-                                        {{ $card->type }}
+                                <div class="flex justify-between">
+                                    <div class="text-lg sm:text-xl font-semibold text-slate-900 dark:text-slate-100">
+                                        Transactions
                                     </div>
-                                    <div class="space-y-0.5">
-                                        <p class="text-xs font-semibold text-slate-900 dark:text-slate-200">{{
-                                            ucfirst($card->type) }}</p>
-                                        <p class="text-[11px] text-slate-500 dark:text-slate-400">{{ $card->hiddenNum }}
-                                        </p>
-                                    </div>
+                                    <a href="{{ route('transactions') }}"
+                                        class=" p-2 rounded-full border px-3 text-xs border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                                        View all
+                                    </a>
                                 </div>
-                                <span class="text-xs font-semibold text-emerald-700 dark:text-emerald-400">${{
-                                    number_format($card->cardBalance, 2) }}</span>
-                            </div>
-                            <div class="flex items-center justify-between gap-2">
-                                <div class="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400">
-                                    <span class="inline-flex items-center gap-1">
-                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Active
-                                    </span>
-                                    <span>{{ $card->created_at->diffForHumans() }}</span>
-                                </div>
-                                <a href="{{ route('cards') }}">
-                                    <button
-                                        class="btn-view-details inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-2.5 py-1 text-[11px] text-slate-700 dark:text-slate-300 hover:border-emerald-400/80 dark:hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-400">
-                                        Details
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
 
-                        @empty
-                        <div id="cardListEmptyState"
-                            class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-600 bg-slate-50/80 dark:bg-slate-800/70 px-5 py-7 flex flex-col items-center justify-center text-center gap-3">
-                            <div
-                                class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-900/40 border border-emerald-100 dark:border-emerald-800 text-emerald-600 dark:text-emerald-300">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M3 8.25A2.25 2.25 0 015.25 6h13.5A2.25 2.25 0 0121 8.25v7.5A2.25 2.25 0 0118.75 18H5.25A2.25 2.25 0 013 15.75v-7.5z">
-                                    </path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 11.25h6M7 14.25h3.5">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div class="space-y-1">
-                                <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">You don’t have any
-                                    virtual cards yet</p>
-                                <p class="text-[11px] text-slate-500 dark:text-slate-400 max-w-xs mx-auto">
-                                    Create your first one‑time or reloadable card to start making secure online
-                                    payments. Your cards will appear here in a simple list.
+
+                                <p class="text-xs text-slate-500 dark:text-slate-400">
+                                    View all your card payments and activity
                                 </p>
                             </div>
-                            <p class="text-[10px] text-slate-400 dark:text-slate-500">
-                                Tip: You can close cards anytime, and only active cards can be charged.
-                            </p>
                         </div>
-                        @endforelse
-                    </div>
 
-                    <p class="text-[11px] text-slate-500">
-                        Tip: You can freeze a card instantly if you see any suspicious transaction.
-                        For reloadable cards you can also top‑up anytime from your main balance.
-                    </p>
+
+                        <!-- Transactions Table -->
+                        <div
+                            class="bg-white mt-2 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md  shadow-sm overflow-hidden">
+
+                            @forelse ($transactions as $trx)
+                            <div
+                                class=" flex justify-between p-[10px] text-xs border-b last:border-0 border-slate-200 dark:border-slate-700 items-center">
+                                <div class="flex">
+                                    <div
+                                        class="bg-purple-500 text-white h-10  flex items-center justify-center text-xl font-bold w-10 rounded-full  mr-2">
+                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.7"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <div class="middle items-center justify-center flex">
+                                        {{ $trx->merchantName }} <br>
+                                        Card {{ $trx->cardNum }} . {{ $trx->created_at->format('M d, Y h:i A') }}
+                                    </div>
+                                </div>
+                                <div class="end flex flex-col text-end">
+                                    <div class="">${{ $trx->amount }}</div>
+                                    <div class="
+                                            @if($trx->status === 'Finish') bg-green-100/50 rounded-md px-2 p-1 text-green-600 
+                                            @elseif($trx->status === 'Pending') bg-yellow-100/50 rounded-md px-2 p-1 text-yellow-600
+                                            @else bg-red-100/50 rounded-md px-2 p-1 text-red-600 
+                                            @endif
+                                            ">
+                                        {{ $trx->status }}
+                                    </div>
+                                </div>
+                            </div>
+                            @empty
+                            Empty Transactions
+                            @endforelse
+
+
+                        </div>
+
+
                 </div>
 
-            </div>
-        </div>
+    </section>
+
+    </div>
+
+    </div>
+    </div>
     </section>
 
     <script>

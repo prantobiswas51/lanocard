@@ -32,6 +32,12 @@ class DashboardController extends Controller
             ->where('state', 1) // only count active reloadable cards
             ->count();
 
+        // show transaction of this user which cards they hold. filter transaction by user's card numbers
+        $cardNumbers = Auth::user()->cards()->pluck('number');
+
+        $transactions = Transaction::whereIn('cardNum', $cardNumbers)
+            ->orderByDesc('recordTime')->take(6)->get();
+
         // last transaction amount of this user
         $lastTransactionAmount = Transaction::where('user_id', Auth::id())
             ->orderBy('recordTime', 'desc')
@@ -56,6 +62,7 @@ class DashboardController extends Controller
             'lastTransactionTime',
             'myCards',
             'bins',
+            'transactions',
             'organizations',
         ));
     }

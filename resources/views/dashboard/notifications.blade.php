@@ -30,7 +30,11 @@
                 <div
                     class="flex items-start justify-between px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/40 transition">
 
-                    <div class="space-y-0.5">
+                   
+                    <div class="space-y-0.5 flex items-center gap-3">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                </svg>
                         <p class="text-[12px] text-slate-500 dark:text-slate-400">
                             {{ $notification->message }}
                         </p>

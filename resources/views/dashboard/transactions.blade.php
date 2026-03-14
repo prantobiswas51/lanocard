@@ -8,10 +8,6 @@
                 class="bg-gradient-to-br from-emerald-50 via-white to-sky-50 dark:from-slate-800 dark:via-slate-800 dark:to-slate-800 border border-emerald-100 dark:border-emerald-900/40 rounded-2xl p-5 flex items-center justify-between">
 
                 <div>
-                    <p
-                        class="text-xs uppercase tracking-[0.2em] text-emerald-500 dark:text-emerald-400 font-semibold mb-1">
-                        Activity
-                    </p>
                     <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
                         Transactions
                     </h2>
@@ -157,6 +153,12 @@
 
                             @endforeach
 
+                            {{-- pagination --}}
+                            <tr>
+                                <td colspan="5" class="px-5 py-4">
+                                    {{ $transactions->links() }}
+                                </td>
+                            </tr>
                             @endif
 
                         </tbody>

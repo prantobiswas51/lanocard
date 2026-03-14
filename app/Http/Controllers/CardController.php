@@ -990,6 +990,8 @@ class CardController extends Controller
             return $card['number'] === $card_number || $card['hiddenNum'] === substr($card_number, -5);
         });
 
+        // dd($cardData);
+
         if (! $cardData) {
             return response()->json(['success' => false, 'status' => 'Card not found in list'], 404);
         }

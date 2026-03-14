@@ -15,7 +15,7 @@ class TransactionController extends Controller
 
         $transactions = Transaction::whereIn('cardNum', $cardNumbers)
             ->orderBy('recordTime', 'desc')
-            ->get();
+            ->paginate(8);
         return view('dashboard/transactions', compact('transactions'));
     }
 }
