@@ -4,7 +4,9 @@
         <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden max-w-md mx-auto">
 
             {{-- site logo --}}
-            <x-logo class="h-8 w-auto mx-auto mt-6 mb-4" />
+            {{-- <div class="flex items-center mb-6">
+                <img src="{{ asset('images/logo.png') }}" alt="Tappayz" class="w-150 h-16">
+            </div> --}}
 
             <!-- Header -->
             <div class="bg-gradient-to-r from-emerald-500 to-emerald-600 px-6 py-8 text-center">
@@ -72,7 +74,7 @@
 
             </div>
 
-            
+
 
         </div>
 
