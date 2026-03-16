@@ -1,128 +1,133 @@
 <x-guest-layout>
-
     <section class="min-h-screen flex items-center justify-center pt-12 pb-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8">
-            <div class="text-center">
-                <h2 class="text-3xl font-bold text-black mb-2">Create Account</h2>
-                <p class="text-gray-600">Join Tappayz and start using virtual cards today</p>
-            </div>
+        <div class="max-w-md w-full">
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+                <div id="stepForm">
+                    <h1 class="text-xl font-bold text-slate-900 mb-1">Create account</h1>
+                    <p class="text-sm text-slate-500 mb-6">Sign up to create virtual cards and manage your balance.</p>
 
-            <div class="bg-white rounded-2xl shadow-lg p-8">
-                <form method="POST" action="{{ route('register') }}" class="space-y-6">
-                    @csrf
+                    <form id="registerForm" method="POST" action="{{ route('register') }}" class="space-y-4">
+                        @csrf
 
-                    <!-- Name -->
-                    <div>
-                        <x-input-label for="name" :value="__('Name')"
-                            class="block text-sm font-medium text-gray-700 mb-2" />
-                        <x-text-input id="name"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent"
-                            type="text" name="name" :value="old('name')" required autofocus autocomplete="name"
-                            placeholder="John Doe" />
-                        <x-input-error :messages="$errors->get('name')" class="mt-2 text-sm text-red-500" />
-                    </div>
-
-                    <!-- Email Address -->
-                    <div>
-                        <x-input-label for="email" :value="__('Email')"
-                            class="block text-sm font-medium text-gray-700 mb-2" />
-                        <x-text-input id="email"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent"
-                            type="email" name="email" :value="old('email')" required autocomplete="username"
-                            placeholder="john@example.com" />
-                        <x-input-error :messages="$errors->get('email')" class="mt-2 text-sm text-red-500" />
-                    </div>
-
-                    <!-- Phone Number -->
-                    <div> 
-                        <x-input-label for="phone" :value="__('Phone Number')"
-                            class="block text-sm font-medium text-gray-700 mb-2" />
-                        <x-text-input id="phone"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent"
-                            type="tel" name="phone" :value="old('phone')" required
-                            placeholder="+1 (234) 567-890" />
-                        <x-input-error :messages="$errors->get('phone')" class="mt-2 text-sm text-red-500" />
-                    </div>
-
-                    <!-- Password -->
-                    <div>
-                        <x-input-label for="password" :value="__('Password')"
-                            class="block text-sm font-medium text-gray-700 mb-2" />
-                        <x-text-input id="password"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent"
-                            type="password" name="password" required autocomplete="new-password"
-                            placeholder="Create a strong password" />
-                        <p class="text-xs text-gray-500 mt-1">Must be at least 8 characters with uppercase, lowercase,
-                            and number</p>
-                        <x-input-error :messages="$errors->get('password')" class="mt-2 text-sm text-red-500" />
-                    </div>
-
-                    <!-- Confirm Password -->
-                    <div>
-                        <x-input-label for="password_confirmation" :value="__('Confirm Password')"
-                            class="block text-sm font-medium text-gray-700 mb-2" />
-                        <x-text-input id="password_confirmation"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent"
-                            type="password" name="password_confirmation" required autocomplete="new-password"
-                            placeholder="Confirm your password" />
-                        <x-input-error :messages="$errors->get('password_confirmation')"
-                            class="mt-2 text-sm text-red-500" />
-                    </div>
-
-                    <!-- Country -->
-                    <div>
-                        <x-input-label for="country" :value="__('Country')"
-                            class="block text-sm font-medium text-gray-700 mb-2" />
-                        <select id="country" name="country" required 
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
-                            <option value="">Select your country</option>
-                            <option value="US" {{ old('country') === 'US' ? 'selected' : '' }}>United States</option>
-                            <option value="CA" {{ old('country') === 'CA' ? 'selected' : '' }}>Canada</option>
-                            <option value="GB" {{ old('country') === 'GB' ? 'selected' : '' }}>United Kingdom</option>
-                            <option value="AU" {{ old('country') === 'AU' ? 'selected' : '' }}>Australia</option>
-                            <option value="DE" {{ old('country') === 'DE' ? 'selected' : '' }}>Germany</option>
-                            <option value="FR" {{ old('country') === 'FR' ? 'selected' : '' }}>France</option>
-                            <option value="IT" {{ old('country') === 'IT' ? 'selected' : '' }}>Italy</option>
-                            <option value="ES" {{ old('country') === 'ES' ? 'selected' : '' }}>Spain</option>
-                            <option value="BD" {{ old('country') === 'BD' ? 'selected' : '' }}>Bangladesh</option>
-                            <option value="IN" {{ old('country') === 'IN' ? 'selected' : '' }}>India</option>
-                            <option value="PK" {{ old('country') === 'PK' ? 'selected' : '' }}>Pakistan</option>
-                            <option value="other" {{ old('country') === 'other' ? 'selected' : '' }}>Other</option>
-                        </select>
-                        <x-input-error :messages="$errors->get('country')" class="mt-2 text-sm text-red-500" />
-                    </div>
-
-                    <!-- Terms -->
-                    <div>
-                        <div class="flex items-center">
-                            <input id="terms" name="terms" type="checkbox" required value="1"
-                                class="h-4 w-4 text-primary-blue focus:ring-primary-blue border-gray-300 rounded"
-                                {{ old('terms') ? 'checked' : '' }}>
-                            <label for="terms" class="ml-2 block text-sm text-gray-700">
-                                I agree to the
-                                <a href="" class="text-primary-blue hover:text-blue-600">Terms & Conditions</a>
-                                and
-                                <a href="" class="text-primary-blue hover:text-blue-600">Privacy Policy</a>
-                            </label>
+                        <div>
+                            <label for="name" class="block text-xs font-medium text-slate-700 mb-1.5">Full name</label>
+                            <input id="name" name="name" type="text" required placeholder="Your name"
+                                value="{{ old('name') }}" autofocus autocomplete="name"
+                                class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white">
+                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
-                        <x-input-error :messages="$errors->get('terms')" class="mt-2 text-sm text-red-500" />
+
+                        <div>
+                            <label for="email" class="block text-xs font-medium text-slate-700 mb-1.5">Email</label>
+                            <input id="email" name="email" type="email" required placeholder="you@example.com"
+                                value="{{ old('email') }}" autocomplete="username"
+                                class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white">
+                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <label for="country" class="block text-xs font-medium text-slate-700 mb-1.5">Country</label>
+                            <select id="country" name="country" required
+                                class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white">
+                                <option value="">Select country</option>
+                                <option value="US" {{ old('country') === 'US' ? 'selected' : '' }}>United States</option>
+                                <option value="CA" {{ old('country') === 'CA' ? 'selected' : '' }}>Canada</option>
+                                <option value="GB" {{ old('country') === 'GB' ? 'selected' : '' }}>United Kingdom</option>
+                                <option value="AU" {{ old('country') === 'AU' ? 'selected' : '' }}>Australia</option>
+                                <option value="DE" {{ old('country') === 'DE' ? 'selected' : '' }}>Germany</option>
+                                <option value="FR" {{ old('country') === 'FR' ? 'selected' : '' }}>France</option>
+                                <option value="IT" {{ old('country') === 'IT' ? 'selected' : '' }}>Italy</option>
+                                <option value="ES" {{ old('country') === 'ES' ? 'selected' : '' }}>Spain</option>
+                                <option value="BD" {{ old('country') === 'BD' ? 'selected' : '' }}>Bangladesh</option>
+                                <option value="IN" {{ old('country') === 'IN' ? 'selected' : '' }}>India</option>
+                                <option value="PK" {{ old('country') === 'PK' ? 'selected' : '' }}>Pakistan</option>
+                                <option value="other" {{ old('country') === 'other' ? 'selected' : '' }}>Other</option>
+                            </select>
+                            <x-input-error :messages="$errors->get('country')" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <label for="phone" class="block text-xs font-medium text-slate-700 mb-1.5">Phone number</label>
+                            <div
+                                class="flex rounded-lg border border-slate-200 bg-slate-50 overflow-hidden focus-within:ring-1 focus-within:ring-emerald-500 focus-within:bg-white">
+                                <select title="Country / area code"
+                                    class="w-32 flex-shrink-0 rounded-none border-0 border-r border-slate-200 bg-slate-100 px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-0">
+                                    <option value="">Code</option>
+                                    <option value="+1">United States +1</option>
+                                    <option value="+44">United Kingdom +44</option>
+                                    <option value="+880">Bangladesh +880</option>
+                                    <option value="+91">India +91</option>
+                                    <option value="+92">Pakistan +92</option>
+                                </select>
+                                <input id="phone" name="phone" type="tel" required placeholder="Phone number"
+                                    value="{{ old('phone') }}"
+                                    class="flex-1 min-w-0 bg-transparent border-0 px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-0">
+                            </div>
+                            <p class="mt-1 text-[11px] text-slate-500">Select country code then enter your number.</p>
+                            <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <label for="password" class="block text-xs font-medium text-slate-700 mb-1.5">Password</label>
+                            <input id="password" name="password" type="password" required placeholder="Min 6 characters"
+                                autocomplete="new-password"
+                                class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white">
+                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <label for="password_confirmation" class="block text-xs font-medium text-slate-700 mb-1.5">Confirm password</label>
+                            <input id="password_confirmation" name="password_confirmation" type="password" required
+                                placeholder="Repeat password" autocomplete="new-password"
+                                class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white">
+                            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                        </div>
+
+                        <label class="flex items-start gap-2 text-sm text-slate-600" for="terms">
+                            <input id="terms" name="terms" type="checkbox" required value="1"
+                                class="mt-0.5 rounded border-slate-300 text-emerald-500 focus:ring-emerald-500"
+                                {{ old('terms') ? 'checked' : '' }}>
+                            <span>
+                                I agree to the
+                                <a href="#" class="text-emerald-600 hover:underline">Terms & Conditions</a>
+                                and
+                                <a href="#" class="text-emerald-600 hover:underline">Privacy Policy</a>.
+                            </span>
+                        </label>
+                        <x-input-error :messages="$errors->get('terms')" class="mt-2" />
+
+                        <button type="submit"
+                            class="w-full rounded-lg bg-emerald-500 py-2.5 text-sm font-semibold text-white hover:bg-emerald-600">
+                            Sign up
+                        </button>
+                    </form>
+
+                    <p class="mt-4 text-center text-sm text-slate-500">
+                        Already have an account?
+                        <a href="{{ route('login') }}" class="font-medium text-emerald-600 hover:underline">Log in</a>
+                    </p>
+                </div>
+
+                <div id="stepNext" class="hidden text-center">
+                    <div
+                        class="flex items-center justify-center h-14 w-14 rounded-full bg-emerald-100 text-emerald-600 mx-auto mb-4">
+                        <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                        </svg>
                     </div>
-
-                    <x-primary-button
-                        class="w-full bg-primary-blue text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-600 transition-colors justify-center">
-                        {{ __('Create Account') }}
-                    </x-primary-button>
-
-                    <div class="text-center">
-                        <p class="text-sm text-gray-600">
-                            Already have an account?
-                            <a href="{{ route('login') }}"
-                                class="text-primary-blue hover:text-blue-600 font-medium">Sign in here</a>
-                        </p>
+                    <h2 class="text-xl font-bold text-slate-900 mb-2">Account created successfully</h2>
+                    <p class="text-sm text-slate-600 mb-4">Welcome to VirtualPay. Your account has been created.</p>
+                    <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-left mb-6">
+                        <p class="text-xs font-medium text-slate-700 mb-1">Next step: verify your email</p>
+                        <p class="text-sm text-slate-600">We have sent a verification link to <strong
+                                id="nextStepEmail" class="text-slate-900"></strong>. Please check your inbox and click
+                            the link to verify your email.</p>
                     </div>
-                </form>
-
-               
+                    <a href="{{ route('login') }}"
+                        class="block w-full rounded-lg bg-emerald-500 py-2.5 text-sm font-semibold text-white hover:bg-emerald-600 text-center">
+                        Go to log in
+                    </a>
+                </div>
             </div>
         </div>
     </section>

@@ -461,7 +461,28 @@
                                 </div>
                             </div>
                             @empty
-                            Empty Transactions
+                            <div id="notificationHistoryEmptyState"
+                                class="px-6 py-10 flex flex-col items-center justify-center text-center gap-3">
+                                <div
+                                    class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+                                    {{-- card icon --}}
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <div class="space-y-1">
+                                    <p class="text-sm font-semibold text-slate-900">You’re all caught up</p>
+                                    <p class="text-[11px] text-slate-500 max-w-xs mx-auto">
+                                        There are no transactions yet. All your recent transactions and activity will appear here in real time.
+                                    </p>
+                                </div>
+                                <p class="text-[10px] text-slate-400">
+                                    Tip: You can manage notification preferences from Settings.
+                                </p>
+                            </div>
                             @endforelse
 
 

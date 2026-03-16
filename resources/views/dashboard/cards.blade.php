@@ -200,7 +200,7 @@
                             data-cardNumber="{{ $card->number }}" data-expiry="{{ $card->expiryDate }}"
                             data-cvv="{{ $card->cvv }}" data-holder="{{ Auth::user()->name }}"
                             data-balance="{{ number_format($card->cardBalance,2) }}" data-type="{{ $card->type }}"
-                            data-status="{{ $card->state }}"
+                            data-status="{{ $card->state }}" data-cardid="{{ $card->id }}"
                             data-totalconsume="{{ number_format($card->totalConsume, 2) }}">
                             <div class="flex items-center justify-between gap-2">
                                 <div class="flex items-center gap-3">
@@ -373,7 +373,7 @@
                                     class="font-semibold text-[15px] text-emerald-300">$0.00</span>
 
                                 {{-- refresh btn --}}
-                                <a class=" ml-2" href="{{ route('update_balance', $card->id) }}">
+                                <a id="selectedCardUpdateBalanceBtn" class=" ml-2" href="#" aria-disabled="true">
 
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
                                         viewBox="0 0 24 24">
@@ -426,27 +426,13 @@
                         <div class="flex flex-wrap gap-2">
 
 
-                            @if($card->state == 2)
-
-                            <form
-                                class="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] text-slate-700 hover:border-amber-400/80 hover:text-amber-600"
-                                action="{{ route('unfreeze_card') }}" method="post">
-
-                                @csrf
-
-                                <input type="hidden" name="card_id" value="{{ $card->id }}">
-                                <button type="submit">Unfreeze</button>
-                            </form>
-                            @else
-
-                            <form
+                            <form id="selectedCardFreezeForm"
                                 class="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] text-slate-700 hover:border-amber-400/80 hover:text-amber-600"
                                 action="{{ route('freeze_card') }}" method="post">
                                 @csrf
-                                <input type="hidden" name="card_id" value="{{ $card->id }}">
-                                <button type="submit">Freeze</button>
+                                <input id="selectedCardFreezeFormCardId" type="hidden" name="card_id" value="">
+                                <button id="selectedCardFreezeButton" type="submit">Freeze</button>
                             </form>
-                            @endif
 
                             <button id="btnTopupSelectedCard"
                                 class="inline-flex items-center gap-1 rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-[11px] text-emerald-700 hover:bg-emerald-100">
@@ -662,11 +648,18 @@
             const selectedSpent = document.getElementById('selectedCardSpent');
             const selectedTitle = document.getElementById('selectedCardTitle');
             const selectedStatus = document.getElementById('selectedCardStatus');
+            const selectedCardUpdateBalanceBtn = document.getElementById('selectedCardUpdateBalanceBtn');
+            const selectedCardFreezeForm = document.getElementById('selectedCardFreezeForm');
+            const selectedCardFreezeFormCardId = document.getElementById('selectedCardFreezeFormCardId');
+            const selectedCardFreezeButton = document.getElementById('selectedCardFreezeButton');
             const detailsPanel = document.getElementById('details_pan');
             const searchInput = document.getElementById('cardSearchInput');
             const filterButtons = document.querySelectorAll('.mycards-filter');
             const showingCount = document.getElementById('cardsShowingCount');
             const cardRows = document.querySelectorAll('.card-row');
+            const updateBalanceRouteTemplate = @json(route('update_balance', ['id' => '__CARD_ID__']));
+            const freezeCardRoute = @json(route('freeze_card'));
+            const unfreezeCardRoute = @json(route('unfreeze_card'));
 
             let activeTypeFilter = 'all';
 
@@ -732,6 +725,7 @@
                 const balance = cardRow.dataset.balance || '0.00';
                 const type = cardRow.dataset.type || 'Card';
                 const status = cardRow.dataset.status || '0';
+                const cardId = cardRow.dataset.cardid || '';
                 const totalconsume = cardRow.dataset.totalconsume || '0.00';
 
                 if (selectedNumber) selectedNumber.innerText = number;
@@ -746,6 +740,28 @@
                     selectedStatus.innerHTML = status == 1
                         ? `<span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Active`
                         : `<span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span> Frozen`;
+                }
+
+                if (selectedCardUpdateBalanceBtn) {
+                    if (cardId) {
+                        selectedCardUpdateBalanceBtn.href = updateBalanceRouteTemplate.replace('__CARD_ID__', cardId);
+                        selectedCardUpdateBalanceBtn.setAttribute('aria-disabled', 'false');
+                    } else {
+                        selectedCardUpdateBalanceBtn.href = '#';
+                        selectedCardUpdateBalanceBtn.setAttribute('aria-disabled', 'true');
+                    }
+                }
+
+                if (selectedCardFreezeForm) {
+                    selectedCardFreezeForm.action = status == 2 ? unfreezeCardRoute : freezeCardRoute;
+                }
+
+                if (selectedCardFreezeButton) {
+                    selectedCardFreezeButton.innerText = status == 2 ? 'Unfreeze' : 'Freeze';
+                }
+
+                if (selectedCardFreezeFormCardId) {
+                    selectedCardFreezeFormCardId.value = cardId;
                 }
             };
 

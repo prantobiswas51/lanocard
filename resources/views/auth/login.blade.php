@@ -1,84 +1,54 @@
 <x-guest-layout>
+    <section class="min-h-screen flex items-center justify-center pb-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full">
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+                <h1 class="text-xl font-bold text-slate-900 mb-1">Log in</h1>
+                <p class="text-sm text-slate-500 mb-6">Enter your email and password to access your account.</p>
 
-
-
-    <section class="min-h-screen flex items-center justify-center  pb-12 px-4 sm:px-6 lg:px-8">
-
-        <div class="max-w-md w-full space-y-8">
-            <div class="text-center">
-                <h2 class="text-3xl font-bold text-black mb-2">Welcome Back</h2>
-                <p class="text-gray-600">Sign in to your Tappayz account</p>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-lg p-8">
-                <!-- Session Status -->
                 <x-auth-session-status class="mb-4" :status="session('status')" />
 
-                <form method="POST" action="{{ route('login') }}" class="space-y-6">
+                <form id="loginForm" method="POST" action="{{ route('login') }}" class="space-y-4">
                     @csrf
 
-                    <!-- Email Address -->
                     <div>
-                        <x-input-label for="email" :value="__('Email Address')"
-                            class="block text-sm font-medium text-gray-700 mb-2" />
-                        <x-text-input id="email" type="email" name="email"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="Enter your email" :value="old('email')" required autofocus
-                            autocomplete="username" />
+                        <label for="email" class="block text-xs font-medium text-slate-700 mb-1.5">Email</label>
+                        <input id="email" name="email" type="email" required placeholder="you@example.com"
+                            value="{{ old('email') }}" autofocus autocomplete="username"
+                            class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white">
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
 
-                    <!-- Password -->
                     <div>
-                        <x-input-label for="password" :value="__('Password')"
-                            class="block text-sm font-medium text-gray-700 mb-2" />
-                        <div class="relative">
-                            <x-text-input id="password" type="password" name="password"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                placeholder="Enter your password" required autocomplete="current-password" />
-                            <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                </svg>
-                            </button>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label for="password" class="block text-xs font-medium text-slate-700">Password</label>
+                            @if (Route::has('password.request'))
+                                <a href="{{ route('password.request') }}"
+                                    class="text-[11px] font-medium text-emerald-600 hover:underline">Forgot password?</a>
+                            @endif
                         </div>
+                        <input id="password" name="password" type="password" required placeholder="••••••••"
+                            autocomplete="current-password"
+                            class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white">
                         <x-input-error :messages="$errors->get('password')" class="mt-2" />
                     </div>
 
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <input id="remember_me" name="remember" type="checkbox"
-                                class="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="remember_me" class="ml-2 block text-sm text-gray-700">Remember me</label>
-                        </div>
+                    <label class="flex items-center gap-2 text-sm text-slate-600" for="remember_me">
+                        <input id="remember_me" name="remember" type="checkbox"
+                            class="rounded border-slate-300 text-emerald-500 focus:ring-emerald-500"
+                            {{ old('remember') ? 'checked' : '' }}>
+                        Remember me
+                    </label>
 
-                        @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}"
-                            class="text-blue-500 hover:text-blue-600 font-medium text-sm">
-                            Forgot password?
-                        </a>
-                        @endif
-                    </div>
-
-
-                    <x-primary-button
-                        class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
-                        {{ __('Sign In') }}
-                    </x-primary-button>
-
-
-                    <div class="text-center">
-                        <p class="text-sm text-gray-600">
-                            Don't have an account?
-                            <a href="{{ route('register') }}"
-                                class="text-blue-500 hover:text-blue-600 font-medium">Create one here</a>
-                        </p>
-                    </div>
+                    <button type="submit"
+                        class="w-full rounded-lg bg-emerald-500 py-2.5 text-sm font-semibold text-white hover:bg-emerald-600">
+                        Log in
+                    </button>
                 </form>
+
+                <p class="mt-4 text-center text-sm text-slate-500">
+                    Don't have an account?
+                    <a href="{{ route('register') }}" class="font-medium text-emerald-600 hover:underline">Sign up</a>
+                </p>
             </div>
         </div>
     </section>

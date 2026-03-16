@@ -58,7 +58,7 @@
                 </div>
                 @empty
                 <div id="notificationHistoryEmptyState"
-                    class="px-6 py-10 flex flex-col items-center justify-center text-center gap-3">
+                    class="px-6 py-10 flex flex-col items-center right-t-0 justify-center text-center gap-3">
                     <div
                         class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
