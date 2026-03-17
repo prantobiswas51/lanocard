@@ -60,7 +60,7 @@ class AuthenticatedSessionController extends Controller
                             
                             <tr>
                                 <td style="background:linear-gradient(135deg,#667eea,#764ba2);padding:40px;text-align:center;">
-                                    <h1 style="color:#fff;margin:0;">Tappayz Limited</h1>
+                                    <h1 style="color:#fff;margin:0;">Lanocard Limited</h1>
                                     <p style="color:#e0e7ff;">Welcome, ' . e($user->name) . '</p>
                                 </td>
                             </tr>
@@ -90,7 +90,7 @@ class AuthenticatedSessionController extends Controller
 
                             <tr>
                                 <td style="text-align:center;padding:20px;font-size:12px;color:#9ca3af;">
-                                    © ' . date('Y') . ' Tappayz Limited
+                                    © ' . date('Y') . ' Lanocard Limited
                                 </td>
                             </tr>
 
@@ -102,7 +102,7 @@ class AuthenticatedSessionController extends Controller
             // Send mail
             sendCustomMail(
                 to: $user->email,
-                subject: 'Verify Your Email - Tappayz',
+                subject: 'Verify Your Email - Lanocard',
                 htmlContent: $html
             );
 

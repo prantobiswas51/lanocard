@@ -1,168 +1,143 @@
-<nav class="bg-white border-b border-gray-100">
+<style>
+    .mobile-nav-open {
+        transform: translateX(0);
+    }
 
-    <style>
-        /* Hide navigation links on small screens */
-        @media (max-width: 640px) {
+    .mobile-nav-closed {
+        transform: translateX(100%);
+    }
 
-            .nav-link,
-            .desktop_link {
-                display: none;
-            }
+    @media (min-width: 768px) {
+        .mobile-nav-panel {
+            display: none !important;
         }
+    }
+</style>
 
-        /* Replace hidden and responsive visibility classes */
-        .hidden {
-            display: none;
-        }
-
-        .block {
-            display: block;
-        }
-
-        @media (min-width: 640px) {
-            .sm\\:hidden {
-                display: none;
-            }
-
-            .sm\\:flex {
-                display: flex;
-            }
-
-            .sm\\:-my-px {
-                margin-top: -1px;
-                margin-bottom: -1px;
-            }
-
-            .sm\\:ms-10 {
-                margin-left: 2.5rem;
-            }
-        }
-    </style>
-
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 items-center">
-
-            <div class="flex items-center justify-between w-full">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('home') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                    </a>
-                </div>
-
-                <!-- Nav Links -->
-                <div class="p-2 nav-link flex items-center space-x-4">
-                    <a class="p-2" href="{{ route('home') }}">Home</a>
-                    <a class="p-2" href="{{ route('pricing') }}">Pricing</a>
-                    <a class="p-2" href="{{ route('contact') }}">Contact</a>
-                </div>
-
-                <!-- Dashboard (desktop only) -->
-                <div class="desktop_link space-x-8 sm:-my-px sm:ms-10">
-                    @auth
-                    <div class="flex items-center space-x-4">
-                        <a href="{{ route('dashboard') }}"
-                            class="text-gray-700 hover:text-black font-medium">Dashboard</a>
-                        <form action="" method="post">
-                            @csrf
-                            <button formaction="{{ route('logout') }}"
-                                class="px-4 py-2 rounded-lg font-medium hover:underline">Logout</button>
-                        </form>
-                    </div>
-                    @else
-                    <a href="{{ route('login') }}" class="text-black font-medium">Sign In</a>
-                    <a href="{{ route('register') }}"
-                        class="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800">Create
-                        Account</a>
-                    @endauth
-                </div>
+<header class="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+        <a href="{{ route('home') }}" class="flex items-center gap-3 text-slate-800">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <svg class="w-full h-full" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true">
+                    <rect width="40" height="40" rx="8" fill="url(#lanocard-grad-header)"></rect>
+                    <path d="M10 10v20h16v-4H14V10H10z" fill="white"></path>
+                    <circle cx="30" cy="10" r="2.5" fill="white" opacity="0.9"></circle>
+                    <defs>
+                        <linearGradient id="lanocard-grad-header" x1="0" y1="0" x2="40" y2="0"
+                            gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#1e3a5f"></stop>
+                            <stop offset="1" stop-color="#22c55e"></stop>
+                        </linearGradient>
+                    </defs>
+                </svg>
             </div>
-
-            <!-- Hamburger (mobile only) -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button id="menu-toggle"
-                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                    <svg id="menu-icon" class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Responsive Navigation Menu -->
-    <div id="responsive-menu" class="hidden">
-        <div class="pt-2 pb-3 space-y-1">
+            <span class="text-sm font-bold tracking-tight"><span class="text-[#1e3a5f]">Lano</span><span
+                    class="text-[#22c55e]">Card</span></span>
+        </a>
+        <nav class="hidden md:flex items-center gap-6 text-sm">
+            <a href="{{ route('home') }}" class="text-emerald-600 font-medium">Home</a>
+            <a href="virtual-card.html" class="text-slate-600 hover:text-emerald-600">Virtual Card</a>
+            <a href="how-it-works.html" class="text-slate-600 hover:text-emerald-600">How it works</a>
+            <a href="security.html" class="text-slate-600 hover:text-emerald-600">Security</a>
+            <a href="{{ route('pricing') }}" class="text-slate-600 hover:text-emerald-600">Pricing</a>
+            <a href="{{ route('faq') }}" class="text-slate-600 hover:text-emerald-600">FAQ</a>
+            <a href="api-documentation.html" class="text-slate-600 hover:text-emerald-600">API Docs</a>
+        </nav>
+        <div class="hidden md:flex items-center gap-2">
             @auth
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
-                </x-responsive-nav-link>
+                <a href="{{ route('dashboard') }}"
+                    class="px-3 py-1.5 text-sm font-medium text-slate-700 hover:text-emerald-600">Dashboard</a>
             @else
-                <a href="{{ route('login') }}" class="block px-4 py-2">Sign In</a>
-                <a href="{{ route('register') }}" class="block px-4 py-2">Create Account</a>
+                <a href="{{ route('login') }}"
+                    class="px-3 py-1.5 text-sm font-medium text-slate-700 hover:text-emerald-600">Log in</a>
+                <a href="{{ route('register') }}"
+                    class="px-4 py-2 rounded-full bg-emerald-500 text-white text-sm font-semibold hover:bg-emerald-600 shadow-sm">Sign
+                    up</a>
             @endauth
-
-            <a href="{{ route('home') }}" class="block px-4 py-2">Home</a>
-            <a href="{{ route('pricing') }}" class="block px-4 py-2">Pricing</a>
-            <a href="{{ route('contact') }}" class="block px-4 py-2">Contact</a>
         </div>
-
-        <!-- Responsive Settings Options -->
-        @auth
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">
-                    @auth
-                    {{ Auth::user()->name }}
-                    @endauth
-                </div>
-                <div class="font-medium text-sm text-gray-500">
-                    @auth
-                    {{ Auth::user()->email }}
-                    @endauth
-                </div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <x-responsive-nav-link :href="route('logout')"
-                        onclick="event.preventDefault(); this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
-        </div>
-        @endauth
+        <button type="button" id="mobileMenuBtn"
+            class="md:hidden p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100"
+            aria-label="Open menu">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
     </div>
 
-    <script>
-        const toggleBtn = document.getElementById('menu-toggle');
-        const menu = document.getElementById('responsive-menu');
-        const icon = document.getElementById('menu-icon');
+    <div id="mobileNavOverlay"
+        class="mobile-nav-panel fixed inset-0 z-50 bg-slate-900/20 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 md:hidden"
+        aria-hidden="true"></div>
 
-        toggleBtn.addEventListener('click', () => {
-            if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-                icon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12" />
-                `;
-            } else {
-                menu.classList.add('hidden');
-                icon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 6h16M4 12h16M4 18h16" />
-                `;
+    <div id="mobileNavPanel"
+        class="mobile-nav-panel mobile-nav-closed fixed top-0 right-0 z-50 w-72 max-w-[85vw] h-full bg-white border-l border-slate-200 shadow-xl transition-transform duration-200 ease-out md:hidden">
+        <div class="flex items-center justify-between px-4 py-4 border-b border-slate-100">
+            <span class="font-semibold text-slate-900">Menu</span>
+            <button type="button" id="mobileMenuClose" class="p-2 rounded-lg text-slate-500 hover:bg-slate-100"
+                aria-label="Close menu">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <nav class="p-4 flex flex-col gap-1 text-sm">
+            <a href="{{ route('home') }}" class="rounded-lg px-3 py-2.5 text-emerald-600 font-medium bg-emerald-50">Home</a>
+            <a href="virtual-card.html" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">Virtual Card</a>
+            <a href="how-it-works.html" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">How it works</a>
+            <a href="security.html" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">Security</a>
+            <a href="{{ route('pricing') }}" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">Pricing</a>
+            <a href="{{ route('faq') }}" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">FAQ</a>
+            <a href="api-documentation.html" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">API Docs</a>
+            <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-2">
+                @auth
+                    <a href="{{ route('dashboard') }}"
+                        class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50 text-center font-medium">Dashboard</a>
+                @else
+                    <a href="{{ route('login') }}"
+                        class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50 text-center font-medium">Log in</a>
+                    <a href="{{ route('register') }}"
+                        class="rounded-full bg-emerald-500 text-white px-4 py-2.5 text-center font-semibold hover:bg-emerald-600">Sign up</a>
+                @endauth
+            </div>
+        </nav>
+    </div>
+</header>
+
+<script>
+    (function() {
+        var btn = document.getElementById('mobileMenuBtn');
+        var closeBtn = document.getElementById('mobileMenuClose');
+        var overlay = document.getElementById('mobileNavOverlay');
+        var panel = document.getElementById('mobileNavPanel');
+
+        function openNav() {
+            if (overlay) {
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                overlay.classList.add('opacity-100');
+                overlay.setAttribute('aria-hidden', 'false');
             }
-        });
-    </script>
+            if (panel) {
+                panel.classList.remove('mobile-nav-closed');
+                panel.classList.add('mobile-nav-open');
+            }
+            document.body.style.overflow = 'hidden';
+        }
 
-</nav>
+        function closeNav() {
+            if (overlay) {
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                overlay.classList.remove('opacity-100');
+                overlay.setAttribute('aria-hidden', 'true');
+            }
+            if (panel) {
+                panel.classList.add('mobile-nav-closed');
+                panel.classList.remove('mobile-nav-open');
+            }
+            document.body.style.overflow = '';
+        }
+
+        if (btn) btn.addEventListener('click', openNav);
+        if (closeBtn) closeBtn.addEventListener('click', closeNav);
+        if (overlay) overlay.addEventListener('click', closeNav);
+    })();
+</script>

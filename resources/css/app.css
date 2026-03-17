@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /*
-  Tappayz UI Theme (HTML/CSS only)
+  Lanocard UI Theme (HTML/CSS only)
   - Clean, modern dashboard look inspired by fintech UIs
   - Colors tuned to be distinct from vcc.agency but familiar
 */
@@ -19,7 +19,6 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
 }
 
 ::-webkit-scrollbar {

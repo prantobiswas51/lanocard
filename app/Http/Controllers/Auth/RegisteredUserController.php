@@ -5,18 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Crypt;
 use App\Http\Requests\RegisterRequest;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Process;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Mail\Message;
+use BcMath\Number;
 
 class RegisteredUserController extends Controller
 {
@@ -28,22 +22,32 @@ class RegisteredUserController extends Controller
 
     public function store(RegisterRequest $request): RedirectResponse
     {
+        $validated = $request->validated();
 
-        // dd($request->all());
         // Create user
         $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->phone = $request->phone;
-        $user->country = $request->country;
-        $user->password = Hash::make($request->password);
-        $user->email_verification_token = Str::random(40); // Generate verification token
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->phone = trim($validated['phoneCode'] . ' ' . $validated['phone']);
+        $user->country = $validated['country'];
+        $user->password = Hash::make($validated['password']);
+        $user->email_verification_token = Str::random(40);
+
+        // Generate unique 16-digit api_num
+        do {
+            $api_num = random_int(1000000000000000, 9999999999999999);
+        } while (User::where('api_num', $api_num)->exists());
+
+        $user->api_num = $api_num;
+
+        $user->api_key = Str::random(32); // Generate random API key
         $user->save();
 
         // Generate verification link
         $verifyUrl = URL::to('/email-check?token=' . $user->email_verification_token . '&email=' . urlencode($user->email));
         // Email content
-        $html = '
+        $html =
+            '
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f3f4f6;">
                 <tr>
                     <td align="center" style="padding: 40px 20px;">
@@ -56,7 +60,7 @@ class RegisteredUserController extends Controller
                                 <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                                     padding: 40px 30px; text-align: center;">
                                     <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">
-                                        Tappayz Limited
+                                        Lanocard Limited
                                     </h1>
                                     <p style="margin: 8px 0 0 0; color: #e0e7ff; font-size: 14px; font-weight: 400;">
                                         Welcome to our platform, ' . e($user->name) . '
@@ -73,7 +77,7 @@ class RegisteredUserController extends Controller
                                     
                                     <p style="margin: 0 0 20px 0; color: #4b5563; font-size: 16px; line-height: 1.6;">
                                         Thank you for registering with 
-                                        <strong style="color: #667eea;">Tappayz Limited</strong>! We\'re excited to have you on board.
+                                        <strong style="color: #667eea;">Lanocard Limited</strong>! We\'re excited to have you on board.
                                     </p>
                                     
                                     <p style="margin: 0 0 30px 0; color: #4b5563; font-size: 16px; line-height: 1.6;">
@@ -129,14 +133,14 @@ class RegisteredUserController extends Controller
                                     border-top: 1px solid #e5e7eb;">
                                     <p style="margin: 0 0 10px 0; color: #6b7280; font-size: 14px;">
                                         Need help? Contact us at 
-                                        <a href="mailto:support@tappayz.com" 
+                                        <a href="mailto:support@tanocard.com" 
                                             style="color: #667eea; text-decoration: none;">
-                                            support@tappayz.com
+                                            support@tanocard.com
                                         </a>
                                     </p>
 
                                     <p style="margin: 0; color: #9ca3af; font-size: 12px;">
-                                        © ' . date("Y") . ' Tappayz Limited. All rights reserved.
+                                        © ' . date("Y") . ' Lanocard Limited. All rights reserved.
                                     </p>
 
                                     <p style="margin: 15px 0 0 0; color: #9ca3af; font-size: 12px;">
@@ -149,10 +153,9 @@ class RegisteredUserController extends Controller
                     </td>
                 </tr>
             </table>
-            ';
+        ';
 
-
-        sendCustomMail($request->email, 'Verify Your Email - Tappayz', $html);
+        sendCustomMail($validated['email'], 'Verify Your Email - Lanocard', $html);
 
         return redirect()->route('check_mail')->with('success', 'Please check your email to verify your account.');
     }

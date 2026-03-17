@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tappayz – Fast, Secure Payments</title>
+    <title>Lanocard – Fast, Secure Payments</title>
     <meta name="description"
-        content="Tappayz is the fastest way to send and receive money globally with secure transactions and low fees." />
+        content="Lanocard is the fastest way to send and receive money globally with secure transactions and low fees." />
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,7 +18,7 @@
         <div class="container" style="display:flex; align-items:center; justify-content:space-between; padding:16px 0;">
             <a href="/" class="brand" style="text-decoration:none; color:inherit;">
                 <div class="brand-badge"></div>
-                <div>Tappayz</div>
+                <div>Lanocard</div>
             </a>
             <nav style="display:flex; gap:14px; align-items:center;">
                 <a href="#features" class="help">Features</a>

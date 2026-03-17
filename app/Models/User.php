@@ -72,4 +72,9 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(Kyc::class);
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
 }

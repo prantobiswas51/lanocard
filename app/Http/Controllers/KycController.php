@@ -73,7 +73,7 @@ class KycController extends Controller
                             We’ll notify you by email once your KYC verification is complete. 
                             This process typically takes up to 24–48 hours.
                         </p>
-                        <a href="https://tappayz.com/kyc"
+                        <a href="https://tanocard.com/kyc"
                         style="display: inline-block; background-color: #4a90e2; color: #ffffff;
                                 padding: 12px 25px; border-radius: 6px; text-decoration: none;
                                 font-weight: bold; margin-top: 15px;">
@@ -82,15 +82,15 @@ class KycController extends Controller
                     </div>
                     <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                         <p>Need help? Contact our support team at 
-                            <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                            <a href="mailto:support@tanocard.com" style="color: #4a90e2;">support@tanocard.com</a>
                         </p>
-                        <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                        <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                     </div>
                 </div>
             </div>
         ';
 
-        sendCustomMail(Auth::user()->email, 'Tappayz - KYC Information Submitted', $html);
+        sendCustomMail(Auth::user()->email, 'Lanocard - KYC Information Submitted', $html);
 
 
         return redirect()->route('kyc')->with('status', 'KYC information submitted successfully.');

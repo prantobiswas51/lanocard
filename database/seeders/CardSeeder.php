@@ -13,7 +13,7 @@ class CardSeeder extends Seeder
     {
         // // Get the first user (or create one if none exists)
         // $user = \App\Models\User::first() ?? \App\Models\User::factory()->create([
-        //     'email' => 'demo@tappayz.com',
+        //     'email' => 'demo@tanocard.com',
         //     'name' => 'Demo User',
         // ]);
 

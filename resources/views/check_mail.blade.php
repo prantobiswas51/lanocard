@@ -5,7 +5,7 @@
 
             {{-- site logo --}}
             {{-- <div class="flex items-center mb-6">
-                <img src="{{ asset('images/logo.png') }}" alt="Tappayz" class="w-150 h-16">
+                <img src="{{ asset('images/logo.png') }}" alt="Lanocard" class="w-150 h-16">
             </div> --}}
 
             <!-- Header -->

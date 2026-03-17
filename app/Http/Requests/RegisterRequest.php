@@ -27,6 +27,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'phoneCode' => ['required', 'string', 'max:10'],
             'phone' => ['required', 'string', 'max:20'],
             'country' => ['required', 'string', 'max:255'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -44,6 +45,7 @@ class RegisterRequest extends FormRequest
             'email.required' => 'Email address is required.',
             'email.email' => 'Please enter a valid email address.',
             'email.unique' => 'This email address is already registered.',
+            'phoneCode.required' => 'Please select a country code.',
             'phone.required' => 'Phone number is required.',
             'country.required' => 'Please select your country.',
             'password.required' => 'Password is required.',

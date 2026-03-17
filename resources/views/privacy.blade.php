@@ -11,7 +11,7 @@
                 <div class="prose prose-lg max-w-none">
                     <h2 class="text-2xl font-bold text-black mb-4">1. Introduction</h2>
                     <p class="text-gray-700 mb-6">
-                        Tappayz ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy
+                        Lanocard ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy
                         explains how we collect, use, disclose, and safeguard your information when you use our virtual
                         payment card services and website.
                     </p>
@@ -117,7 +117,7 @@
                     <p class="text-gray-700 mb-4">If you have any questions about this Privacy Policy, please contact
                         us:</p>
                     <div class="bg-gray-50 rounded-lg p-6">
-                        <p class="text-gray-700 mb-2"><strong>Email:</strong> privacy@tappayz.com</p>
+                        <p class="text-gray-700 mb-2"><strong>Email:</strong> privacy@tanocard.com</p>
                         <p class="text-gray-700 mb-2"><strong>Phone:</strong> +1 (234) 567-890</p>
                         <p class="text-gray-700 mb-2"><strong>Address:</strong> 123 Financial District, New York, NY
                             10004, United States</p>

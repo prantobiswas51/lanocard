@@ -23,136 +23,29 @@
         }
     </style>
 
-    {{-- Cashout Modal --}}
-    <div id="cashoutModal" class="fixed inset-0 bg-gray-600 bg-opacity-50   hidden z-50">
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-2xl h-[270px] bg-white">
-            <!-- Modal Header -->
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">Cash Out</h3>
-                <button id="closeCashoutModal" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">
-                    &times;
-                </button>
-            </div>
-
-            <!-- Modal Body -->
-            <form action="{{ route('card_cashout') }}" method="post" class="space-y-4">
-                @csrf
-                <div>
-                    <label for="cashout_amount" class="block text-sm font-medium text-gray-700 mb-2">
-                        Withdrawal Amount
-                    </label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
-                        <input type="number" id="cashout_amount" name="amount" placeholder="0.00" min="1"
-                            max="{{ $card->cardBalance ?? 0 }}" step="0.01" required
-                            class="w-full pl-8 pr-3 py-2 border text-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                    <p class=" text-sm text-black ">
-                        <span class="text-green-600">Available: B</span>
-                        <br>
-                        You will get: <span class="text-red-500">$HH (Card Balance - 20%)</span>
-                    </p>
-                </div>
-
-                <input type="hidden" name="card_id" value="">
-
-                <!-- Modal Footer -->
-                <div class="flex space-x-3 pt-4">
-                    <button type="button" id="cancelCashout"
-                        class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
-                        Cancel
-                    </button>
-                    <button type="submit"
-                        class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                        Cash Out
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    {{-- Recharge Modal --}}
-    <div id="rechargeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-2xl h-[270px] bg-white">
-            <!-- Modal Header -->
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">Recharge</h3>
-                <button id="closeRechargeModal" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">
-                    &times;
-                </button>
-            </div>
-
-            <!-- Modal Body -->
-            <form action="{{ route('card_recharge') }}" method="post" class="space-y-4">
-                @csrf
-
-                <div>
-                    <label for="recharge_amount" class="block text-sm font-medium text-gray-700 mb-2">
-                        Recharge Amount
-                    </label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
-
-                        <input type="number" name="amount" min="10" value="10" max="{{ Auth::user()->balance }}"
-                            required id="recharge_amount" onchange="updateRechargeTotal()"
-                            style="background: #f8f9fa; border: 1px solid #e9ecef; color: #333;"
-                            class="w-full pl-8 pr-3 py-2 border text-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-
-                    </div>
-                    <p class=" text-sm text-black ">
-                        <span class="text-green-600">Available: ${{ number_format(Auth::user()->balance ?? 0, 2)
-                            }}</span>
-                        | Total: <span class="text-red-500" id="total_amount">$11.00 (Fee 10%)</span>
-                    </p>
-
-                </div>
-
-                <input type="hidden" name="card_id" value="">
-
-                <!-- Modal Footer -->
-                <div class="flex space-x-3 pt-4">
-                    <button type="button" id="cancelRechargeModal"
-                        class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
-                        Cancel
-                    </button>
-                    <button type="submit"
-                        class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                        Recharge
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <section class="flex-1 w-full">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-5">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div>
-                    <p class="text-xs uppercase tracking-[0.2em] text-emerald-500 font-semibold">My cards</p>
-                    <h2 class="text-lg sm:text-xl font-semibold text-slate-900">Manage all your virtual cards</h2>
-                    <p class="text-xs text-slate-500 max-w-xl">
-                        View every one‑time and reloadable card in one place. Quickly search, filter, freeze or top‑up
-                        cards.
-                    </p>
-                </div>
-                <div class="flex flex-wrap gap-2 text-[11px]">
-                    <span
-                        class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 border border-emerald-200 text-emerald-700">
-                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Active · {{
-                        $mycards->where('state', 1)->count() }}
-                    </span>
-                    <span
-                        class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 border border-amber-200 text-amber-700">
-                        <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span> Frozen · {{ $mycards->where('state',
-                        2)->count() }}
-                    </span>
-                </div>
-            </div>
+        <div class="max-w-6xl grid lg:grid-cols-[1.6fr,1.2fr] mx-auto px-4 sm:px-6 space-y-5">
 
-            <div class="grid lg:grid-cols-[1.6fr,1.2fr] gap-5 items-start scroll-smooth">
+
+
+            <div class=" gap-5 items-start scroll-smooth mt-6">
                 <!-- Left: search + filters + list -->
+
+                <div class="flex flex-col  w-max sm:flex-row sm:items-center sm:justify-between gap-3 ">
+                    <div>
+                        <p class="text-xs uppercase tracking-[0.2em] text-emerald-500 font-semibold">My cards</p>
+                        <h2 class="text-lg sm:text-xl font-semibold text-slate-900">Manage all your virtual cards</h2>
+                        <p class="text-xs text-slate-500 max-w-xl">
+                            View every one‑time and reloadable card in one place. Quickly search, filter, freeze or
+                            top‑up
+                            cards.
+                        </p>
+                    </div>
+                </div>
+
                 <div
-                    class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 sm:p-5 space-y-4 shadow-sm">
+                    class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 sm:p-5 space-y-4 my-4 shadow-sm">
+
 
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div class="relative w-full sm:max-w-xs">
@@ -184,12 +77,25 @@
                         </div>
                     </div>
 
-                    <div class="text-[11px] text-slate-500 flex items-center justify-between">
+                    <div class="text-[11px] text-slate-500 flex items-center gap-2 justify-between">
                         <span id="cardsShowingCount">Showing {{ $mycards->count() }} cards</span>
-                        <button
-                            class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] text-slate-700 hover:border-emerald-300 hover:text-emerald-700">
-                            Sort by latest
-                        </button>
+                        <div class="gap-2 flex items-center">
+                            <button
+                                class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] text-slate-700 hover:border-emerald-300 hover:text-emerald-700">
+                                Sort by latest
+                            </button>
+                            <span
+                                class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 border border-emerald-200 text-emerald-700">
+                                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Active · {{
+                                $mycards->where('state', 1)->count() }}
+                            </span>
+                            <span
+                                class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 border border-amber-200 text-amber-700">
+                                <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span> Frozen · {{
+                                $mycards->where('state',
+                                2)->count() }}
+                            </span>
+                        </div>
                     </div>
 
                     <div class="space-y-3 max-h-[360px] overflow-y-auto pr-1">
@@ -312,13 +218,17 @@
                     </div>
                 </div>
 
+
+            </div>
+
+            <div class="ml-3">
                 <!-- Right: selected card summary -->
                 {{-- Flag-3 --}}
                 <div id="details_pan"
-                    class="bg-white border-slate-200 rounded-2xl p-3 sm:p-4 space-y-3 shadow-sm max-h-[calc(85vh-4rem)] overflow-y-auto overscroll-contain lg:sticky lg:top-5">
-                    
+                    class="bg-white border-slate-200 rounded-2xl p-3 sm:p-4 flex gap-3 flex-col shadow-sm max-h-[calc(93vh-4rem)] overflow-y-auto overscroll-contain lg:sticky ">
+
                     {{-- header details --}}
-                    <div class="space-y-0.5  flex justify-between rounded-lg  px-3 py-2 text-red-800 items-center">
+                    <div class="space-y-0.5  flex justify-between rounded-lg  p-2 text-red-800 items-center">
                         <div class="">
                             <p
                                 class="text-[11px] uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 font-semibold">
@@ -372,10 +282,12 @@
                                 Balance: <span id="selectedCardBalance"
                                     class="font-semibold text-[15px] text-emerald-300">$0.00</span>
 
-                                {{-- refresh btn --}}
-                                <a id="selectedCardUpdateBalanceBtn" class=" ml-2" href="#" aria-disabled="true">
+                                {{-- refresh btn flag-6 --}} 
+                                <a id="selectedCardUpdateBalanceBtn"
+                                    class="ml-2 inline-flex items-center justify-center rounded-full p-1 transition hover:bg-white/10 disabled:pointer-events-none"
+                                    href="#" aria-disabled="true" title="Refresh balance">
 
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                    <svg id="selectedCardUpdateBalanceIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
@@ -383,6 +295,7 @@
                                     </svg>
 
                                 </a>
+                                <span id="selectedCardUpdateBalanceFeedback" class="text-[10px] text-white/80"></span>
                             </span>
                         </div>
                         <div class="flex items-end justify-between pt-1 border-t border-white/10">
@@ -446,7 +359,7 @@
                     </div>
 
                     {{-- transactions FLAG-5 --}}
-                    <div class="space-y-2 text-[11px] overflow-y-auto">
+                    <div class="space-y-2 text-[11px] ">
                         <p class="font-medium text-slate-700 dark:text-slate-300">Recent activity (demo)</p>
                         <div id="selectedCardRecentActivity"
                             class="space-y-1.5 max-h-64 overflow-y-auto pr-1 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/30 px-3 py-2">
@@ -649,6 +562,8 @@
             const selectedTitle = document.getElementById('selectedCardTitle');
             const selectedStatus = document.getElementById('selectedCardStatus');
             const selectedCardUpdateBalanceBtn = document.getElementById('selectedCardUpdateBalanceBtn');
+            const selectedCardUpdateBalanceIcon = document.getElementById('selectedCardUpdateBalanceIcon');
+            const selectedCardUpdateBalanceFeedback = document.getElementById('selectedCardUpdateBalanceFeedback');
             const selectedCardFreezeForm = document.getElementById('selectedCardFreezeForm');
             const selectedCardFreezeFormCardId = document.getElementById('selectedCardFreezeFormCardId');
             const selectedCardFreezeButton = document.getElementById('selectedCardFreezeButton');
@@ -662,6 +577,30 @@
             const unfreezeCardRoute = @json(route('unfreeze_card'));
 
             let activeTypeFilter = 'all';
+            let selectedCardId = '';
+            let isBalanceRefreshLoading = false;
+
+            const setBalanceRefreshFeedback = (message = '') => {
+                if (selectedCardUpdateBalanceFeedback) {
+                    selectedCardUpdateBalanceFeedback.innerText = message;
+                }
+            };
+
+            const setBalanceRefreshLoading = (isLoading) => {
+                isBalanceRefreshLoading = isLoading;
+
+                if (selectedCardUpdateBalanceIcon) {
+                    selectedCardUpdateBalanceIcon.classList.toggle('animate-spin', isLoading);
+                    selectedCardUpdateBalanceIcon.classList.toggle('opacity-70', isLoading);
+                }
+
+                if (selectedCardUpdateBalanceBtn) {
+                    selectedCardUpdateBalanceBtn.classList.toggle('pointer-events-none', isLoading);
+                    selectedCardUpdateBalanceBtn.classList.toggle('opacity-60', isLoading);
+                    selectedCardUpdateBalanceBtn.setAttribute('aria-busy', isLoading ? 'true' : 'false');
+                    selectedCardUpdateBalanceBtn.setAttribute('title', isLoading ? '' : '');
+                }
+            };
 
             const normalizeType = (value) => {
                 return String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -727,6 +666,7 @@
                 const status = cardRow.dataset.status || '0';
                 const cardId = cardRow.dataset.cardid || '';
                 const totalconsume = cardRow.dataset.totalconsume || '0.00';
+                selectedCardId = cardId;
 
                 if (selectedNumber) selectedNumber.innerText = number;
                 if (selectedBalance) selectedBalance.innerText = '$' + balance;
@@ -746,11 +686,15 @@
                     if (cardId) {
                         selectedCardUpdateBalanceBtn.href = updateBalanceRouteTemplate.replace('__CARD_ID__', cardId);
                         selectedCardUpdateBalanceBtn.setAttribute('aria-disabled', 'false');
+                        selectedCardUpdateBalanceBtn.dataset.cardid = cardId;
                     } else {
                         selectedCardUpdateBalanceBtn.href = '#';
                         selectedCardUpdateBalanceBtn.setAttribute('aria-disabled', 'true');
+                        selectedCardUpdateBalanceBtn.dataset.cardid = '';
                     }
                 }
+
+                setBalanceRefreshFeedback('');
 
                 if (selectedCardFreezeForm) {
                     selectedCardFreezeForm.action = status == 2 ? unfreezeCardRoute : freezeCardRoute;
@@ -768,6 +712,65 @@
             if (detailsPanel) {
                 detailsPanel.classList.add('hidden');
             }
+
+            selectedCardUpdateBalanceBtn?.addEventListener('click', async (event) => {
+                event.preventDefault();
+
+                const isDisabled = selectedCardUpdateBalanceBtn.getAttribute('aria-disabled') === 'true';
+                if (isDisabled || isBalanceRefreshLoading || !selectedCardId) {
+                    return;
+                }
+
+                setBalanceRefreshFeedback('');
+                setBalanceRefreshLoading(true);
+
+                try {
+                    const refreshUrl = updateBalanceRouteTemplate.replace('__CARD_ID__', selectedCardId);
+                    const response = await fetch(refreshUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok || !data?.success) {
+                        throw new Error(data?.message || 'Failed to refresh card balance.');
+                    }
+
+                    const latestBalance = Number.parseFloat(data?.card?.cardBalance ?? 0);
+                    const latestTotalConsume = Number.parseFloat(data?.card?.totalConsume ?? 0);
+                    const formattedBalance = Number.isFinite(latestBalance) ? latestBalance.toFixed(2) : '0.00';
+                    const formattedTotalConsume = Number.isFinite(latestTotalConsume) ? latestTotalConsume.toFixed(2) : '0.00';
+
+                    if (selectedBalance) {
+                        selectedBalance.innerText = `$${formattedBalance}`;
+                    }
+
+                    if (selectedSpent) {
+                        selectedSpent.innerText = `$${formattedTotalConsume}`;
+                    }
+
+                    cardRows.forEach((row) => {
+                        if ((row.dataset.cardid || '') === selectedCardId) {
+                            row.dataset.balance = formattedBalance;
+                            row.dataset.totalconsume = formattedTotalConsume;
+                        }
+                    });
+
+                    setBalanceRefreshFeedback('Updated');
+                } catch (error) {
+                    setBalanceRefreshFeedback('Failed');
+                    alert(error.message || 'Failed to refresh card balance.');
+                } finally {
+                    setBalanceRefreshLoading(false);
+                    setTimeout(() => {
+                        setBalanceRefreshFeedback('');
+                    }, 2000);
+                }
+            });
 
             var hideSelectedCard = document.getElementById('hideSelectedCard');
             hideSelectedCard.addEventListener('click', () => {

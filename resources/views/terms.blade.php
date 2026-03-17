@@ -11,11 +11,11 @@
                 <div class="prose prose-lg max-w-none">
                     <h2 class="text-2xl font-bold text-black mb-4">1. Acceptance of Terms</h2>
                     <p class="text-gray-700 mb-6">
-                        By accessing and using Tappayz services, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+                        By accessing and using Lanocard services, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
                     </p>
 
                     <h2 class="text-2xl font-bold text-black mb-4">2. Description of Service</h2>
-                    <p class="text-gray-700 mb-4">Tappayz provides the following services:</p>
+                    <p class="text-gray-700 mb-4">Lanocard provides the following services:</p>
                     <ul class="list-disc pl-6 text-gray-700 mb-6">
                         <li>Virtual payment card creation and management</li>
                         <li>Multi-currency wallet services</li>
@@ -99,17 +99,17 @@
 
                     <h2 class="text-2xl font-bold text-black mb-4">9. Intellectual Property Rights</h2>
                     <p class="text-gray-700 mb-6">
-                        The Tappayz service and its original content, features, and functionality are and will remain the exclusive property of Tappayz and its licensors. The service is protected by copyright, trademark, and other laws.
+                        The Lanocard service and its original content, features, and functionality are and will remain the exclusive property of Lanocard and its licensors. The service is protected by copyright, trademark, and other laws.
                     </p>
 
                     <h2 class="text-2xl font-bold text-black mb-4">10. Limitation of Liability</h2>
                     <p class="text-gray-700 mb-6">
-                        In no event shall Tappayz, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the service.
+                        In no event shall Lanocard, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the service.
                     </p>
 
                     <h2 class="text-2xl font-bold text-black mb-4">11. Indemnification</h2>
                     <p class="text-gray-700 mb-6">
-                        You agree to defend, indemnify, and hold harmless Tappayz and its licensee and licensors, and their employees, contractors, agents, officers and directors, from and against any and all claims, damages, obligations, losses, liabilities, costs or debt, and expenses (including but not limited to attorney's fees).
+                        You agree to defend, indemnify, and hold harmless Lanocard and its licensee and licensors, and their employees, contractors, agents, officers and directors, from and against any and all claims, damages, obligations, losses, liabilities, costs or debt, and expenses (including but not limited to attorney's fees).
                     </p>
 
                     <h2 class="text-2xl font-bold text-black mb-4">12. Termination</h2>
@@ -131,7 +131,7 @@
                     <h2 class="text-2xl font-bold text-black mb-4">15. Contact Information</h2>
                     <p class="text-gray-700 mb-4">If you have any questions about these Terms & Conditions, please contact us:</p>
                     <div class="bg-gray-50 rounded-lg p-6">
-                        <p class="text-gray-700 mb-2"><strong>Email:</strong> legal@tappayz.com</p>
+                        <p class="text-gray-700 mb-2"><strong>Email:</strong> legal@tanocard.com</p>
                         <p class="text-gray-700 mb-2"><strong>Phone:</strong> +1 (234) 567-890</p>
                         <p class="text-gray-700 mb-2"><strong>Address:</strong> 123 Financial District, New York, NY 10004, United States</p>
                     </div>

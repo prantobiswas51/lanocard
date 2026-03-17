@@ -51,7 +51,7 @@
             </button> --}}
 
             {{-- notifications --}}
-            <div class="relative z-[9999]">
+            <div class="relative z-[9999] ">
                 <button id="btnNotifications"
                     class="relative h-9 w-9 rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
@@ -68,7 +68,7 @@
 
                 </button>
                 <div id="notificationPanel"
-                    class="hidden fixed top-14 right-4 w-80 sm:w-96 rounded-xl border border-slate-200 bg-white shadow-xl z-[9999] overflow-hidden">
+                    class="hidden absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-xl border border-slate-200 bg-white shadow-xl z-[9999] overflow-hidden">
                     <div
                         class="px-4 py-3 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between bg-slate-50/80 dark:bg-slate-700/50">
                         <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100">Notifications </h3>

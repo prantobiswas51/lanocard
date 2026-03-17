@@ -3,7 +3,7 @@
         <div class="max-w-md w-full">
 
             {{-- <div class="flex items-center mb-6">
-                <img src="{{ asset('images/logo.png') }}" alt="Tappayz" class="w-150 h-16">
+                <img src="{{ asset('images/logo.png') }}" alt="Lanocard" class="w-150 h-16">
             </div> --}}
 
             <div class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">

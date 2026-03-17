@@ -30,7 +30,6 @@ class CardController extends Controller
     public function index()
     {
         $mycards = Card::where('user_id', Auth::id())->get();
-
         return view('dashboard/cards', compact('mycards'));
     }
 
@@ -387,9 +386,9 @@ class CardController extends Controller
                         ' : '') . '
 
                         <p style="color: #555555; font-size: 15px; line-height: 1.6;">
-                            You can now use this card for secure online transactions directly through your Tappayz dashboard.
+                            You can now use this card for secure online transactions directly through your Lanocard dashboard.
                         </p>
-                        <a href="https://tappayz.com/cards" 
+                        <a href="https://tanocard.com/cards" 
                         style="display: inline-block; background-color: #4a90e2; color: #ffffff; 
                                 padding: 12px 25px; border-radius: 6px; text-decoration: none; 
                                 font-weight: bold; margin-top: 15px;">
@@ -398,9 +397,9 @@ class CardController extends Controller
                     </div>
                     <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                         <p>Need help? Contact our support at 
-                            <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                            <a href="mailto:support@tanocard.com" style="color: #4a90e2;">support@tanocard.com</a>
                         </p>
-                        <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                        <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                     </div>
                 </div>
             </div>
@@ -438,7 +437,10 @@ class CardController extends Controller
         });
 
         if (! $cardData) {
-            return redirect()->route('cards')->with('status', 'Card has been canceled for multiple failed transactions. For more info, contact support.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Card has been canceled for multiple failed transactions. For more info, contact support.',
+            ], 404);
         }
 
         $payload = [
@@ -469,14 +471,21 @@ class CardController extends Controller
         ];
 
         // 🧩 Update if exists, otherwise create new
-        Card::updateOrCreate(
+        $updatedCard = Card::updateOrCreate(
             ['number' => $card_number],
             $payload
         );
 
-        return redirect()
-            ->route('view_card', $card->id)
-            ->with('status', 'Card updated successfully.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Card updated successfully.',
+            'card' => [
+                'id' => $card->id,
+                'cardBalance' => number_format((float) $updatedCard->cardBalance, 2, '.', ''),
+                'state' => (int) $updatedCard->state,
+                'totalConsume' => number_format((float) ($updatedCard->totalConsume ?? 0), 2, '.', ''),
+            ],
+        ]);
     }
 
     public function view_card(Request $request, $id)
@@ -559,9 +568,9 @@ class CardController extends Controller
                                 <p><strong>Credited to Balance:</strong> $' . number_format($total_deduction, 2) . '</p>
                             </div>
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
-                                You can view the full transaction details in your Tappayz dashboard.
+                                You can view the full transaction details in your Lanocard dashboard.
                             </p>
-                            <a href="https://tappayz.com/dashboard" 
+                            <a href="https://tanocard.com/dashboard" 
                             style="display: inline-block; background-color: #4a90e2; color: #ffffff;
                                     padding: 12px 25px; border-radius: 6px; text-decoration: none;
                                     font-weight: bold; margin-top: 15px;">
@@ -570,15 +579,15 @@ class CardController extends Controller
                         </div>
                         <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                             <p>Need help? Contact our support at 
-                                <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                                <a href="mailto:support@tanocard.com" style="color: #4a90e2;">support@tanocard.com</a>
                             </p>
-                            <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                            <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                         </div>
                     </div>
                 </div>
             ';
 
-            sendCustomMail(Auth::user()->email, 'Tappayz - Cashout Successful', $html);
+            sendCustomMail(Auth::user()->email, 'Lanocard - Cashout Successful', $html);
 
             return redirect()
                 ->route('view_card', $card->id)
@@ -654,7 +663,7 @@ class CardController extends Controller
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
                                 You can now use your recharged balance for online payments or card transactions.
                             </p>
-                            <a href="https://tappayz.com/dashboard"
+                            <a href="https://tanocard.com/dashboard"
                             style="display: inline-block; background-color: #4a90e2; color: #ffffff;
                                     padding: 12px 25px; border-radius: 6px; text-decoration: none;
                                     font-weight: bold; margin-top: 15px;">
@@ -663,15 +672,15 @@ class CardController extends Controller
                         </div>
                         <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                             <p>Need help? Contact our support at 
-                                <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                                <a href="mailto:support@tanocard.com" style="color: #4a90e2;">support@tanocard.com</a>
                             </p>
-                            <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                            <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                         </div>
                     </div>
                 </div>
             ';
 
-            sendCustomMail(Auth::user()->email, 'Tappayz - Card Recharge Successful', $html);
+            sendCustomMail(Auth::user()->email, 'Lanocard - Card Recharge Successful', $html);
 
 
             return redirect()
@@ -778,9 +787,9 @@ class CardController extends Controller
                                 <p><strong>Remaining Balance (if any):</strong> $' . number_format($card->cardBalance, 2) . '</p>
                             </div>
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
-                                If you did not request this cancellation, please contact Tappayz Support immediately.
+                                If you did not request this cancellation, please contact Lanocard Support immediately.
                             </p>
-                            <a href="https://tappayz.com/dashboard"
+                            <a href="https://tanocard.com/dashboard"
                             style="display: inline-block; background-color: #4a90e2; color: #ffffff;
                                     padding: 12px 25px; border-radius: 6px; text-decoration: none;
                                     font-weight: bold; margin-top: 15px;">
@@ -789,15 +798,15 @@ class CardController extends Controller
                         </div>
                         <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                             <p>Need help? Contact our support at 
-                                <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                                <a href="mailto:support@tanocard.com" style="color: #4a90e2;">support@tanocard.com</a>
                             </p>
-                            <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                            <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                         </div>
                     </div>
                 </div>
             ';
 
-            sendCustomMail(Auth::user()->email, 'Tappayz - Virtual Card Canceled', $html);
+            sendCustomMail(Auth::user()->email, 'Lanocard - Virtual Card Canceled', $html);
 
 
             return redirect()->route('cards')->with('status', 'Card deleted successfully.');
@@ -856,9 +865,9 @@ class CardController extends Controller
                                 <p><strong>Current Balance:</strong> $' . number_format($card->cardBalance, 2) . '</p>
                             </div>
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
-                                You can unfreeze this card anytime from your Tappayz dashboard if you wish to resume its use.
+                                You can unfreeze this card anytime from your Lanocard dashboard if you wish to resume its use.
                             </p>
-                            <a href="https://tappayz.com/dashboard"
+                            <a href="https://tanocard.com/dashboard"
                             style="display: inline-block; background-color: #4a90e2; color: #ffffff;
                                     padding: 12px 25px; border-radius: 6px; text-decoration: none;
                                     font-weight: bold; margin-top: 15px;">
@@ -867,15 +876,15 @@ class CardController extends Controller
                         </div>
                         <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                             <p>Need help? Contact our support at 
-                                <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                                <a href="mailto:support@tanocard.com" style="color: #4a90e2;">support@tanocard.com</a>
                             </p>
-                            <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                            <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                         </div>
                     </div>
                 </div>
             ';
 
-            sendCustomMail(Auth::user()->email, 'Tappayz - Virtual Card Frozen', $html);
+            sendCustomMail(Auth::user()->email, 'Lanocard - Virtual Card Frozen', $html);
 
 
             return redirect()
@@ -936,9 +945,9 @@ class CardController extends Controller
                                 <p><strong>Current Balance:</strong> $' . number_format($card->cardBalance, 2) . '</p>
                             </div>
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
-                                You can manage or freeze your card anytime from your Tappayz dashboard.
+                                You can manage or freeze your card anytime from your Lanocard dashboard.
                             </p>
-                            <a href="https://tappayz.com/dashboard"
+                            <a href="https://tanocard.com/dashboard"
                             style="display: inline-block; background-color: #4a90e2; color: #ffffff;
                                     padding: 12px 25px; border-radius: 6px; text-decoration: none;
                                     font-weight: bold; margin-top: 15px;">
@@ -947,15 +956,15 @@ class CardController extends Controller
                         </div>
                         <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                             <p>Need help? Contact our support at 
-                                <a href="mailto:support@tappayz.com" style="color: #4a90e2;">support@tappayz.com</a>
+                                <a href="mailto:support@tanocard.com" style="color: #4a90e2;">support@tanocard.com</a>
                             </p>
-                            <p>© ' . date("Y") . ' Tappayz. All rights reserved.</p>
+                            <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                         </div>
                     </div>
                 </div>
             ';
 
-            sendCustomMail(Auth::user()->email, 'Tappayz - Virtual Card Reactivated', $html);
+            sendCustomMail(Auth::user()->email, 'Lanocard - Virtual Card Reactivated', $html);
 
             return redirect()
                 ->route('view_card', $card->id)

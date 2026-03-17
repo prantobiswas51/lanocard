@@ -56,7 +56,7 @@ class DepositConfirmedJob implements ShouldQueue
                 </div>
             </div>';
 
-        sendCustomMail($user->email, 'Tappayz - Deposit Successful', $html);
+        sendCustomMail($user->email, 'Lanocard - Deposit Successful', $html);
 
         Notification::create([
             'user_id' => $user->id,

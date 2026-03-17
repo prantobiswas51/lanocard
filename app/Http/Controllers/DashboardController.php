@@ -15,9 +15,13 @@ class DashboardController extends Controller
         $myActiveCards = Card::where('user_id', Auth::id())->where('state', 1)->get();
 
         // Calculate total amount spent this month of this user by summing up all the cards transactions of this user
-        $amountSpentThisMonth = Transaction::where('user_id', Auth::id())
-            ->where('type', 'consume')
-            ->whereBetween('recordTime', [now()->startOfMonth(), now()->endOfMonth()])
+        $amountSpentThisMonth = \App\Models\Transaction::whereIn(
+            'cardNum',
+            Auth::user()->cards()->pluck('number')
+        )
+            ->where('type', 'Consumption')
+            ->where('status', 'Finish')
+            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->sum('amount');
 
         // one time card count of this user
@@ -39,14 +43,16 @@ class DashboardController extends Controller
             ->orderByDesc('recordTime')->take(6)->get();
 
         // last transaction amount of this user
-        $lastTransactionAmount = Transaction::where('user_id', Auth::id())
-            ->orderBy('recordTime', 'desc')
-            ->value('amount');
+        $lastTransactionAmount = \App\Models\Transaction::whereIn(
+            'cardNum',
+            Auth::user()->cards()->pluck('number')
+        )->latest('created_at')->value('amount');
 
         // last transaction time of this user to show how long ago the last transaction was made
-        $lastTransactionTime = Transaction::where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->value('created_at');
+        $lastTransactionTime = \App\Models\Transaction::whereIn(
+            'cardNum',
+            Auth::user()->cards()->pluck('number')
+        )->latest('created_at')->value('created_at');
 
         $myCards = Card::where('user_id', Auth::id())->get();
 
