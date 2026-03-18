@@ -228,7 +228,7 @@
                     class="bg-white border-slate-200 rounded-2xl p-3 sm:p-4 flex gap-3 flex-col shadow-sm max-h-[calc(93vh-4rem)] overflow-y-auto overscroll-contain lg:sticky ">
 
                     {{-- header details --}}
-                    <div class="space-y-0.5  flex justify-between rounded-lg  p-2 text-red-800 items-center">
+                    <div class="space-y-0.5  flex justify-between rounded-lg p-2  items-center">
                         <div class="">
                             <p
                                 class="text-[11px] uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 font-semibold">
@@ -240,67 +240,72 @@
                         <span id="hideSelectedCard" class="p-2 text-md cursor-pointer rounded-md">X</span>
                     </div>
 
-                    <div id="selectedCardBox"
-                        class="virtualpay-card px-3.5 py-3.5 space-y-2.5 bg-amber-500 relative overflow-hidden">
-                        <div class="card-frozen-lock">
-                            <span class="flex flex-col items-center gap-1 rounded-full bg-slate-600/95 p-3 shadow-lg">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2"
+                    {{-- card design flag-8--}}
+                        <div id="selectedCardBox" class="w-full max-w-[340px] mx-auto min-h-[200px] p-4 rounded-2xl relative overflow-hidden
+                    bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900
+                    shadow-xl text-white">
+
+                        <!-- Frozen Overlay -->
+                        <div
+                            class="card-frozen-lock invisible opacity-0 pointer-events-none absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm transition">
+                            <div class="flex flex-col items-center gap-1">
+                                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
-                                    </path>
+                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                 </svg>
-                                <span
-                                    class="text-[10px] font-semibold text-white uppercase tracking-wider">Locked</span>
-                            </span>
+                                <span class="text-xs font-semibold uppercase tracking-widest">Locked</span>
+                            </div>
                         </div>
+
+                        <!-- Frozen Badge -->
                         <div
-                            class="card-frozen-badge h-6 min-w-[4.5rem] rounded px-1.5 flex items-center justify-center gap-1 text-[8px] font-bold text-white bg-slate-600/95 absolute top-2.5 right-2.5">
-                            <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
-                                </path>
-                            </svg>
+                            class="card-frozen-badge hidden absolute top-3 right-3 text-[10px] px-2 py-0.5 rounded-full bg-white/20 backdrop-blur">
                             FROZEN
                         </div>
-                        <div class="flex items-start justify-between gap-2">
-                            <div class="virtualpay-chip flex-shrink-0"></div>
-                            <span class="text-[10px] font-bold tracking-wide text-white uppercase">Entrocard</span>
+
+                        <!-- Top -->
+                        <div class="flex justify-between items-start">
+                            <div class="virtualpay-chip w-10 h-7 bg-yellow-400 rounded-md"></div>
+                            <span class="text-xs font-semibold tracking-wider uppercase text-white/80">Lanocard</span>
                         </div>
-                        <p id="selectedCardNumber" class="font-mono text-white text-xs sm:text-sm tracking-[0.15em]">
-                            •••• •••• •••• ••••
+
+                        <!-- Card Number -->
+                        <p id="selectedCardNumber" class="mt-6 font-mono text-lg tracking-[0.2em]">
+                            4549 2416 3941 1859
                         </p>
-                        <div class="flex items-center justify-between text-[12px] text-white/80">
-                            <span id="selectedCardExpiry" class="font-medium text-white/90">••/••</span>
-                            <span id="selectedCardCvv" class="font-medium text-white/90">•••</span>
+
+                        <!-- Expiry + CVV -->
+                        <div class="flex justify-between mt-3 text-sm text-white/80">
+                            <span id="selectedCardExpiry">03/29</span>
+                            <span id="selectedCardCvv">703</span>
                         </div>
-                        <div class="flex items-center justify-between text-[12px] text-white/80">
-                            <span>Cardholder: <span class="font-medium text-white/90">{{ Auth::user()->name
-                                    }}</span></span>
-                            <span class="flex items-center gap-1">
-                                Balance: <span id="selectedCardBalance"
-                                    class="font-semibold text-[15px] text-emerald-300">$0.00</span>
 
-                                {{-- refresh btn flag-6 --}} 
-                                <a id="selectedCardUpdateBalanceBtn"
-                                    class="ml-2 inline-flex items-center justify-center rounded-full p-1 transition hover:bg-white/10 disabled:pointer-events-none"
-                                    href="#" aria-disabled="true" title="Refresh balance">
+                        <!-- Bottom -->
+                        <div class="absolute bottom-3 left-4 right-4 flex justify-between items-end">
+                            <div>
+                                <p class="text-[10px] text-white/60">CARDHOLDER</p>
+                                <p id="selectedCardHolder" class="text-sm font-medium truncate max-w-[10rem]">{{ Auth::user()->name }}</p>
+                            </div>
 
-                                    <svg id="selectedCardUpdateBalanceIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                                        </path>
-                                    </svg>
+                            <div class="text-right">
+                                <p class="text-[10px] text-white/60">BALANCE</p>
+                                <div class="flex items-center gap-1 justify-end">
+                                    <span id="selectedCardBalance"
+                                        class="text-emerald-300 font-semibold text-sm">$0.35</span>
 
-                                </a>
-                                <span id="selectedCardUpdateBalanceFeedback" class="text-[10px] text-white/80"></span>
-                            </span>
-                        </div>
-                        <div class="flex items-end justify-between pt-1 border-t border-white/10">
-                            <span class="text-[9px] font-semibold tracking-wider text-white/90">VIRTUALPAY</span>
-                            <span class="text-[9px] font-medium tracking-wider text-white/70">VIRTUAL</span>
+                                    <a id="selectedCardUpdateBalanceBtn" href="#"
+                                        class="p-1 rounded-full hover:bg-white/10 transition" data-cardid="" aria-disabled="true">
+
+                                        <svg id="selectedCardUpdateBalanceIcon" class="w-4 h-4" fill="none"
+                                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                        </svg>
+                                    </a>
+                                </div>
+                                <span id="selectedCardUpdateBalanceFeedback" class="text-[10px] text-white/60"></span>
+                            </div>
                         </div>
                     </div>
 
@@ -347,6 +352,7 @@
                                 <button id="selectedCardFreezeButton" type="submit">Freeze</button>
                             </form>
 
+                            {{-- flag-7 --}}
                             <button id="btnTopupSelectedCard"
                                 class="inline-flex items-center gap-1 rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-[11px] text-emerald-700 hover:bg-emerald-100">
                                 Top‑up from balance <span class="text-[10px] opacity-80">(10% fee)</span>
@@ -550,6 +556,51 @@
         </div>
     </section>
 
+    <div id="rechargeModal" class="fixed inset-0 bg-slate-900/50 hidden z-50 p-4">
+        <div class="relative top-12 mx-auto p-5 border border-slate-200 w-full max-w-md shadow-xl rounded-2xl bg-white">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-base font-semibold text-slate-900">Top-up selected card</h3>
+                <button id="closeRechargeModal" type="button"
+                    class="text-slate-400 hover:text-slate-600 text-2xl font-bold leading-none">
+                    &times;
+                </button>
+            </div>
+
+            <form id="rechargeForm" action="{{ route('card_recharge') }}" method="post" class="space-y-4">
+                @csrf
+
+                <div>
+                    <label for="recharge_amount" class="block text-sm font-medium text-slate-700 mb-2">
+                        Recharge amount
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span>
+                        <input type="number" name="amount" min="1" step="0.01" value="10" required id="recharge_amount"
+                            class="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+                    </div>
+                    <p class="text-sm text-slate-700 mt-1">
+                        <span class="text-emerald-600">Available: ${{ number_format(Auth::user()->balance ?? 0, 2)
+                            }}</span>
+                        | Total: <span class="text-rose-500" id="total_amount">$11.00 (Fee 10%)</span>
+                    </p>
+                </div>
+
+                <input id="rechargeCardId" type="hidden" name="card_id" value="">
+
+                <div class="flex space-x-3 pt-2">
+                    <button type="button" id="cancelRechargeModal"
+                        class="flex-1 px-4 py-2 bg-slate-200 text-slate-800 rounded-lg hover:bg-slate-300 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors shadow-sm">
+                        Recharge
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
 
@@ -564,14 +615,23 @@
             const selectedCardUpdateBalanceBtn = document.getElementById('selectedCardUpdateBalanceBtn');
             const selectedCardUpdateBalanceIcon = document.getElementById('selectedCardUpdateBalanceIcon');
             const selectedCardUpdateBalanceFeedback = document.getElementById('selectedCardUpdateBalanceFeedback');
+            const selectedCardFrozenLock = document.querySelector('#selectedCardBox .card-frozen-lock');
+            const selectedCardFrozenBadge = document.querySelector('#selectedCardBox .card-frozen-badge');
             const selectedCardFreezeForm = document.getElementById('selectedCardFreezeForm');
             const selectedCardFreezeFormCardId = document.getElementById('selectedCardFreezeFormCardId');
             const selectedCardFreezeButton = document.getElementById('selectedCardFreezeButton');
+            const btnTopupSelectedCard = document.getElementById('btnTopupSelectedCard');
             const detailsPanel = document.getElementById('details_pan');
             const searchInput = document.getElementById('cardSearchInput');
             const filterButtons = document.querySelectorAll('.mycards-filter');
             const showingCount = document.getElementById('cardsShowingCount');
             const cardRows = document.querySelectorAll('.card-row');
+            const rechargeModal = document.getElementById('rechargeModal');
+            const rechargeAmountInput = document.getElementById('recharge_amount');
+            const rechargeTotalText = document.getElementById('total_amount');
+            const rechargeCardIdInput = document.getElementById('rechargeCardId');
+            const closeRechargeModalBtn = document.getElementById('closeRechargeModal');
+            const cancelRechargeModalBtn = document.getElementById('cancelRechargeModal');
             const updateBalanceRouteTemplate = @json(route('update_balance', ['id' => '__CARD_ID__']));
             const freezeCardRoute = @json(route('freeze_card'));
             const unfreezeCardRoute = @json(route('unfreeze_card'));
@@ -579,6 +639,21 @@
             let activeTypeFilter = 'all';
             let selectedCardId = '';
             let isBalanceRefreshLoading = false;
+
+            const closeRechargeModal = () => {
+                if (!rechargeModal) return;
+                rechargeModal.classList.add('hidden');
+                rechargeModal.classList.remove('flex');
+            };
+
+            const updateRechargeTotal = () => {
+                if (!rechargeAmountInput || !rechargeTotalText) return;
+
+                const amount = Number.parseFloat(rechargeAmountInput.value || '0');
+                const validAmount = Number.isFinite(amount) && amount > 0 ? amount : 0;
+                const totalAmount = validAmount + (validAmount * 0.10);
+                rechargeTotalText.innerText = `$${totalAmount.toFixed(2)} (Fee 10%)`;
+            };
 
             const setBalanceRefreshFeedback = (message = '') => {
                 if (selectedCardUpdateBalanceFeedback) {
@@ -664,6 +739,7 @@
                 const balance = cardRow.dataset.balance || '0.00';
                 const type = cardRow.dataset.type || 'Card';
                 const status = cardRow.dataset.status || '0';
+                const statusNumber = Number.parseInt(status, 10);
                 const cardId = cardRow.dataset.cardid || '';
                 const totalconsume = cardRow.dataset.totalconsume || '0.00';
                 selectedCardId = cardId;
@@ -677,9 +753,24 @@
                 if (selectedTitle) selectedTitle.innerText = type.charAt(0).toUpperCase() + type.slice(1) + ' Card';
 
                 if (selectedStatus) {
-                    selectedStatus.innerHTML = status == 1
-                        ? `<span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Active`
-                        : `<span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span> Frozen`;
+                    if (statusNumber === 1) {
+                        selectedStatus.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Active`;
+                    } else if (statusNumber === 2) {
+                        selectedStatus.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span> Frozen`;
+                    } else {
+                        selectedStatus.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span> Pending`;
+                    }
+                }
+
+                if (selectedCardFrozenLock) {
+                    const isFrozen = statusNumber === 2;
+                    selectedCardFrozenLock.classList.toggle('invisible', !isFrozen);
+                    selectedCardFrozenLock.classList.toggle('opacity-0', !isFrozen);
+                    selectedCardFrozenLock.classList.toggle('pointer-events-none', !isFrozen);
+                }
+
+                if (selectedCardFrozenBadge) {
+                    selectedCardFrozenBadge.classList.toggle('hidden', statusNumber !== 2);
                 }
 
                 if (selectedCardUpdateBalanceBtn) {
@@ -706,6 +797,16 @@
 
                 if (selectedCardFreezeFormCardId) {
                     selectedCardFreezeFormCardId.value = cardId;
+                }
+
+                if (rechargeCardIdInput) {
+                    rechargeCardIdInput.value = cardId;
+                }
+
+                if (btnTopupSelectedCard) {
+                    const hasCard = Boolean(cardId);
+                    btnTopupSelectedCard.classList.toggle('pointer-events-none', !hasCard);
+                    btnTopupSelectedCard.classList.toggle('opacity-60', !hasCard);
                 }
             };
 
@@ -796,8 +897,33 @@
                 });
             });
 
+            btnTopupSelectedCard?.addEventListener('click', () => {
+                if (!selectedCardId || !rechargeModal || !rechargeCardIdInput) {
+                    alert('Select a card first.');
+                    return;
+                }
+
+                rechargeCardIdInput.value = selectedCardId;
+                updateRechargeTotal();
+                rechargeModal.classList.remove('hidden');
+                rechargeModal.classList.add('flex');
+                rechargeAmountInput?.focus();
+            });
+
+            closeRechargeModalBtn?.addEventListener('click', closeRechargeModal);
+            cancelRechargeModalBtn?.addEventListener('click', closeRechargeModal);
+
+            rechargeModal?.addEventListener('click', (event) => {
+                if (event.target === rechargeModal) {
+                    closeRechargeModal();
+                }
+            });
+
+            rechargeAmountInput?.addEventListener('input', updateRechargeTotal);
+
             updateActiveFilterStyles();
             applyCardFilters();
+            updateRechargeTotal();
 
         });
 
@@ -809,13 +935,6 @@
                 .catch(err => alert('Failed to copy'));
         }
 
-         function updateRechargeTotal() {
-            let amountInput = document.getElementById('recharge_amount');
-            fee_percent = amountInput.value * 0.10;
-            total_amount = parseFloat(amountInput.value) + fee_percent;
-            document.getElementById('total_amount').innerText = "$" + total_amount.toFixed(2);
-        }
-
         // Cashout Modal functionality
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('cashoutModal');
@@ -823,36 +942,9 @@
             const closeButton = document.getElementById('closeCashoutModal');
             const cancelButton = document.getElementById('cancelCashout');
 
-            openButton.addEventListener('click', () => {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            });
-
-            closeButton.addEventListener('click', () => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            });
-
-            cancelButton.addEventListener('click', () => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            });
-
-            // Close modal when clicking outside
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('flex');
-                }
-            });
-        });
-
-        // Recharge Modal functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('rechargeModal');
-            const openButton = document.getElementById('openRechargeModal');
-            const closeButton = document.getElementById('closeRechargeModal');
-            const cancelButton = document.getElementById('cancelRechargeModal');
+            if (!modal || !openButton || !closeButton || !cancelButton) {
+                return;
+            }
 
             openButton.addEventListener('click', () => {
                 modal.classList.remove('hidden');
@@ -877,5 +969,6 @@
                 }
             });
         });
+
     </script>
 </x-app-layout>

@@ -211,8 +211,12 @@
 
     <div id="drawer_backdrop"></div>
 
+    <div class="fixed z-[999] w-full">
+        @include('layouts.app_header')
+    </div>
 
-    <div class="container_app  w-full">
+    <div class="container_app  w-full pt-[70px]">
+
         {{-- Sidebar (20%) --}}
         <div id="sidebar_id" class="w-full flex flex-col">
             @include('layouts.aside')
@@ -221,11 +225,6 @@
         {{-- Main Content (80%) --}}
 
         <main class="min-h-screen bg-gray-100 right_side">
-
-            <div class="relative z-[999]">
-                @include('layouts.app_header')
-            </div>
-
             {{ $slot }}
         </main>
     </div>

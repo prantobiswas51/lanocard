@@ -1,29 +1,61 @@
-<header
-    class="fixed z-50 top-0 left-0 right-0 md:static w-full border-b border-slate-200 dark:border-slate-700  dark:bg-slate-800/80 backdrop-blur bg-white dark:md:bg-slate-800/80">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+<header class="w-full border-b border-slate-200 bg-white/95 backdrop-blur">
 
-        {{-- left side --}}
-        <div class="flex items-center gap-3">
+    <div class="w-full md:grid md:grid-cols-[280px_minmax(0,1fr)]">
 
-            {{-- three dot on header --}}
-            <button id="icon_btn"
-                class="md:hidden p-2 rounded-lg border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 bg-white dark:bg-slate-800">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
+        {{-- logo part --}}
+        <div
+            class="hidden md:flex items-center gap-4 px-4 sm:px-6 py-3 border-r border-slate-200 text-slate-800">
 
-            {{-- user panel txt --}}
-            <div>
-                <p class="text-xs uppercase tracking-[0.2em] text-emerald-500 dark:text-emerald-400 font-semibold">
-                    User Panel</p>
-                <h1 class="text-lg sm:text-xl font-semibold text-slate-900 dark:text-slate-100">Virtual Card
-                    Dashboard</h1>
+            {{-- card icon --}}
+            <a href="{{ route('home') }}" class="flex items-center gap-3 text-slate-800">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    <svg class="w-full h-full" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true">
+                        <rect width="40" height="40" rx="8" fill="url(#lanocard-grad-header)"></rect>
+                        <path d="M10 10v20h16v-4H14V10H10z" fill="white"></path>
+                        <circle cx="30" cy="10" r="2.5" fill="white" opacity="0.9"></circle>
+                        <defs>
+                            <linearGradient id="lanocard-grad-header" x1="0" y1="0" x2="40" y2="0"
+                                gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#1e3a5f"></stop>
+                                <stop offset="1" stop-color="#22c55e"></stop>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </a>
+            <div class="ml-1">
+                <p class="text-sm font-bold tracking-wide">Lanocard</p>
+                <p class="text-[11px] text-slate-500">User Control Panel</p>
             </div>
         </div>
 
-        {{-- right side --}}
-        <div class="flex items-center gap-2 sm:gap-4">
+        <div class="w-full">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex w-full items-center justify-between gap-4">
+
+                {{-- left side --}}
+                <div class="flex items-center gap-3">
+
+                    {{-- three dot on header --}}
+                    <button id="icon_btn"
+                        class="md:hidden p-2 rounded-lg border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 bg-white dark:bg-slate-800">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+
+                    {{-- user panel txt --}}
+                    <div>
+                        <p
+                            class="text-xs uppercase tracking-[0.2em] text-emerald-500 dark:text-emerald-400 font-semibold">
+                            User Panel</p>
+                        <h1 class="text-lg sm:text-xl font-semibold text-slate-900 dark:text-slate-100">Virtual Card
+                            Dashboard</h1>
+                    </div>
+                </div>
+
+                {{-- right side --}}
+                <div class="flex items-center gap-2 sm:gap-4">
 
             {{-- main balance --}}
             <div class="hidden sm:flex flex-col items-end">
@@ -165,13 +197,17 @@
             </form>
 
             {{-- user --}}
-            <div
+            {{-- <div
                 class="h-9 w-9 rounded-full bg-gradient-to-br from-sky-400 via-emerald-400 to-violet-500 p-[1px] shadow flex-shrink-0">
                 <div
                     class="h-full w-full rounded-full bg-white dark:bg-slate-800 flex items-center justify-center text-xs font-semibold text-slate-800 dark:text-slate-200">
                     U
                 </div>
+            </div> --}}
+                </div>
+
             </div>
         </div>
     </div>
+
 </header>
