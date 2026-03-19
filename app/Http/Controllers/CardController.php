@@ -691,6 +691,52 @@ class CardController extends Controller
 
     public function get_transactions()
     {
+        $request = request();
+
+        // AJAX mode for the cards page: return selected card's recent transactions.
+        if ($request->expectsJson() || $request->ajax() || $request->has('card_id')) {
+            $validated = $request->validate([
+                'card_id' => 'required|integer|exists:cards,id',
+                'limit' => 'nullable|integer|min:1|max:20',
+            ]);
+
+            $card = Card::where('id', $validated['card_id'])
+                ->where('user_id', Auth::id())
+                ->first();
+
+            if (!$card) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Card not found.',
+                ], 404);
+            }
+
+            $limit = $validated['limit'] ?? 5;
+
+            $transactions = Transaction::query()
+                ->where('cardNum', $card->number)
+                ->orderByDesc('recordTime')
+                ->orderByDesc('id')
+                ->limit($limit)
+                ->get()
+                ->map(function ($transaction) {
+                    return [
+                        'id' => $transaction->id,
+                        'merchantName' => $transaction->merchantName,
+                        'amount' => $transaction->amount,
+                        'type' => $transaction->type,
+                        'status' => $transaction->status,
+                        'recordTime' => $transaction->recordTime,
+                    ];
+                })
+                ->values();
+
+            return response()->json([
+                'success' => true,
+                'transactions' => $transactions,
+            ]);
+        }
+
         $timestamp = (string) round(microtime(true) * 1000);
 
         $params = [

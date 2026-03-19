@@ -23,6 +23,97 @@
         }
     </style>
 
+    <div id="rechargeModal" class="fixed inset-0 bg-slate-900/50 hidden z-50 p-4 pt-20">
+        <div class="relative top-12 mx-auto  border border-slate-200 p-5 w-full max-w-md max-h-60 shadow-xl rounded-2xl bg-white">
+            
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-base font-semibold text-slate-900">Top-up selected card</h3>
+                <button id="closeRechargeModal" type="button"
+                    class="text-slate-400 hover:text-slate-600 text-2xl font-bold leading-none">
+                    &times;
+                </button>
+            </div>
+
+            <form id="rechargeForm" action="{{ route('card_recharge') }}" method="post" class="space-y-4">
+                @csrf
+
+                <div>
+                    <label for="recharge_amount" class="block text-sm font-medium text-slate-700 mb-2">
+                        Recharge amount
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span>
+                        <input type="number" name="amount" min="1" step="0.01" value="10" required id="recharge_amount"
+                            class="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+                    </div>
+                    <p class="text-sm text-slate-700 mt-1">
+                        <span class="text-emerald-600">Available: ${{ number_format(Auth::user()->balance ?? 0, 2)
+                            }}</span>
+                        | Total: <span class="text-rose-500" id="total_amount">$11.00 (Fee 10%)</span>
+                    </p>
+                </div>
+
+                <input id="rechargeCardId" type="hidden" name="card_id" value="">
+
+                <div class="flex space-x-3 pt-2">
+                    <button type="button" id="cancelRechargeModal"
+                        class="flex-1 px-4 py-2 bg-slate-200 text-slate-800 rounded-lg hover:bg-slate-300 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors shadow-sm">
+                        Recharge
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="cashoutModal" class="fixed inset-0 bg-slate-900/50 hidden z-50 p-4 pt-20">
+        <div class="relative top-12 mx-auto border border-slate-200 p-5 w-full max-w-md max-h-60 shadow-xl rounded-2xl bg-white">
+
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-base font-semibold text-slate-900">Cashout from selected card</h3>
+                <button id="closeCashoutModal" type="button"
+                    class="text-slate-400 hover:text-slate-600 text-2xl font-bold leading-none">
+                    &times;
+                </button>
+            </div>
+
+            <form id="cashoutForm" action="{{ route('card_cashout') }}" method="post" class="space-y-4">
+                @csrf
+
+                <div>
+                    <label for="cashout_amount" class="block text-sm font-medium text-slate-700 mb-2">
+                        Cashout amount
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span>
+                        <input type="number" name="amount" min="0.01" step="0.01" value="10" required id="cashout_amount"
+                            class="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent">
+                    </div>
+                    <p class="text-sm text-slate-700 mt-1">
+                        <span class="text-sky-600">Card balance: <span id="cashout_card_balance">$0.00</span></span>
+                        | You receive: <span class="text-emerald-600" id="cashout_total_amount">$10.00</span>
+                    </p>
+                </div>
+
+                <input id="cashoutCardId" type="hidden" name="card_id" value="">
+
+                <div class="flex space-x-3 pt-2">
+                    <button type="button" id="cancelCashoutModal"
+                        class="flex-1 px-4 py-2 bg-slate-200 text-slate-800 rounded-lg hover:bg-slate-300 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg transition-colors shadow-sm">
+                        Cashout
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <section class="flex-1 w-full">
         <div class="max-w-6xl grid lg:grid-cols-[1.6fr,1.2fr] mx-auto px-4 sm:px-6 space-y-5">
 
@@ -241,9 +332,7 @@
                     </div>
 
                     {{-- card design flag-8--}}
-                        <div id="selectedCardBox" class="w-full max-w-[340px] mx-auto min-h-[200px] p-4 rounded-2xl relative overflow-hidden
-                    bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900
-                    shadow-xl text-white">
+                        <div id="selectedCardBox" class="w-full max-w-[340px] mx-auto min-h-[200px] p-4 rounded-2xl relative overflow-hidden bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 shadow-xl text-white">
 
                         <!-- Frozen Overlay -->
                         <div
@@ -366,187 +455,11 @@
 
                     {{-- transactions FLAG-5 --}}
                     <div class="space-y-2 text-[11px] ">
-                        <p class="font-medium text-slate-700 dark:text-slate-300">Recent activity (demo)</p>
+                        <p class="font-medium text-slate-700 dark:text-slate-300">Recent activity</p>
                         <div id="selectedCardRecentActivity"
                             class="space-y-1.5 max-h-64 overflow-y-auto pr-1 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/30 px-3 py-2">
-                            <div
-                                class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">Amazon marketplace</span>
-                                    <span class="font-semibold text-slate-900 dark:text-slate-100">- $45.20</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>02 Mar · Online purchase</span>
-                                    <span>Approved</span>
-                                </div>
-                            </div>
-                            <div
-                                class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">Top‑up from main balance</span>
-                                    <span class="font-semibold text-emerald-700 dark:text-emerald-400">+ $100.00</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>28 Feb · Manual top‑up</span>
-                                    <span>Completed</span>
-                                </div>
-                            </div>
-                            <div
-                                class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">Netflix subscription</span>
-                                    <span class="font-semibold text-slate-900 dark:text-slate-100">- $12.99</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>01 Mar · Recurring</span>
-                                    <span>Approved</span>
-                                </div>
-                            </div>
-                            <div
-                                class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">Spotify</span>
-                                    <span class="font-semibold text-slate-900 dark:text-slate-100">- $9.99</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>01 Mar · Subscription</span>
-                                    <span>Approved</span>
-                                </div>
-                            </div>
-                            <div
-                                class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">Top‑up from main balance</span>
-                                    <span class="font-semibold text-emerald-700 dark:text-emerald-400">+ $50.00</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>27 Feb · Manual top‑up</span>
-                                    <span>Completed</span>
-                                </div>
-                            </div>
-                            <div
-                                class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">Google Play</span>
-                                    <span class="font-semibold text-slate-900 dark:text-slate-100">- $4.99</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>26 Feb · Online purchase</span>
-                                    <span>Approved</span>
-                                </div>
-                            </div>
-                            <div
-                                class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">Uber</span>
-                                    <span class="font-semibold text-slate-900 dark:text-slate-100">- $18.40</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>25 Feb · Transport</span>
-                                    <span>Approved</span>
-                                </div>
-                            </div>
-                            <div
-                                class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">Steam</span>
-                                    <span class="font-semibold text-slate-900 dark:text-slate-100">- $29.99</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>24 Feb · Online purchase</span>
-                                    <span>Approved</span>
-                                </div>
-                            </div>
-                            <div
-                                class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">Top‑up from main balance</span>
-                                    <span class="font-semibold text-emerald-700 dark:text-emerald-400">+ $80.00</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>23 Feb · Manual top‑up</span>
-                                    <span>Completed</span>
-                                </div>
-                            </div>
-                            <div
-                                class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">Adobe Creative Cloud</span>
-                                    <span class="font-semibold text-slate-900 dark:text-slate-100">- $54.99</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>22 Feb · Subscription</span>
-                                    <span>Approved</span>
-                                </div>
-                            </div>
-                            <div
-                                class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">Microsoft 365</span>
-                                    <span class="font-semibold text-slate-900 dark:text-slate-100">- $6.99</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>21 Feb · Subscription</span>
-                                    <span>Approved</span>
-                                </div>
-                            </div>
-                            <div
-                                class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">Apple iCloud</span>
-                                    <span class="font-semibold text-slate-900 dark:text-slate-100">- $2.99</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>20 Feb · Storage</span>
-                                    <span>Approved</span>
-                                </div>
-                            </div>
-                            <div
-                                class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">YouTube Premium</span>
-                                    <span class="font-semibold text-slate-900 dark:text-slate-100">- $11.99</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>19 Feb · Subscription</span>
-                                    <span>Approved</span>
-                                </div>
-                            </div>
-                            <div
-                                class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">Top‑up from main balance</span>
-                                    <span class="font-semibold text-emerald-700 dark:text-emerald-400">+ $200.00</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>18 Feb · Manual top‑up</span>
-                                    <span>Completed</span>
-                                </div>
-                            </div>
-                            <div class="recent-activity-item flex flex-col gap-0.5 py-2">
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-slate-700 dark:text-slate-300">Dropbox Plus</span>
-                                    <span class="font-semibold text-slate-900 dark:text-slate-100">- $9.99</span>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
-                                    <span>17 Feb · Subscription</span>
-                                    <span>Approved</span>
-                                </div>
+                            <div class="py-4 text-center text-slate-500 text-[11px]">
+                                Select a card to see its last 5 transactions.
                             </div>
                         </div>
                     </div>
@@ -556,50 +469,7 @@
         </div>
     </section>
 
-    <div id="rechargeModal" class="fixed inset-0 bg-slate-900/50 hidden z-50 p-4">
-        <div class="relative top-12 mx-auto p-5 border border-slate-200 w-full max-w-md shadow-xl rounded-2xl bg-white">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base font-semibold text-slate-900">Top-up selected card</h3>
-                <button id="closeRechargeModal" type="button"
-                    class="text-slate-400 hover:text-slate-600 text-2xl font-bold leading-none">
-                    &times;
-                </button>
-            </div>
-
-            <form id="rechargeForm" action="{{ route('card_recharge') }}" method="post" class="space-y-4">
-                @csrf
-
-                <div>
-                    <label for="recharge_amount" class="block text-sm font-medium text-slate-700 mb-2">
-                        Recharge amount
-                    </label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span>
-                        <input type="number" name="amount" min="1" step="0.01" value="10" required id="recharge_amount"
-                            class="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
-                    </div>
-                    <p class="text-sm text-slate-700 mt-1">
-                        <span class="text-emerald-600">Available: ${{ number_format(Auth::user()->balance ?? 0, 2)
-                            }}</span>
-                        | Total: <span class="text-rose-500" id="total_amount">$11.00 (Fee 10%)</span>
-                    </p>
-                </div>
-
-                <input id="rechargeCardId" type="hidden" name="card_id" value="">
-
-                <div class="flex space-x-3 pt-2">
-                    <button type="button" id="cancelRechargeModal"
-                        class="flex-1 px-4 py-2 bg-slate-200 text-slate-800 rounded-lg hover:bg-slate-300 transition-colors">
-                        Cancel
-                    </button>
-                    <button type="submit"
-                        class="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors shadow-sm">
-                        Recharge
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
+    
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -621,6 +491,7 @@
             const selectedCardFreezeFormCardId = document.getElementById('selectedCardFreezeFormCardId');
             const selectedCardFreezeButton = document.getElementById('selectedCardFreezeButton');
             const btnTopupSelectedCard = document.getElementById('btnTopupSelectedCard');
+            const selectedCardRecentActivity = document.getElementById('selectedCardRecentActivity');
             const detailsPanel = document.getElementById('details_pan');
             const searchInput = document.getElementById('cardSearchInput');
             const filterButtons = document.querySelectorAll('.mycards-filter');
@@ -632,18 +503,34 @@
             const rechargeCardIdInput = document.getElementById('rechargeCardId');
             const closeRechargeModalBtn = document.getElementById('closeRechargeModal');
             const cancelRechargeModalBtn = document.getElementById('cancelRechargeModal');
+            const btnCashoutSelectedCard = document.getElementById('btnCashoutSelectedCard');
+            const cashoutModal = document.getElementById('cashoutModal');
+            const cashoutAmountInput = document.getElementById('cashout_amount');
+            const cashoutTotalText = document.getElementById('cashout_total_amount');
+            const cashoutCardBalanceText = document.getElementById('cashout_card_balance');
+            const cashoutCardIdInput = document.getElementById('cashoutCardId');
+            const closeCashoutModalBtn = document.getElementById('closeCashoutModal');
+            const cancelCashoutModalBtn = document.getElementById('cancelCashoutModal');
             const updateBalanceRouteTemplate = @json(route('update_balance', ['id' => '__CARD_ID__']));
+            const getTransactionsRoute = @json(route('get_transactions'));
             const freezeCardRoute = @json(route('freeze_card'));
             const unfreezeCardRoute = @json(route('unfreeze_card'));
 
             let activeTypeFilter = 'all';
             let selectedCardId = '';
             let isBalanceRefreshLoading = false;
+            let latestTransactionsRequestId = 0;
 
             const closeRechargeModal = () => {
                 if (!rechargeModal) return;
                 rechargeModal.classList.add('hidden');
                 rechargeModal.classList.remove('flex');
+            };
+
+            const closeCashoutModal = () => {
+                if (!cashoutModal) return;
+                cashoutModal.classList.add('hidden');
+                cashoutModal.classList.remove('flex');
             };
 
             const updateRechargeTotal = () => {
@@ -653,6 +540,14 @@
                 const validAmount = Number.isFinite(amount) && amount > 0 ? amount : 0;
                 const totalAmount = validAmount + (validAmount * 0.10);
                 rechargeTotalText.innerText = `$${totalAmount.toFixed(2)} (Fee 10%)`;
+            };
+
+            const updateCashoutTotal = () => {
+                if (!cashoutAmountInput || !cashoutTotalText) return;
+
+                const amount = Number.parseFloat(cashoutAmountInput.value || '0');
+                const validAmount = Number.isFinite(amount) && amount > 0 ? amount : 0;
+                cashoutTotalText.innerText = `$${validAmount.toFixed(2)}`;
             };
 
             const setBalanceRefreshFeedback = (message = '') => {
@@ -679,6 +574,125 @@
 
             const normalizeType = (value) => {
                 return String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            };
+
+            const escapeHtml = (value = '') => {
+                return String(value)
+                    .replaceAll('&', '&amp;')
+                    .replaceAll('<', '&lt;')
+                    .replaceAll('>', '&gt;')
+                    .replaceAll('"', '&quot;')
+                    .replaceAll("'", '&#039;');
+            };
+
+            const formatTransactionDate = (recordTime) => {
+                if (!recordTime) return 'Unknown date';
+
+                const parsedNumber = Number.parseInt(String(recordTime), 10);
+                let date = null;
+
+                if (Number.isFinite(parsedNumber) && String(parsedNumber).length >= 12) {
+                    date = new Date(parsedNumber);
+                } else {
+                    date = new Date(recordTime);
+                }
+
+                if (Number.isNaN(date.getTime())) {
+                    return 'Unknown date';
+                }
+
+                return date.toLocaleString(undefined, {
+                    day: '2-digit',
+                    month: 'short',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                });
+            };
+
+            const renderSelectedCardTransactions = (transactions = []) => {
+                if (!selectedCardRecentActivity) return;
+
+                if (!transactions.length) {
+                    selectedCardRecentActivity.innerHTML = `
+                        <div class="py-4 text-center text-slate-500 text-[11px]">
+                            No transactions found for this card.
+                        </div>
+                    `;
+                    return;
+                }
+
+                selectedCardRecentActivity.innerHTML = transactions.map((transaction) => {
+                    const amountNumber = Number.parseFloat(transaction.amount ?? 0);
+                    const amount = Number.isFinite(amountNumber) ? amountNumber : 0;
+                    const isCredit = ['topup', 'recharge', 'refund'].includes(String(transaction.type || '').toLowerCase());
+                    const amountPrefix = isCredit ? '+ ' : '- ';
+                    const amountClass = isCredit
+                        ? 'font-semibold text-emerald-700 dark:text-emerald-400'
+                        : 'font-semibold text-slate-900 dark:text-slate-100';
+
+                    const merchant = transaction.merchantName || 'Unknown merchant';
+                    const type = transaction.type || 'Transaction';
+                    const status = transaction.status || 'Unknown';
+                    const dateText = formatTransactionDate(transaction.recordTime);
+
+                    return `
+                        <div class="recent-activity-item flex flex-col gap-0.5 py-2 border-b border-slate-200/80 dark:border-slate-600/80 last:border-0">
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="text-slate-700 dark:text-slate-300">${escapeHtml(merchant)}</span>
+                                <span class="${amountClass}">${amountPrefix}$${Math.abs(amount).toFixed(2)}</span>
+                            </div>
+                            <div class="flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-400">
+                                <span>${escapeHtml(dateText)} · ${escapeHtml(type)}</span>
+                                <span>${escapeHtml(status)}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            };
+
+            const loadSelectedCardTransactions = async (cardId) => {
+                if (!selectedCardRecentActivity) return;
+
+                const requestId = ++latestTransactionsRequestId;
+
+                selectedCardRecentActivity.innerHTML = `
+                    <div class="py-4 text-center text-slate-500 text-[11px]">
+                        Loading transactions...
+                    </div>
+                `;
+
+                try {
+                    const endpoint = `${getTransactionsRoute}?card_id=${encodeURIComponent(cardId)}&limit=5`;
+                    const response = await fetch(endpoint, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    });
+
+                    const payload = await response.json();
+
+                    if (requestId !== latestTransactionsRequestId) {
+                        return;
+                    }
+
+                    if (!response.ok || !payload?.success) {
+                        throw new Error(payload?.message || 'Failed to fetch transactions.');
+                    }
+
+                    renderSelectedCardTransactions(payload.transactions || []);
+                } catch (error) {
+                    if (requestId !== latestTransactionsRequestId) {
+                        return;
+                    }
+
+                    selectedCardRecentActivity.innerHTML = `
+                        <div class="py-4 text-center text-rose-500 text-[11px]">
+                            Failed to load transactions.
+                        </div>
+                    `;
+                }
             };
 
             const updateActiveFilterStyles = () => {
@@ -803,10 +817,28 @@
                     rechargeCardIdInput.value = cardId;
                 }
 
+                if (cashoutCardIdInput) {
+                    cashoutCardIdInput.value = cardId;
+                }
+
+                if (cashoutCardBalanceText) {
+                    cashoutCardBalanceText.innerText = `$${balance}`;
+                }
+
                 if (btnTopupSelectedCard) {
                     const hasCard = Boolean(cardId);
                     btnTopupSelectedCard.classList.toggle('pointer-events-none', !hasCard);
                     btnTopupSelectedCard.classList.toggle('opacity-60', !hasCard);
+                }
+
+                if (btnCashoutSelectedCard) {
+                    const hasCard = Boolean(cardId);
+                    btnCashoutSelectedCard.classList.toggle('pointer-events-none', !hasCard);
+                    btnCashoutSelectedCard.classList.toggle('opacity-60', !hasCard);
+                }
+
+                if (cardId) {
+                    loadSelectedCardTransactions(cardId);
                 }
             };
 
@@ -919,11 +951,35 @@
                 }
             });
 
+            btnCashoutSelectedCard?.addEventListener('click', () => {
+                if (!selectedCardId || !cashoutModal || !cashoutCardIdInput) {
+                    alert('Select a card first.');
+                    return;
+                }
+
+                cashoutCardIdInput.value = selectedCardId;
+                updateCashoutTotal();
+                cashoutModal.classList.remove('hidden');
+                cashoutModal.classList.add('flex');
+                cashoutAmountInput?.focus();
+            });
+
+            closeCashoutModalBtn?.addEventListener('click', closeCashoutModal);
+            cancelCashoutModalBtn?.addEventListener('click', closeCashoutModal);
+
+            cashoutModal?.addEventListener('click', (event) => {
+                if (event.target === cashoutModal) {
+                    closeCashoutModal();
+                }
+            });
+
             rechargeAmountInput?.addEventListener('input', updateRechargeTotal);
+            cashoutAmountInput?.addEventListener('input', updateCashoutTotal);
 
             updateActiveFilterStyles();
             applyCardFilters();
             updateRechargeTotal();
+            updateCashoutTotal();
 
         });
 
@@ -934,41 +990,6 @@
                 .then(() => alert('Card number copied!'))
                 .catch(err => alert('Failed to copy'));
         }
-
-        // Cashout Modal functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('cashoutModal');
-            const openButton = document.getElementById('openCashoutModal');
-            const closeButton = document.getElementById('closeCashoutModal');
-            const cancelButton = document.getElementById('cancelCashout');
-
-            if (!modal || !openButton || !closeButton || !cancelButton) {
-                return;
-            }
-
-            openButton.addEventListener('click', () => {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            });
-
-            closeButton.addEventListener('click', () => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            });
-
-            cancelButton.addEventListener('click', () => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            });
-
-            // Close modal when clicking outside
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('flex');
-                }
-            });
-        });
 
     </script>
 </x-app-layout>
