@@ -1,4 +1,4 @@
-<header class="w-full border-b border-slate-200 bg-white/95 backdrop-blur">
+<header class="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/95 backdrop-blur">
 
     <div class="w-full md:grid md:grid-cols-[280px_minmax(0,1fr)]">
 

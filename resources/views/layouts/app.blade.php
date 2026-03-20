@@ -25,7 +25,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased h-screen overflow-hidden flex flex-col">
 
     @if (session('status'))
     <div class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 mt-20">
@@ -75,6 +75,8 @@
                 display: grid;
                 grid-template-columns: minmax(0, 1fr);
                 width: 100%;
+                min-height: 0;
+                height: 100%;
             }
         }
 
@@ -88,6 +90,8 @@
                 display: grid;
                 grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
                 width: 100%;
+                min-height: 0;
+                height: 100%;
             }
         }
 
@@ -211,20 +215,20 @@
 
     <div id="drawer_backdrop"></div>
 
-    <div class="fixed z-[999] w-full">
+    <div class="z-[999] w-full">
         @include('layouts.app_header')
     </div>
 
-    <div class="container_app  w-full pt-[70px]">
+    <div class="container_app w-full flex-1 min-h-0">
 
         {{-- Sidebar (20%) --}}
-        <div id="sidebar_id" class="w-full flex flex-col">
+        <div id="sidebar_id" class="w-full h-full min-h-0 flex flex-col overflow-y-auto">
             @include('layouts.aside')
         </div>
 
         {{-- Main Content (80%) --}}
 
-        <main class="min-h-screen bg-gray-100 right_side">
+        <main class="h-full min-h-0 overflow-y-auto bg-gray-100 right_side">
             {{ $slot }}
         </main>
     </div>
