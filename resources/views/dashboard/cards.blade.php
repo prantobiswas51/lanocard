@@ -23,93 +23,95 @@
         }
     </style>
 
-    <div id="rechargeModal" class="fixed inset-0 bg-slate-900/50 hidden z-50 p-4 pt-20">
-        <div class="relative top-12 mx-auto  border border-slate-200 p-5 w-full max-w-md max-h-60 shadow-xl rounded-2xl bg-white">
-            
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base font-semibold text-slate-900">Top-up selected card</h3>
-                <button id="closeRechargeModal" type="button"
-                    class="text-slate-400 hover:text-slate-600 text-2xl font-bold leading-none">
-                    &times;
-                </button>
+    {{-- topup modal flag-9 --}}
+    <div id="topupModal"
+        class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-900/10 dark:bg-slate-900/50 backdrop-blur p-4">
+        <div
+            class="w-full max-w-sm rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-5 py-5 space-y-4 shadow-xl">
+            <div class="flex items-start justify-between gap-2">
+                <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100">Top-up from balance</h3>
+                <button id="closeTopupModal" type="button"
+                    class="h-7 w-7 rounded-full border border-slate-200 dark:border-slate-600 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center text-xs">✕</button>
             </div>
+
+            <p class="text-[11px] text-slate-500 dark:text-slate-300">
+                10% fee applies. The fee is deducted from your main balance along with the top-up amount.
+            </p>
 
             <form id="rechargeForm" action="{{ route('card_recharge') }}" method="post" class="space-y-4">
                 @csrf
 
-                <div>
-                    <label for="recharge_amount" class="block text-sm font-medium text-slate-700 mb-2">
-                        Recharge amount
-                    </label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span>
-                        <input type="number" name="amount" min="1" step="0.01" value="10" required id="recharge_amount"
-                            class="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
-                    </div>
-                    <p class="text-sm text-slate-700 mt-1">
-                        <span class="text-emerald-600">Available: ${{ number_format(Auth::user()->balance ?? 0, 2)
-                            }}</span>
-                        | Total: <span class="text-rose-500" id="total_amount">$11.00 (Fee 10%)</span>
-                    </p>
+                <div class="space-y-1.5">
+                    <label for="topupAmountInput" class="text-xs font-medium text-slate-800 dark:text-slate-200">Amount
+                        to add to card (USD)</label>
+                    <input id="topupAmountInput" type="number" name="amount" min="1" step="1" placeholder="e.g. 100"
+                        class="w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white dark:focus:bg-slate-700"
+                        required>
+                </div>
+
+                <div
+                    class="rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-3 py-2.5 text-xs space-y-1.5">
+                    <div class="flex justify-between text-slate-600 dark:text-slate-300"><span>Amount to
+                            card</span><span id="topupToCard"
+                            class="font-medium text-slate-900 dark:text-slate-100">$0.00</span></div>
+                    <div class="flex justify-between text-slate-600 dark:text-slate-300"><span>Fee (10%)</span><span
+                            id="topupFee" class="font-medium text-amber-600">$0.00</span></div>
+                    <div
+                        class="flex justify-between text-slate-700 dark:text-slate-200 pt-1 border-t border-slate-200 dark:border-slate-600">
+                        <span>Total from balance</span><span id="topupTotal"
+                            class="font-semibold text-slate-900 dark:text-slate-100">$0.00</span></div>
                 </div>
 
                 <input id="rechargeCardId" type="hidden" name="card_id" value="">
 
-                <div class="flex space-x-3 pt-2">
-                    <button type="button" id="cancelRechargeModal"
-                        class="flex-1 px-4 py-2 bg-slate-200 text-slate-800 rounded-lg hover:bg-slate-300 transition-colors">
-                        Cancel
-                    </button>
-                    <button type="submit"
-                        class="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors shadow-sm">
-                        Recharge
-                    </button>
-                </div>
+                <button id="confirmTopup" type="submit"
+                    class="w-full rounded-lg bg-emerald-500 py-2.5 text-xs font-semibold text-white hover:bg-emerald-600">
+                    Confirm top-up
+                </button>
             </form>
         </div>
     </div>
 
-    <div id="cashoutModal" class="fixed inset-0 bg-slate-900/50 hidden z-50 p-4 pt-20">
-        <div class="relative top-12 mx-auto border border-slate-200 p-5 w-full max-w-md max-h-60 shadow-xl rounded-2xl bg-white">
 
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base font-semibold text-slate-900">Cashout from selected card</h3>
+    {{-- Flag-10 --}}
+    <div id="cashoutModal"
+        class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-900/10 dark:bg-slate-900/50 backdrop-blur p-4">
+        <div
+            class="w-full max-w-sm rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-5 py-5 space-y-4 shadow-xl">
+            <div class="flex items-start justify-between gap-2">
+                <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100">Cash out to balance</h3>
                 <button id="closeCashoutModal" type="button"
-                    class="text-slate-400 hover:text-slate-600 text-2xl font-bold leading-none">
-                    &times;
-                </button>
+                    class="h-7 w-7 rounded-full border border-slate-200 dark:border-slate-600 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center text-xs">✕</button>
             </div>
+
+            <p class="text-[11px] text-slate-500 dark:text-slate-300">
+                The selected amount will be moved from this card balance to your main balance.
+            </p>
 
             <form id="cashoutForm" action="{{ route('card_cashout') }}" method="post" class="space-y-4">
                 @csrf
 
-                <div>
-                    <label for="cashout_amount" class="block text-sm font-medium text-slate-700 mb-2">
-                        Cashout amount
-                    </label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span>
-                        <input type="number" name="amount" min="0.01" step="0.01" value="10" required id="cashout_amount"
-                            class="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent">
-                    </div>
-                    <p class="text-sm text-slate-700 mt-1">
-                        <span class="text-sky-600">Card balance: <span id="cashout_card_balance">$0.00</span></span>
-                        | You receive: <span class="text-emerald-600" id="cashout_total_amount">$10.00</span>
-                    </p>
+                <div class="space-y-1.5">
+                    <label for="cashout_amount" class="text-xs font-medium text-slate-800 dark:text-slate-200">Amount to cash out (USD)</label>
+                    <input id="cashout_amount" type="number" name="amount" min="0.01" step="0.01" placeholder="e.g. 100"
+                        class="w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 focus:bg-white dark:focus:bg-slate-700"
+                        required>
+                </div>
+
+                <div
+                    class="rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-3 py-2.5 text-xs space-y-1.5">
+                    <div class="flex justify-between text-slate-600 dark:text-slate-300"><span>Card balance</span><span id="cashout_card_balance"
+                            class="font-medium text-slate-900 dark:text-slate-100">$0.00</span></div>
+                    <div class="flex justify-between text-slate-700 dark:text-slate-200 pt-1 border-t border-slate-200 dark:border-slate-600"><span>You receive</span><span id="cashout_total_amount"
+                            class="font-semibold text-emerald-600">$0.00</span></div>
                 </div>
 
                 <input id="cashoutCardId" type="hidden" name="card_id" value="">
 
-                <div class="flex space-x-3 pt-2">
-                    <button type="button" id="cancelCashoutModal"
-                        class="flex-1 px-4 py-2 bg-slate-200 text-slate-800 rounded-lg hover:bg-slate-300 transition-colors">
-                        Cancel
-                    </button>
-                    <button type="submit"
-                        class="flex-1 px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg transition-colors shadow-sm">
-                        Cashout
-                    </button>
-                </div>
+                <button type="submit"
+                    class="w-full rounded-lg bg-sky-600 py-2.5 text-xs font-semibold text-white hover:bg-sky-700">
+                    Confirm cash out
+                </button>
             </form>
         </div>
     </div>
@@ -332,7 +334,8 @@
                     </div>
 
                     {{-- card design flag-8--}}
-                        <div id="selectedCardBox" class="w-full max-w-[340px] mx-auto min-h-[200px] p-4 rounded-2xl relative overflow-hidden bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 shadow-xl text-white">
+                    <div id="selectedCardBox"
+                        class="w-full max-w-[340px] mx-auto min-h-[200px] p-4 rounded-2xl relative overflow-hidden bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 shadow-xl text-white">
 
                         <!-- Frozen Overlay -->
                         <div
@@ -374,7 +377,8 @@
                         <div class="absolute bottom-3 left-4 right-4 flex justify-between items-end">
                             <div>
                                 <p class="text-[10px] text-white/60">CARDHOLDER</p>
-                                <p id="selectedCardHolder" class="text-sm font-medium truncate max-w-[10rem]">{{ Auth::user()->name }}</p>
+                                <p id="selectedCardHolder" class="text-sm font-medium truncate max-w-[10rem]">{{
+                                    Auth::user()->name }}</p>
                             </div>
 
                             <div class="text-right">
@@ -384,7 +388,8 @@
                                         class="text-emerald-300 font-semibold text-sm">$0.35</span>
 
                                     <a id="selectedCardUpdateBalanceBtn" href="#"
-                                        class="p-1 rounded-full hover:bg-white/10 transition" data-cardid="" aria-disabled="true">
+                                        class="p-1 rounded-full hover:bg-white/10 transition" data-cardid=""
+                                        aria-disabled="true">
 
                                         <svg id="selectedCardUpdateBalanceIcon" class="w-4 h-4" fill="none"
                                             stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -469,7 +474,7 @@
         </div>
     </section>
 
-    
+
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -497,12 +502,14 @@
             const filterButtons = document.querySelectorAll('.mycards-filter');
             const showingCount = document.getElementById('cardsShowingCount');
             const cardRows = document.querySelectorAll('.card-row');
-            const rechargeModal = document.getElementById('rechargeModal');
-            const rechargeAmountInput = document.getElementById('recharge_amount');
-            const rechargeTotalText = document.getElementById('total_amount');
+            const rechargeModal = document.getElementById('topupModal');
+            const rechargeAmountInput = document.getElementById('topupAmountInput');
+            const topupToCardText = document.getElementById('topupToCard');
+            const topupFeeText = document.getElementById('topupFee');
+            const topupTotalText = document.getElementById('topupTotal');
             const rechargeCardIdInput = document.getElementById('rechargeCardId');
-            const closeRechargeModalBtn = document.getElementById('closeRechargeModal');
-            const cancelRechargeModalBtn = document.getElementById('cancelRechargeModal');
+            const closeRechargeModalBtn = document.getElementById('closeTopupModal');
+            const cancelRechargeModalBtn = null;
             const btnCashoutSelectedCard = document.getElementById('btnCashoutSelectedCard');
             const cashoutModal = document.getElementById('cashoutModal');
             const cashoutAmountInput = document.getElementById('cashout_amount');
@@ -534,12 +541,16 @@
             };
 
             const updateRechargeTotal = () => {
-                if (!rechargeAmountInput || !rechargeTotalText) return;
+                if (!rechargeAmountInput || !topupToCardText || !topupFeeText || !topupTotalText) return;
 
                 const amount = Number.parseFloat(rechargeAmountInput.value || '0');
                 const validAmount = Number.isFinite(amount) && amount > 0 ? amount : 0;
-                const totalAmount = validAmount + (validAmount * 0.10);
-                rechargeTotalText.innerText = `$${totalAmount.toFixed(2)} (Fee 10%)`;
+                const feeAmount = validAmount * 0.10;
+                const totalAmount = validAmount + feeAmount;
+
+                topupToCardText.innerText = `$${validAmount.toFixed(2)}`;
+                topupFeeText.innerText = `$${feeAmount.toFixed(2)}`;
+                topupTotalText.innerText = `$${totalAmount.toFixed(2)}`;
             };
 
             const updateCashoutTotal = () => {
