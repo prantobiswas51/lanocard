@@ -12,9 +12,9 @@
     <!-- Google tag (gtag.js) -->
 
     <meta name="description"
-        content="TapPayz offers instant virtual payment cards with 3DS support for secure online transactions. Create your card today and shop with confidence!">
+        content="Lanocard offers instant virtual payment cards with 3DS support for secure online transactions. Create your card today and shop with confidence!">
     <meta name="keywords"
-        content="virtual payment cards, 3DS support, secure online transactions, instant card creation, TapPayz, online shopping, digital payments, prepaid cards, virtual credit cards, secure payments">
+        content="virtual payment cards, 3DS support, secure online transactions, instant card creation, Lanocard, online shopping, digital payments, prepaid cards, virtual credit cards, secure payments">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -59,6 +59,10 @@
     <style>
         /* GLOBAL FIX */
 
+        :root {
+            --mobile-header-height: 65px;
+        }
+
         body {
             margin: 0;
             padding: 0;
@@ -99,16 +103,12 @@
         /* MOBILE DRAWER */
         #mob_sidebar {
             position: fixed;
-            top: 0;
+            top: var(--mobile-header-height);
             left: 0;
-            height: 100vh;
-            width: 280px;
-            /* background: #1f2937; */
-            background: white;
-            /* gray-800 */
-            color: white;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
+            width: min(84vw, 304px);
+            height: calc(100dvh - var(--mobile-header-height));
+            transform: translateX(-104%);
+            transition: transform 0.28s ease;
             z-index: 50;
         }
 
@@ -121,7 +121,8 @@
         #drawer_backdrop {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(15, 23, 42, 0.38);
+            backdrop-filter: blur(1px);
             z-index: 40;
             display: none;
         }
@@ -129,88 +130,96 @@
         #drawer_backdrop.show {
             display: block;
         }
+
+        body.drawer-open {
+            overflow: hidden;
+            touch-action: none;
+        }
     </style>
 
     {{-- MOBILE DRAWER --}}
-    <div id="mob_sidebar" class="fixed top-0 left-0 z-50 h-[calc(100vh-3rem)] w-72 shadow-2xl
-            rounded-r-2xl flex flex-col overflow-y-auto
-            px-3 py-4 space-y-1">
+    <aside id="mob_sidebar"
+        class="fixed left-0 z-50 flex flex-col overflow-hidden rounded-r-2xl border-r border-slate-200 bg-white shadow-2xl">
 
-        {{-- NAV ITEM --}}
-        @php
-        $item = fn ($active) => [
-        'relative flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition',
-        $active
-        ? 'bg-emerald-600/20 text-emerald-400'
-        : 'text-gray-300 hover:bg-gray-800 hover:text-emerald-400',
-        ];
-        @endphp
+        <div class="px-4 py-3 border-b border-slate-200 bg-slate-50/90">
+            <div class="flex items-center justify-between gap-3">
+                <div>
+                    <p class="text-[10px] uppercase tracking-[0.2em] text-emerald-500 font-semibold">Lanocard</p>
+                    <p class="text-sm font-semibold text-slate-900">Navigation</p>
+                </div>
+                <button id="closeDrawerBtn" type="button"
+                    class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+                    aria-label="Close navigation drawer">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
 
-        <a href="{{ route('dashboard') }}"
-            @class([ 'w-full flex items-center gap-3 rounded-lg px-3 py-2 font-medium border transition'
-            , 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800'=>
-            request()->routeIs('dashboard'),
-            'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700
-            dark:hover:text-slate-200 border-transparent' => !request()->routeIs('dashboard'),
-            ])>
-            <span
-                class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-800/50 text-emerald-600 dark:text-emerald-400">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M3.75 5.25h16.5M3.75 9.75h7.5m-7.5 4.5h16.5M3.75 18.75h7.5" />
-                </svg>
-            </span>
-            Dashboard
-        </a>
+        <nav class="flex-1 overflow-y-auto px-3 py-3 space-y-1.5 text-sm bg-white">
+            <a href="{{ route('dashboard') }}"
+                @class([ 'w-full flex items-center gap-3 rounded-lg px-3 py-2 font-medium border transition'
+                , 'bg-emerald-50 text-emerald-700 border-emerald-100' => request()->routeIs('dashboard'),
+                'text-slate-600 hover:bg-slate-100 hover:text-slate-900 border-transparent' => !request()->routeIs('dashboard'),
+                ])>
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3.75 5.25h16.5M3.75 9.75h7.5m-7.5 4.5h16.5M3.75 18.75h7.5" />
+                    </svg>
+                </span>
+                Dashboard
+            </a>
 
-        <a href="{{ route('cards') }}"
-            @class([ 'w-full flex items-center gap-3 rounded-lg px-3 py-2 font-medium border transition'
-            , 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800'=>
-            request()->routeIs('cards'),
-            'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700
-            dark:hover:text-slate-200 border-transparent' => !request()->routeIs('cards'),
-            ])>
-            <span
-                class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                </svg>
-            </span>
-            My Cards
-        </a>
+            <a href="{{ route('cards') }}"
+                @class([ 'w-full flex items-center gap-3 rounded-lg px-3 py-2 font-medium border transition'
+                , 'bg-emerald-50 text-emerald-700 border-emerald-100' => request()->routeIs('cards'),
+                'text-slate-600 hover:bg-slate-100 hover:text-slate-900 border-transparent' => !request()->routeIs('cards'),
+                ])>
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                </span>
+                My Cards
+            </a>
 
-        {{-- Transactions --}}
-        <a href="{{ route('transactions') }}" @class($item(request()->routeIs('transactions') ||
-            request()->is('transactions/*')))>
-            @if(request()->routeIs('transactions') || request()->is('transactions/*'))
-            <span class="absolute left-0 top-2 bottom-2 w-1 bg-emerald-400 rounded-r"></span>
-            @endif
-            <x-heroicon-o-document-text class="h-5 w-5" />
-            <span>Transactions</span>
-        </a>
+            <a href="{{ route('fundings') }}"
+                @class([ 'w-full flex items-center gap-3 rounded-lg px-3 py-2 font-medium border transition'
+                , 'bg-emerald-50 text-emerald-700 border-emerald-100' => request()->routeIs('fundings'),
+                'text-slate-600 hover:bg-slate-100 hover:text-slate-900 border-transparent' => !request()->routeIs('fundings'),
+                ])>
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+                    </svg>
+                </span>
+                Add Balance
+            </a>
 
-        {{-- Fundings --}}
-        <a href="{{ route('fundings') }}" @class($item(request()->routeIs('fundings')))>
-            @if(request()->routeIs('fundings'))
-            <span class="absolute left-0 top-2 bottom-2 w-1 bg-emerald-400 rounded-r"></span>
-            @endif
-            <x-heroicon-o-banknotes class="h-5 w-5" />
-            <span>Funding</span>
-        </a>
+            <a href="{{ route('settings') }}"
+                @class([ 'w-full flex items-center gap-3 rounded-lg px-3 py-2 font-medium border transition'
+                , 'bg-emerald-50 text-emerald-700 border-emerald-100' => request()->routeIs('settings'),
+                'text-slate-600 hover:bg-slate-100 hover:text-slate-900 border-transparent' => !request()->routeIs('settings'),
+                ])>
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </span>
+                Settings
+            </a>
+        </nav>
 
-        <form method="POST" action="{{ route('logout') }}" class="pt-2 border-t border-gray-800">
-            @csrf
-            <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg
-                       text-sm font-medium text-red-400
-                       hover:bg-red-500/10 transition">
-                <x-heroicon-o-arrow-left-on-rectangle class="h-5 w-5" />
-                <span>Logout</span>
-            </button>
-        </form>
-
-
-    </div>
+        <div class="px-4 py-3 border-t border-slate-200 bg-slate-50 text-[11px] text-slate-500">
+            <p class="font-medium text-slate-700 mb-0.5">Need help?</p>
+            <p>Use live chat for card and payment support.</p>
+        </div>
+    </aside>
 
 
     <div id="drawer_backdrop"></div>
@@ -236,16 +245,34 @@
     <script>
         const iconBtn = document.getElementById('icon_btn');
         const drawer = document.getElementById('mob_sidebar');
+        const closeDrawerBtn = document.getElementById('closeDrawerBtn');
         const backdrop = document.getElementById('drawer_backdrop');
+        const drawerLinks = drawer ? drawer.querySelectorAll('a') : [];
 
-        iconBtn.addEventListener('click', () => {
+        const openDrawer = () => {
             drawer.classList.add('open');
             backdrop.classList.add('show');
-        });
+            document.body.classList.add('drawer-open');
+        };
 
-        backdrop.addEventListener('click', () => {
+        const closeDrawer = () => {
             drawer.classList.remove('open');
             backdrop.classList.remove('show');
+            document.body.classList.remove('drawer-open');
+        };
+
+        iconBtn?.addEventListener('click', openDrawer);
+        closeDrawerBtn?.addEventListener('click', closeDrawer);
+        backdrop?.addEventListener('click', closeDrawer);
+
+        drawerLinks.forEach((link) => {
+            link.addEventListener('click', closeDrawer);
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeDrawer();
+            }
         });
     </script>
 

@@ -59,7 +59,8 @@
                     <div
                         class="flex justify-between text-slate-700 dark:text-slate-200 pt-1 border-t border-slate-200 dark:border-slate-600">
                         <span>Total from balance</span><span id="topupTotal"
-                            class="font-semibold text-slate-900 dark:text-slate-100">$0.00</span></div>
+                            class="font-semibold text-slate-900 dark:text-slate-100">$0.00</span>
+                    </div>
                 </div>
 
                 <input id="rechargeCardId" type="hidden" name="card_id" value="">
@@ -92,7 +93,8 @@
                 @csrf
 
                 <div class="space-y-1.5">
-                    <label for="cashout_amount" class="text-xs font-medium text-slate-800 dark:text-slate-200">Amount to cash out (USD)</label>
+                    <label for="cashout_amount" class="text-xs font-medium text-slate-800 dark:text-slate-200">Amount to
+                        cash out (USD)</label>
                     <input id="cashout_amount" type="number" name="amount" min="0.01" step="0.01" placeholder="e.g. 100"
                         class="w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 focus:bg-white dark:focus:bg-slate-700"
                         required>
@@ -100,9 +102,12 @@
 
                 <div
                     class="rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-3 py-2.5 text-xs space-y-1.5">
-                    <div class="flex justify-between text-slate-600 dark:text-slate-300"><span>Card balance</span><span id="cashout_card_balance"
+                    <div class="flex justify-between text-slate-600 dark:text-slate-300"><span>Card balance</span><span
+                            id="cashout_card_balance"
                             class="font-medium text-slate-900 dark:text-slate-100">$0.00</span></div>
-                    <div class="flex justify-between text-slate-700 dark:text-slate-200 pt-1 border-t border-slate-200 dark:border-slate-600"><span>You receive</span><span id="cashout_total_amount"
+                    <div
+                        class="flex justify-between text-slate-700 dark:text-slate-200 pt-1 border-t border-slate-200 dark:border-slate-600">
+                        <span>You receive</span><span id="cashout_total_amount"
                             class="font-semibold text-emerald-600">$0.00</span></div>
                 </div>
 
@@ -335,11 +340,20 @@
 
                     {{-- card design flag-8--}}
                     <div id="selectedCardBox"
-                        class="w-full max-w-[340px] mx-auto min-h-[200px] p-4 rounded-2xl relative overflow-hidden bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 shadow-xl text-white">
+                        class="w-full h-[200px] max-w-full mx-auto relative overflow-hidden rounded-[20px] border border-white/10 shadow-[0_20px_45px_rgba(0,0,0,0.35)] text-white bg-[#0d0d0e]">
+
+                        <div class="absolute inset-0 bg-[linear-gradient(90deg,#000_0%,#111_40%,#1a1a1c_70%,#141416_100%)]"></div>
+                        <div
+                            class="absolute inset-0 opacity-[0.08] bg-[repeating-linear-gradient(90deg,transparent_0px,transparent_28px,rgba(255,255,255,0.08)_60px,transparent_100px)]">
+                        </div>
+
+                        <div class="absolute right-[-92px] top-[18%] w-[260px] h-[260px] opacity-[0.06]">
+                            <div class="w-full h-full border-[34px] border-white rounded-[40px] rotate-45"></div>
+                        </div>
 
                         <!-- Frozen Overlay -->
                         <div
-                            class="card-frozen-lock invisible opacity-0 pointer-events-none absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm transition">
+                            class="card-frozen-lock invisible opacity-0 pointer-events-none absolute inset-0 z-30 flex items-center justify-center bg-black/40 backdrop-blur-sm transition">
                             <div class="flex flex-col items-center gap-1">
                                 <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2"
                                     viewBox="0 0 24 24">
@@ -352,53 +366,72 @@
 
                         <!-- Frozen Badge -->
                         <div
-                            class="card-frozen-badge hidden absolute top-3 right-3 text-[10px] px-2 py-0.5 rounded-full bg-white/20 backdrop-blur">
+                            class="card-frozen-badge hidden absolute z-40 top-2 right-2 text-[9px] px-1.5 py-0.5 rounded-full bg-white/20 backdrop-blur">
                             FROZEN
                         </div>
 
-                        <!-- Top -->
-                        <div class="flex justify-between items-start">
-                            <div class="virtualpay-chip w-10 h-7 bg-yellow-400 rounded-md"></div>
-                            <span class="text-xs font-semibold tracking-wider uppercase text-white/80">Lanocard</span>
-                        </div>
-
-                        <!-- Card Number -->
-                        <p id="selectedCardNumber" class="mt-6 font-mono text-lg tracking-[0.2em]">
-                            4549 2416 3941 1859
-                        </p>
-
-                        <!-- Expiry + CVV -->
-                        <div class="flex justify-between mt-3 text-sm text-white/80">
-                            <span id="selectedCardExpiry">03/29</span>
-                            <span id="selectedCardCvv">703</span>
-                        </div>
-
-                        <!-- Bottom -->
-                        <div class="absolute bottom-3 left-4 right-4 flex justify-between items-end">
-                            <div>
-                                <p class="text-[10px] text-white/60">CARDHOLDER</p>
-                                <p id="selectedCardHolder" class="text-sm font-medium truncate max-w-[10rem]">{{
-                                    Auth::user()->name }}</p>
+                        <div class="relative z-10 h-full px-3.5 py-3">
+                            <!-- Top -->
+                            <div class="flex items-start justify-between">
+                                <p class="text-sm font-bold tracking-[0.04em] uppercase">LANOCARD</p>
+                                <p class="text-[9px] font-semibold uppercase tracking-[0.12em] text-white/75">Virtual Card</p>
                             </div>
 
-                            <div class="text-right">
-                                <p class="text-[10px] text-white/60">BALANCE</p>
-                                <div class="flex items-center gap-1 justify-end">
-                                    <span id="selectedCardBalance"
-                                        class="text-emerald-300 font-semibold text-sm">$0.35</span>
+                            <!-- Balance -->
+                            <div class="mt-1.5">
+                                <p class="text-[8px] uppercase tracking-[0.18em] text-white/60">Balance</p>
+                                <div class="mt-1 flex items-center gap-1">
+                                    <span id="selectedCardBalance" class="text-lg font-semibold tabular-nums text-white">$0.35</span>
 
                                     <a id="selectedCardUpdateBalanceBtn" href="#"
-                                        class="p-1 rounded-full hover:bg-white/10 transition" data-cardid=""
+                                        class="p-0.5 rounded-full hover:bg-white/10 transition" data-cardid=""
                                         aria-disabled="true">
-
-                                        <svg id="selectedCardUpdateBalanceIcon" class="w-4 h-4" fill="none"
+                                        <svg id="selectedCardUpdateBalanceIcon" class="w-3.5 h-3.5" fill="none"
                                             stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                         </svg>
                                     </a>
                                 </div>
-                                <span id="selectedCardUpdateBalanceFeedback" class="text-[10px] text-white/60"></span>
+                                <span id="selectedCardUpdateBalanceFeedback" class="hidden"></span>
+                            </div>
+
+                            <!-- Chip -->
+                            <div
+                                class="virtualpay-chip mt-2 w-[44px] h-[33px] rounded-md bg-gradient-to-br from-zinc-200 via-zinc-300 to-zinc-400 border border-zinc-500/90 p-1">
+                                <div class="w-full h-full rounded-[5px] border border-zinc-500/70 flex items-center justify-center">
+                                    <span class="block h-[1px] w-full bg-zinc-500/60"></span>
+                                </div>
+                            </div>
+
+                            <!-- Card Number -->
+                            <p id="selectedCardNumber" class="mt-2.5 text-[15px] tracking-[0.16em] font-medium tabular-nums">
+                                4549 2416 3941 1859
+                            </p>
+
+                            <!-- Bottom -->
+                            <div class="mt-2.5 flex items-end justify-between gap-2">
+                                <div class="grid grid-cols-3 gap-2 text-[8px] uppercase tracking-[0.11em]">
+                                    <div>
+                                        <p class="text-white/55">Card Holder</p>
+                                        <p id="selectedCardHolder" class="mt-0.5 text-[9px] font-medium tracking-[0.09em] uppercase max-w-[5.5rem] truncate text-white/90">
+                                            {{ Auth::user()->name }}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-white/55">Expiry</p>
+                                        <p id="selectedCardExpiry" class="mt-0.5 text-[9px] font-medium tracking-[0.08em] text-white/90">03/29</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-white/55">CVV</p>
+                                        <p id="selectedCardCvv" class="mt-0.5 text-[9px] font-medium tracking-[0.08em] text-white/90">703</p>
+                                    </div>
+                                </div>
+
+                                <div class="shrink-0 flex opacity-90">
+                                    <div class="w-6 h-6 bg-white/90 rounded-full"></div>
+                                    <div class="w-6 h-6 bg-white/70 rounded-full -ml-2"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -419,19 +452,6 @@
                         </div>
                     </div>
 
-
-                    <!-- Billing address for the selected card (demo) -->
-                    <div class="rounded-2xl border border-slate-200 bg-slate-50 px-3.5 py-3 space-y-1 text-[11px]">
-                        <p class="font-medium text-slate-700 dark:text-slate-300">Billing address</p>
-                        <p class="text-slate-700 dark:text-slate-200 leading-relaxed">
-                            2148 Market Street, Apt 5B<br>
-                            San Francisco, CA 94114<br>
-                            United States
-                        </p>
-                        <p class="text-[10px] text-slate-400 mt-1">
-                            Use this address when a merchant asks for the card billing address.
-                        </p>
-                    </div>
 
                     <div class="space-y-2 text-[11px]">
                         <p class="font-medium text-slate-700">Quick actions</p>
@@ -460,7 +480,15 @@
 
                     {{-- transactions FLAG-5 --}}
                     <div class="space-y-2 text-[11px] ">
-                        <p class="font-medium text-slate-700 dark:text-slate-300">Recent activity</p>
+                        <p class="font-medium text-slate-700 flex justify-between dark:text-slate-300">Recent activity
+                            <span>
+                                <a href="{{ route('transactions') }}"
+                                    class="text-[11px] text-emerald-600 hover:text-emerald-700 border-gray-300 hover:border-emerald-300 rounded-full border px-2 py-1">
+                                    View all
+                                </a>
+                            </span>
+                        </p>
+
                         <div id="selectedCardRecentActivity"
                             class="space-y-1.5 max-h-64 overflow-y-auto pr-1 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/30 px-3 py-2">
                             <div class="py-4 text-center text-slate-500 text-[11px]">
@@ -468,7 +496,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
