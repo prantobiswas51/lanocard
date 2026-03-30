@@ -133,9 +133,9 @@ class RegisteredUserController extends Controller
                                     border-top: 1px solid #e5e7eb;">
                                     <p style="margin: 0 0 10px 0; color: #6b7280; font-size: 14px;">
                                         Need help? Contact us at 
-                                        <a href="mailto:support@tanocard.com" 
+                                        <a href="mailto:support@lanocard.com" 
                                             style="color: #667eea; text-decoration: none;">
-                                            support@tanocard.com
+                                            support@lanocard.com
                                         </a>
                                     </p>
 

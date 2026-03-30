@@ -87,7 +87,7 @@
 
                     <div class="bg-gray-50 rounded-lg p-6 mt-8">
                         <h3 class="text-xl font-semibold text-black mb-4">Contact Information</h3>
-                        <p class="text-gray-700 mb-2"><strong>📧 Email:</strong> support@tanocard.com</p>
+                        <p class="text-gray-700 mb-2"><strong>📧 Email:</strong> support@lanocard.com</p>
                         <p class="text-gray-700">For any questions regarding this Service Usage Agreement, please contact us using the information above.</p>
                     </div>
                 </div>

@@ -191,15 +191,107 @@ class CardController extends Controller
             );
 
             sendCustomMail(
-                Auth::user()->email,
-                'We Received Your Virtual Card Request',
-                '
-                <p>Dear ' . Auth::user()->name . ',</p>
-                <p>Thank you for choosing Lanocard for your virtual card needs. We have received your request to create a new virtual card.</p>
-                <p>Our team is currently processing your request, and we will notify you once your virtual card is ready for use. This typically takes up to 30 minutes.</p>
-                <p>If you have any questions or need further assistance, please do not hesitate to contact our support team at support@lanocard.com.</p>
-            '
-            );
+    Auth::user()->email,
+    'We Received Your Virtual Card Request',
+    '
+<table role="presentation" width="100%" style="background:#f3f4f6;">
+<tr>
+<td align="center" style="padding:30px 15px;">
+
+<table width="600" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.05);font-family:Arial,sans-serif;">
+
+    <!-- Header -->
+    <tr>
+        <td style="background:#4f46e5;text-align:center;padding:25px;">
+            <h1 style="color:#ffffff;margin:0;font-size:22px;">Lanocard</h1>
+            <p style="color:#c7d2fe;font-size:13px;margin-top:5px;">Secure Virtual Card Service</p>
+        </td>
+    </tr>
+
+    <!-- Body -->
+    <tr>
+        <td style="padding:30px;">
+
+            <h2 style="color:#1f2937;margin-bottom:10px;">
+                Card Creation Request Received 💳
+            </h2>
+
+            <p style="color:#4b5563;font-size:14px;">
+                Hello <strong>' . Auth::user()->name . '</strong>,
+            </p>
+
+            <p style="color:#4b5563;font-size:14px;line-height:1.6;">
+                We have successfully received your request to create a new virtual card on your Lanocard account.
+                Our system is currently processing your request.
+            </p>
+
+            <!-- Request Details -->
+            <table width="100%" style="margin-top:20px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:15px;">
+                <tr>
+                    <td style="padding:10px;">
+                        <strong style="color:#374151;">Request Details</strong>
+
+                        <p style="font-size:14px;color:#6b7280;">
+                            Status:
+                            <strong style="color:#d97706;">Processing</strong>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Info Message -->
+            <div style="margin-top:20px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:15px;">
+                <p style="font-size:13px;color:#1d4ed8;margin:0;">
+                    Your virtual card is currently being generated. You will receive another notification once your card is successfully created.
+                </p>
+            </div>
+
+            <!-- Button -->
+            <div style="text-align:center;margin-top:30px;">
+                <a href="https://lanocard.com/dashboard"
+                   style="background:#4f46e5;color:#ffffff;text-decoration:none;
+                          padding:14px 28px;border-radius:8px;font-size:14px;font-weight:bold;display:inline-block;">
+                    View Dashboard
+                </a>
+            </div>
+
+        </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+        <td style="background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;padding:25px;">
+
+            <h3 style="margin:0;color:#111827;">LanoCard</h3>
+
+            <p style="font-size:13px;color:#6b7280;margin-top:5px;">
+                Safer Virtual Cards Worldwide
+            </p>
+
+            <p style="font-size:13px;color:#4b5563;margin-top:15px;">
+                275 New North Road, Islington<br>
+                N1 7AA, London, United Kingdom
+            </p>
+
+            <p style="font-size:13px;color:#4b5563;">
+                ✉️ hi@lanocard.com<br>
+                🌐 lanocard.com
+            </p>
+
+            <p style="font-size:11px;color:#9ca3af;margin-top:15px;">
+                © ' . date("Y") . ' Lanocard. All rights reserved.
+            </p>
+
+        </td>
+    </tr>
+
+</table>
+
+</td>
+</tr>
+</table>
+'
+);
 
             return redirect()->route('cards')->with('status', 'Your Card is being processed. It will appear in your card list within 30 minutes.');
         }
@@ -361,49 +453,102 @@ class CardController extends Controller
         ]);
 
         $html = '
-            <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
-                <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; 
-                            box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
-                    <div style="background-color: #4a90e2; color: #ffffff; padding: 20px; text-align: center;">
-                        <h1 style="margin: 0; font-size: 22px;">New Virtual Card Created</h1>
-                    </div>
-                    <div style="padding: 30px; text-align: center;">
-                        <h2 style="color: #333333;">Your Card Is Ready!</h2>
-                        <p style="color: #555555; font-size: 16px; line-height: 1.6;">
-                            Congratulations! Your new virtual card has been created successfully.
-                        </p>
-                        <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px; 
-                                    padding: 15px; max-width: 400px; font-size: 18px; color: #222; font-weight: bold;">
-                            Card Number: ' . $card_number . '
-                        </div>
+            <div style="font-family: Arial, sans-serif; background:#f3f4f6; padding:20px;">
+            <div style="max-width:600px;margin:auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.05);">
 
-
-                        ' . (isset($bill_address) ? '
-                        <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px; 
-                                    padding: 15px; max-width: 400px; font-size: 18px; color: #222; font-weight: bold;">
-                            Billing Address: ' . $bill_address . '
-                        </div>
-                        ' : '') . '
-
-                        <p style="color: #555555; font-size: 15px; line-height: 1.6;">
-                            You can now use this card for secure online transactions directly through your Lanocard dashboard.
-                        </p>
-                        <a href="https://tanocard.com/cards" 
-                        style="display: inline-block; background-color: #4a90e2; color: #ffffff; 
-                                padding: 12px 25px; border-radius: 6px; text-decoration: none; 
-                                font-weight: bold; margin-top: 15px;">
-                            View My Cards
-                        </a>
-                    </div>
-                    <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
-                        <p>Need help? Contact our support at 
-                            <a href="mailto:support@tanocard.com" style="color: #4a90e2;">support@tanocard.com</a>
-                        </p>
-                        <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
-                    </div>
+                <!-- Header -->
+                <div style="background:linear-gradient(to right,#2563eb,#4f46e5);text-align:center;padding:25px;">
+                <h1 style="color:#ffffff;margin:0;font-size:22px;">Lanocard</h1>
+                <p style="color:#dbeafe;font-size:13px;margin-top:5px;">Secure Virtual Card Service</p>
                 </div>
+
+                <!-- Content -->
+                <div style="padding:30px;">
+
+                <h2 style="color:#1f2937;font-size:20px;margin-bottom:10px;">
+                    Your Virtual Card is Ready 🎉
+                </h2>
+
+                <p style="color:#4b5563;font-size:14px;line-height:1.6;">
+                    Hello <strong>' . Auth::user()->name . '</strong>,<br>
+                    your virtual card has been successfully created and is now ready to use for online transactions.
+                </p>
+
+                <!-- Card Info -->
+                <div style="margin-top:20px;border:1px solid #e5e7eb;border-radius:12px;background:#f9fafb;padding:20px;">
+                    <h3 style="color:#374151;margin-bottom:10px;">Card Information</h3>
+
+                   
+
+                    <p style="font-size:14px;color:#6b7280;">
+                    Card Number:
+                    <strong style="color:#111827;letter-spacing:2px;">' . $card_number . '</strong>
+                    </p>
+
+                    <p style="font-size:14px;color:#6b7280;">
+                    Available Balance:
+                    <strong style="color:#16a34a;">' . $balance . '</strong>
+                    </p>
+
+                    <p style="font-size:14px;color:#6b7280;">
+                    Status:
+                    <strong style="color:#16a34a;">Active</strong>
+                    </p>
+                </div>
+
+                <!-- Optional Billing Address -->
+                ' . (isset($bill_address) ? '
+                <div style="margin-top:20px;border:1px solid #e5e7eb;border-radius:12px;background:#f9fafb;padding:15px;">
+                    <p style="font-size:14px;color:#6b7280;">
+                    Billing Address:<br>
+                    <strong style="color:#111827;">' . $bill_address . '</strong>
+                    </p>
+                </div>' : '') . '
+
+                <!-- Security Notice -->
+                <div style="margin-top:20px;background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:15px;">
+                    <p style="font-size:12px;color:#92400e;">
+                    ⚠️ For security reasons, never share your card details with anyone.
+                    If you did not create this card, contact support immediately.
+                    </p>
+                </div>
+
+                <!-- Button -->
+                <div style="text-align:center;margin-top:30px;">
+                    <a href="https://lanocard.com/cards"
+                    style="background:#2563eb;color:#ffffff;padding:12px 25px;
+                            text-decoration:none;border-radius:8px;font-size:14px;font-weight:bold;">
+                    View Your Card
+                    </a>
+                </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div style="background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;padding:25px;">
+                <h3 style="margin:0;color:#111827;">LanoCard</h3>
+                <p style="font-size:13px;color:#6b7280;margin-top:5px;">
+                    Safer Virtual Cards Worldwide
+                </p>
+
+                <p style="font-size:13px;color:#4b5563;margin-top:15px;">
+                    275 New North Road, Islington<br>
+                    N1 7AA, London, United Kingdom
+                </p>
+
+                <p style="font-size:13px;color:#4b5563;">
+                    ✉️ hi@lanocard.com<br>
+                    🌐 lanocard.com
+                </p>
+
+                <p style="font-size:11px;color:#9ca3af;margin-top:15px;">
+                    © ' . date("Y") . ' Lanocard. All rights reserved.
+                </p>
+                </div>
+
             </div>
-        ';
+            </div>
+            ';
 
         sendCustomMail(Auth::user()->email, 'New Virtual Card Created', $html);
 
@@ -570,7 +715,7 @@ class CardController extends Controller
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
                                 You can view the full transaction details in your Lanocard dashboard.
                             </p>
-                            <a href="https://tanocard.com/dashboard" 
+                            <a href="https://lanocard.com/dashboard" 
                             style="display: inline-block; background-color: #4a90e2; color: #ffffff;
                                     padding: 12px 25px; border-radius: 6px; text-decoration: none;
                                     font-weight: bold; margin-top: 15px;">
@@ -579,7 +724,7 @@ class CardController extends Controller
                         </div>
                         <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                             <p>Need help? Contact our support at 
-                                <a href="mailto:support@tanocard.com" style="color: #4a90e2;">support@tanocard.com</a>
+                                <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
                             </p>
                             <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                         </div>
@@ -663,7 +808,7 @@ class CardController extends Controller
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
                                 You can now use your recharged balance for online payments or card transactions.
                             </p>
-                            <a href="https://tanocard.com/dashboard"
+                            <a href="https://lanocard.com/dashboard"
                             style="display: inline-block; background-color: #4a90e2; color: #ffffff;
                                     padding: 12px 25px; border-radius: 6px; text-decoration: none;
                                     font-weight: bold; margin-top: 15px;">
@@ -672,7 +817,7 @@ class CardController extends Controller
                         </div>
                         <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                             <p>Need help? Contact our support at 
-                                <a href="mailto:support@tanocard.com" style="color: #4a90e2;">support@tanocard.com</a>
+                                <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
                             </p>
                             <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                         </div>
@@ -835,7 +980,7 @@ class CardController extends Controller
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
                                 If you did not request this cancellation, please contact Lanocard Support immediately.
                             </p>
-                            <a href="https://tanocard.com/dashboard"
+                            <a href="https://lanocard.com/dashboard"
                             style="display: inline-block; background-color: #4a90e2; color: #ffffff;
                                     padding: 12px 25px; border-radius: 6px; text-decoration: none;
                                     font-weight: bold; margin-top: 15px;">
@@ -844,7 +989,7 @@ class CardController extends Controller
                         </div>
                         <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                             <p>Need help? Contact our support at 
-                                <a href="mailto:support@tanocard.com" style="color: #4a90e2;">support@tanocard.com</a>
+                                <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
                             </p>
                             <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                         </div>
@@ -913,7 +1058,7 @@ class CardController extends Controller
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
                                 You can unfreeze this card anytime from your Lanocard dashboard if you wish to resume its use.
                             </p>
-                            <a href="https://tanocard.com/dashboard"
+                            <a href="https://lanocard.com/dashboard"
                             style="display: inline-block; background-color: #4a90e2; color: #ffffff;
                                     padding: 12px 25px; border-radius: 6px; text-decoration: none;
                                     font-weight: bold; margin-top: 15px;">
@@ -922,7 +1067,7 @@ class CardController extends Controller
                         </div>
                         <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                             <p>Need help? Contact our support at 
-                                <a href="mailto:support@tanocard.com" style="color: #4a90e2;">support@tanocard.com</a>
+                                <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
                             </p>
                             <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                         </div>
@@ -993,7 +1138,7 @@ class CardController extends Controller
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
                                 You can manage or freeze your card anytime from your Lanocard dashboard.
                             </p>
-                            <a href="https://tanocard.com/dashboard"
+                            <a href="https://lanocard.com/dashboard"
                             style="display: inline-block; background-color: #4a90e2; color: #ffffff;
                                     padding: 12px 25px; border-radius: 6px; text-decoration: none;
                                     font-weight: bold; margin-top: 15px;">
@@ -1002,7 +1147,7 @@ class CardController extends Controller
                         </div>
                         <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                             <p>Need help? Contact our support at 
-                                <a href="mailto:support@tanocard.com" style="color: #4a90e2;">support@tanocard.com</a>
+                                <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
                             </p>
                             <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                         </div>

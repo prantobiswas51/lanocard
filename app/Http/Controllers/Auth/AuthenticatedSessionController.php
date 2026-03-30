@@ -51,60 +51,119 @@ class AuthenticatedSessionController extends Controller
                 ]
             );
 
-            // Email HTML (your template)
             $html = '
-            <table role="presentation" width="100%" style="background-color:#f3f4f6;">
+<table role="presentation" width="100%" style="background:#f3f4f6;">
+<tr>
+<td align="center" style="padding:30px 15px;">
+
+<table width="600" style="background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.05);font-family:Arial,sans-serif;">
+
+    <!-- Header Image -->
+    <tr>
+        <td>
+            <img src="https://i.postimg.cc/1Xv8rYj6/welcome.png" 
+                 style="width:100%;height:250px;object-fit:cover;display:block;">
+        </td>
+    </tr>
+
+    <!-- Content -->
+    <tr>
+        <td style="padding:30px;">
+
+            <h2 style="color:#1f2937;margin:0 0 10px 0;">
+                Welcome to Lanocard 🎉
+            </h2>
+
+            <p style="color:#4b5563;font-size:14px;">
+                Hello <strong>' . e($user->name) . '</strong>,
+            </p>
+
+            <p style="color:#4b5563;font-size:14px;line-height:1.6;">
+                Thank you for creating an account with <strong>Lanocard</strong>.<br>
+                Before you can start creating and using virtual cards, please confirm your email address.
+            </p>
+
+            <!-- Account Info -->
+            <table width="100%" style="margin-top:20px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:15px;">
                 <tr>
-                    <td align="center" style="padding:40px 20px;">
-                        <table width="600" style="background:#ffffff;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,.1);">
-                            
-                            <tr>
-                                <td style="background:linear-gradient(135deg,#667eea,#764ba2);padding:40px;text-align:center;">
-                                    <h1 style="color:#fff;margin:0;">Lanocard Limited</h1>
-                                    <p style="color:#e0e7ff;">Welcome, ' . e($user->name) . '</p>
-                                </td>
-                            </tr>
+                    <td style="padding:10px;">
+                        <strong style="color:#374151;">Account Details</strong>
 
-                            <tr>
-                                <td style="padding:40px;">
-                                    <h2>Activate Your Account</h2>
-                                    <p>Click the button below to verify your email:</p>
+                        <p style="font-size:14px;color:#6b7280;margin-top:10px;">
+                            Email Address:
+                            <strong style="color:#111827;">' . e($user->email) . '</strong>
+                        </p>
 
-                                    <div style="text-align:center;margin:30px 0;">
-                                        <a href="' . e($verifyUrl) . '" 
-                                        style="padding:16px 40px;background:#667eea;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;">
-                                        Activate Account
-                                        </a>
-                                    </div>
-
-                                    <p style="font-size:14px;color:#6b7280;text-align:center;">
-                                        Or copy this link:<br>
-                                        <a href="' . e($verifyUrl) . '">' . e($verifyUrl) . '</a>
-                                    </p>
-
-                                    <p style="font-size:14px;color:#1e40af;background:#f0f9ff;padding:15px;border-left:4px solid #667eea;">
-                                        ⚠️ Link expires in 24 hours.
-                                    </p>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td style="text-align:center;padding:20px;font-size:12px;color:#9ca3af;">
-                                    © ' . date('Y') . ' Lanocard Limited
-                                </td>
-                            </tr>
-
-                        </table>
+                        <p style="font-size:14px;color:#6b7280;">
+                            Account Status:
+                            <strong style="color:#d97706;">Pending Activation</strong>
+                        </p>
                     </td>
                 </tr>
-            </table>';
+            </table>
 
-            // Send mail
-            sendCustomMail(
-                to: $user->email,
-                subject: 'Verify Your Email - Lanocard',
-                htmlContent: $html
-            );
+            <!-- Button -->
+            <div style="text-align:center;margin:30px 0;">
+                <a href="' . e($verifyUrl) . '" 
+                   style="background:#2563eb;color:#ffffff;text-decoration:none;
+                          padding:14px 30px;border-radius:8px;font-size:14px;font-weight:bold;display:inline-block;">
+                    Activate Your Account
+                </a>
+            </div>
+
+            <!-- Backup Link -->
+            <p style="font-size:12px;color:#6b7280;word-break:break-all;">
+                If the button above does not work, copy and paste this link:<br>
+                <span style="color:#2563eb;">' . e($verifyUrl) . '</span>
+            </p>
+
+            <!-- Security Notice -->
+            <div style="margin-top:20px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:15px;">
+                <p style="font-size:12px;color:#1d4ed8;margin:0;">
+                    For security reasons, this activation link may expire. If you did not create this account,
+                    please ignore this email or contact our support team.
+                </p>
+            </div>
+
+        </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+        <td style="background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;padding:25px;">
+
+            <h3 style="margin:0;color:#111827;">LanoCard</h3>
+
+            <p style="font-size:13px;color:#6b7280;margin-top:5px;">
+                Safer Virtual Cards Worldwide
+            </p>
+
+            <p style="font-size:13px;color:#4b5563;margin-top:15px;">
+                275 New North Road, Islington<br>
+                N1 7AA, London, United Kingdom
+            </p>
+
+            <p style="font-size:13px;color:#4b5563;">
+                ✉️ hi@lanocard.com<br>
+                🌐 lanocard.com
+            </p>
+
+            <p style="font-size:11px;color:#9ca3af;margin-top:15px;">
+                © ' . date('Y') . ' Lanocard. All rights reserved.
+            </p>
+
+        </td>
+    </tr>
+
+</table>
+
+</td>
+</tr>
+</table>
+';
+
+            // Send mail 
+            sendCustomMail(to: $user->email, subject: 'Verify Your Email - Lanocard', htmlContent: $html);
 
             return back()->withErrors([
                 'email' => 'Please verify your email before login. Check your Inbox or Spam for the verification link.',

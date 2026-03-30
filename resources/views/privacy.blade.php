@@ -117,7 +117,7 @@
                     <p class="text-gray-700 mb-4">If you have any questions about this Privacy Policy, please contact
                         us:</p>
                     <div class="bg-gray-50 rounded-lg p-6">
-                        <p class="text-gray-700 mb-2"><strong>Email:</strong> privacy@tanocard.com</p>
+                        <p class="text-gray-700 mb-2"><strong>Email:</strong> privacy@lanocard.com</p>
                         <p class="text-gray-700 mb-2"><strong>Phone:</strong> +1 (234) 567-890</p>
                         <p class="text-gray-700 mb-2"><strong>Address:</strong> 123 Financial District, New York, NY
                             10004, United States</p>

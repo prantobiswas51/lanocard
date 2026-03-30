@@ -125,7 +125,7 @@ class CardsTable
                                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
                                                 You can now use this card for secure online transactions directly through your Lanocard dashboard.
                                             </p>
-                                            <a href="https://tanocard.com/cards" 
+                                            <a href="https://lanocard.com/cards" 
                                             style="display: inline-block; background-color: #4a90e2; color: #ffffff; 
                                                     padding: 12px 25px; border-radius: 6px; text-decoration: none; 
                                                     font-weight: bold; margin-top: 15px;">
@@ -134,7 +134,7 @@ class CardsTable
                                         </div>
                                         <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
                                             <p>Need help? Contact our support at 
-                                                <a href="mailto:support@tanocard.com" style="color: #4a90e2;">support@tanocard.com</a>
+                                                <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
                                             </p>
                                             <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                                         </div>
