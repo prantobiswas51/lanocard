@@ -141,7 +141,7 @@ class CardController extends Controller
         if ($request->bin != '49387520') {
             // cut balance from user
 
-            if ($request->bin == '428852' || $request->bin == '428820') {
+            if ($request->bin == '45492416' || $request->bin == '428820') {
                 $organization = 'VISA';
             } else {
                 $organization = "MASTERCARD";

@@ -108,7 +108,8 @@
                     <div
                         class="flex justify-between text-slate-700 dark:text-slate-200 pt-1 border-t border-slate-200 dark:border-slate-600">
                         <span>You receive</span><span id="cashout_total_amount"
-                            class="font-semibold text-emerald-600">$0.00</span></div>
+                            class="font-semibold text-emerald-600">$0.00</span>
+                    </div>
                 </div>
 
                 <input id="cashoutCardId" type="hidden" name="card_id" value="">
@@ -205,7 +206,8 @@
                             data-cvv="{{ $card->cvv }}" data-holder="{{ Auth::user()->name }}"
                             data-balance="{{ number_format($card->cardBalance,2) }}" data-type="{{ $card->type }}"
                             data-status="{{ $card->state }}" data-cardid="{{ $card->id }}"
-                            data-totalconsume="{{ number_format($card->totalConsume, 2) }}">
+                            data-totalconsume="{{ number_format($card->totalConsume, 2) }}"
+                            data-organization="{{ $card->organization }}">
                             <div class="flex items-center justify-between gap-2">
                                 <div class="flex items-center gap-3">
                                     <div
@@ -233,8 +235,6 @@
                                             <img class="h-6 object-contain" src="{{ asset('images/mastercard.png') }}"
                                                 alt="Mastercard">
                                             @else
-                                            <img class="h-6 object-contain" src="{{ asset('images/mastercard-a.png') }}"
-                                                alt="Card">
                                             @endif
 
                                         </div>
@@ -321,9 +321,10 @@
 
             <div class="ml-3">
                 <!-- Right: selected card summary -->
+
                 {{-- Flag-3 --}}
                 <div id="details_pan"
-                    class="bg-white border-slate-200 rounded-2xl p-3 sm:p-4 flex gap-3 flex-col shadow-sm max-h-[calc(93vh-4rem)] overflow-y-auto overscroll-contain lg:sticky ">
+                    class="bg-white border-slate-200 rounded-2xl p-3 sm:p-4 flex gap-3 flex-col shadow-sm max-h-[calc(93vh-4rem)] min-h-[calc(90vh-4rem)] overflow-y-auto overscroll-contain lg:sticky ">
 
                     {{-- header details --}}
                     <div class="space-y-0.5  flex justify-between rounded-lg p-2  items-center">
@@ -340,9 +341,11 @@
 
                     {{-- card design flag-8--}}
                     <div id="selectedCardBox"
-                        class="w-full h-[200px] max-w-full mx-auto relative overflow-hidden rounded-[20px] border border-white/10 shadow-[0_20px_45px_rgba(0,0,0,0.35)] text-white bg-[#0d0d0e]">
+                        class="w-full min-h-[200px] max-w-full mx-auto relative overflow-hidden rounded-[20px] border border-white/10 shadow-md text-white bg-slate-900">
 
-                        <div class="absolute inset-0 bg-[linear-gradient(90deg,#000_0%,#111_40%,#1a1a1c_70%,#141416_100%)]"></div>
+                        <div id="selectedCardGradientLayer"
+                            class="absolute inset-0 bg-[linear-gradient(90deg,#000_0%,#111_40%,#1a1a1c_70%,#141416_100%)]">
+                        </div>
                         <div
                             class="absolute inset-0 opacity-[0.08] bg-[repeating-linear-gradient(90deg,transparent_0px,transparent_28px,rgba(255,255,255,0.08)_60px,transparent_100px)]">
                         </div>
@@ -351,40 +354,21 @@
                             <div class="w-full h-full border-[34px] border-white rounded-[40px] rotate-45"></div>
                         </div>
 
-                        <!-- Frozen Overlay -->
-                        <div
-                            class="card-frozen-lock invisible opacity-0 pointer-events-none absolute inset-0 z-30 flex items-center justify-center bg-black/40 backdrop-blur-sm transition">
-                            <div class="flex flex-col items-center gap-1">
-                                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                                <span class="text-xs font-semibold uppercase tracking-widest">Locked</span>
-                            </div>
-                        </div>
-
-                        <!-- Frozen Badge -->
-                        <div
-                            class="card-frozen-badge hidden absolute z-40 top-2 right-2 text-[9px] px-1.5 py-0.5 rounded-full bg-white/20 backdrop-blur">
-                            FROZEN
-                        </div>
-
                         <div class="relative z-10 h-full px-3.5 py-3">
                             <!-- Top -->
                             <div class="flex items-start justify-between">
-                                <p class="text-sm font-bold tracking-[0.04em] uppercase">LANOCARD</p>
-                                <p class="text-[9px] font-semibold uppercase tracking-[0.12em] text-white/75">Virtual Card</p>
+                                <p class="text-[9px] font-semibold uppercase tracking-[0.12em] text-white/75">Virtual
+                                    Card</p>
                             </div>
 
                             <!-- Balance -->
                             <div class="mt-1.5">
                                 <p class="text-[8px] uppercase tracking-[0.18em] text-white/60">Balance</p>
                                 <div class="mt-1 flex items-center gap-1">
-                                    <span id="selectedCardBalance" class="text-lg font-semibold tabular-nums text-white">$0.35</span>
-
+                                    <span id="selectedCardBalance"
+                                        class="text-lg font-semibold tabular-nums text-white">$0.35</span>
                                     <a id="selectedCardUpdateBalanceBtn" href="#"
-                                        class="p-0.5 rounded-full hover:bg-white/10 transition" data-cardid=""
+                                        class="hidden p-0.5 rounded-full hover:bg-white/10 transition" data-cardid=""
                                         aria-disabled="true">
                                         <svg id="selectedCardUpdateBalanceIcon" class="w-3.5 h-3.5" fill="none"
                                             stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -399,13 +383,15 @@
                             <!-- Chip -->
                             <div
                                 class="virtualpay-chip mt-2 w-[44px] h-[33px] rounded-md bg-gradient-to-br from-zinc-200 via-zinc-300 to-zinc-400 border border-zinc-500/90 p-1">
-                                <div class="w-full h-full rounded-[5px] border border-zinc-500/70 flex items-center justify-center">
+                                <div
+                                    class="w-full h-full rounded-[5px] border border-zinc-500/70 flex items-center justify-center">
                                     <span class="block h-[1px] w-full bg-zinc-500/60"></span>
                                 </div>
                             </div>
 
                             <!-- Card Number -->
-                            <p id="selectedCardNumber" class="mt-2.5 text-[15px] tracking-[0.16em] font-medium tabular-nums">
+                            <p id="selectedCardNumber"
+                                class="mt-2.5 text-[15px] tracking-[0.16em] font-medium tabular-nums">
                                 4549 2416 3941 1859
                             </p>
 
@@ -414,17 +400,22 @@
                                 <div class="grid grid-cols-3 gap-2 text-[8px] uppercase tracking-[0.11em]">
                                     <div>
                                         <p class="text-white/55">Card Holder</p>
-                                        <p id="selectedCardHolder" class="mt-0.5 text-[9px] font-medium tracking-[0.09em] uppercase max-w-[5.5rem] truncate text-white/90">
+                                        <p id="selectedCardHolder"
+                                            class="mt-0.5 text-[9px] font-medium tracking-[0.09em] uppercase max-w-[5.5rem] truncate text-white/90">
                                             {{ Auth::user()->name }}
                                         </p>
                                     </div>
                                     <div>
                                         <p class="text-white/55">Expiry</p>
-                                        <p id="selectedCardExpiry" class="mt-0.5 text-[9px] font-medium tracking-[0.08em] text-white/90">03/29</p>
+                                        <p id="selectedCardExpiry"
+                                            class="mt-0.5 text-[9px] font-medium tracking-[0.08em] text-white/90">03/29
+                                        </p>
                                     </div>
                                     <div>
                                         <p class="text-white/55">CVV</p>
-                                        <p id="selectedCardCvv" class="mt-0.5 text-[9px] font-medium tracking-[0.08em] text-white/90">703</p>
+                                        <p id="selectedCardCvv"
+                                            class="mt-0.5 text-[9px] font-medium tracking-[0.08em] text-white/90">703
+                                        </p>
                                     </div>
                                 </div>
 
@@ -463,7 +454,15 @@
                                 action="{{ route('freeze_card') }}" method="post">
                                 @csrf
                                 <input id="selectedCardFreezeFormCardId" type="hidden" name="card_id" value="">
-                                <button id="selectedCardFreezeButton" type="submit">Freeze</button>
+                                <button id="selectedCardFreezeButton" type="submit"
+                                    class="inline-flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 2v20M4 7l16 10M20 7L4 17M7 4l10 16M17 4L7 20" />
+                                    </svg>
+                                    <span id="selectedCardFreezeLabel">FREEZE</span>
+                                </button>
                             </form>
 
                             {{-- flag-7 --}}
@@ -514,6 +513,8 @@
             const selectedSpent = document.getElementById('selectedCardSpent');
             const selectedTitle = document.getElementById('selectedCardTitle');
             const selectedStatus = document.getElementById('selectedCardStatus');
+            const selectedCardBox = document.getElementById('selectedCardBox');
+            const selectedCardGradientLayer = document.getElementById('selectedCardGradientLayer');
             const selectedCardUpdateBalanceBtn = document.getElementById('selectedCardUpdateBalanceBtn');
             const selectedCardUpdateBalanceIcon = document.getElementById('selectedCardUpdateBalanceIcon');
             const selectedCardUpdateBalanceFeedback = document.getElementById('selectedCardUpdateBalanceFeedback');
@@ -522,6 +523,7 @@
             const selectedCardFreezeForm = document.getElementById('selectedCardFreezeForm');
             const selectedCardFreezeFormCardId = document.getElementById('selectedCardFreezeFormCardId');
             const selectedCardFreezeButton = document.getElementById('selectedCardFreezeButton');
+            const selectedCardFreezeLabel = document.getElementById('selectedCardFreezeLabel');
             const btnTopupSelectedCard = document.getElementById('btnTopupSelectedCard');
             const selectedCardRecentActivity = document.getElementById('selectedCardRecentActivity');
             const detailsPanel = document.getElementById('details_pan');
@@ -612,6 +614,27 @@
 
             const normalizeType = (value) => {
                 return String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            };
+
+            const applySelectedCardTheme = (organization) => {
+                if (!selectedCardBox || !selectedCardGradientLayer) return;
+
+                const org = String(organization || '').toUpperCase();
+
+                if (org === 'MASTERCARD') {
+                    selectedCardBox.style.background = 'linear-gradient(135deg, #000000 0%, #111111 45%, #1a1a1c 100%)';
+                    selectedCardGradientLayer.style.background = 'linear-gradient(90deg, #000 0%, #111 40%, #1a1a1c 70%, #141416 100%)';
+                    return;
+                }
+
+                if (org === 'VISA') {
+                    selectedCardBox.style.background = 'linear-gradient(135deg, #065f46 0%, #059669 52%, #34d399 100%)';
+                    selectedCardGradientLayer.style.background = 'linear-gradient(90deg, rgba(2, 44, 34, 0.52) 0%, rgba(5, 150, 105, 0.24) 46%, rgba(52, 211, 153, 0.18) 100%)';
+                    return;
+                }
+
+                selectedCardBox.style.background = 'linear-gradient(135deg, #0f172a 0%, #111827 60%, #1e293b 100%)';
+                selectedCardGradientLayer.style.background = 'linear-gradient(90deg, #000 0%, #111 40%, #1a1a1c 70%, #141416 100%)';
             };
 
             const escapeHtml = (value = '') => {
@@ -790,8 +813,10 @@
                 const holder = cardRow.dataset.holder || 'USER';
                 const balance = cardRow.dataset.balance || '0.00';
                 const type = cardRow.dataset.type || 'Card';
+                const organization = cardRow.dataset.organization || '';
                 const status = cardRow.dataset.status || '0';
                 const statusNumber = Number.parseInt(status, 10);
+                const isFrozen = statusNumber === 2;
                 const cardId = cardRow.dataset.cardid || '';
                 const totalconsume = cardRow.dataset.totalconsume || '0.00';
                 selectedCardId = cardId;
@@ -804,6 +829,8 @@
                 if (selectedSpent) selectedSpent.innerText = '$' + totalconsume;
                 if (selectedTitle) selectedTitle.innerText = type.charAt(0).toUpperCase() + type.slice(1) + ' Card';
 
+                applySelectedCardTheme(organization);
+
                 if (selectedStatus) {
                     if (statusNumber === 1) {
                         selectedStatus.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Active`;
@@ -814,8 +841,12 @@
                     }
                 }
 
+                if (selectedCardBox) {
+                    selectedCardBox.classList.toggle('grayscale', isFrozen);
+                    selectedCardBox.classList.toggle('blur-sm', isFrozen);
+                }
+
                 if (selectedCardFrozenLock) {
-                    const isFrozen = statusNumber === 2;
                     selectedCardFrozenLock.classList.toggle('invisible', !isFrozen);
                     selectedCardFrozenLock.classList.toggle('opacity-0', !isFrozen);
                     selectedCardFrozenLock.classList.toggle('pointer-events-none', !isFrozen);
@@ -826,7 +857,12 @@
                 }
 
                 if (selectedCardUpdateBalanceBtn) {
-                    if (cardId) {
+                    const isFrozen = statusNumber === 2;
+                    const canRefreshBalance = Boolean(cardId) && !isFrozen;
+
+                    selectedCardUpdateBalanceBtn.classList.toggle('hidden', !canRefreshBalance);
+
+                    if (canRefreshBalance) {
                         selectedCardUpdateBalanceBtn.href = updateBalanceRouteTemplate.replace('__CARD_ID__', cardId);
                         selectedCardUpdateBalanceBtn.setAttribute('aria-disabled', 'false');
                         selectedCardUpdateBalanceBtn.dataset.cardid = cardId;
@@ -843,8 +879,8 @@
                     selectedCardFreezeForm.action = status == 2 ? unfreezeCardRoute : freezeCardRoute;
                 }
 
-                if (selectedCardFreezeButton) {
-                    selectedCardFreezeButton.innerText = status == 2 ? 'Unfreeze' : 'Freeze';
+                if (selectedCardFreezeLabel) {
+                    selectedCardFreezeLabel.innerText = status == 2 ? 'UNFREEZE' : 'FREEZE';
                 }
 
                 if (selectedCardFreezeFormCardId) {
@@ -1018,6 +1054,7 @@
             applyCardFilters();
             updateRechargeTotal();
             updateCashoutTotal();
+            applySelectedCardTheme('');
 
         });
 
