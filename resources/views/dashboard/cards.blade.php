@@ -343,86 +343,102 @@
                     <div id="selectedCardBox"
                         class="w-full min-h-[200px] max-w-full mx-auto relative overflow-hidden rounded-[20px] border border-white/10 shadow-md text-white bg-slate-900">
 
-                        <div id="selectedCardGradientLayer"
-                            class="absolute inset-0 bg-[linear-gradient(90deg,#000_0%,#111_40%,#1a1a1c_70%,#141416_100%)]">
-                        </div>
-                        <div
-                            class="absolute inset-0 opacity-[0.08] bg-[repeating-linear-gradient(90deg,transparent_0px,transparent_28px,rgba(255,255,255,0.08)_60px,transparent_100px)]">
-                        </div>
-
-                        <div class="absolute right-[-92px] top-[18%] w-[260px] h-[260px] opacity-[0.06]">
-                            <div class="w-full h-full border-[34px] border-white rounded-[40px] rotate-45"></div>
-                        </div>
-
-                        <div class="relative z-10 h-full px-3.5 py-3">
-                            <!-- Top -->
-                            <div class="flex items-start justify-between">
-                                <p class="text-[9px] font-semibold uppercase tracking-[0.12em] text-white/75">Virtual
-                                    Card</p>
+                        <div id="selectedCardBoxContent" class="absolute inset-0 z-10">
+                            <div id="selectedCardGradientLayer"
+                                class="absolute inset-0 bg-[linear-gradient(90deg,#000_0%,#111_40%,#1a1a1c_70%,#141416_100%)]">
                             </div>
-
-                            <!-- Balance -->
-                            <div class="mt-1.5">
-                                <p class="text-[8px] uppercase tracking-[0.18em] text-white/60">Balance</p>
-                                <div class="mt-1 flex items-center gap-1">
-                                    <span id="selectedCardBalance"
-                                        class="text-lg font-semibold tabular-nums text-white">$0.35</span>
-                                    <a id="selectedCardUpdateBalanceBtn" href="#"
-                                        class="hidden p-0.5 rounded-full hover:bg-white/10 transition" data-cardid=""
-                                        aria-disabled="true">
-                                        <svg id="selectedCardUpdateBalanceIcon" class="w-3.5 h-3.5" fill="none"
-                                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                        </svg>
-                                    </a>
-                                </div>
-                                <span id="selectedCardUpdateBalanceFeedback" class="hidden"></span>
-                            </div>
-
-                            <!-- Chip -->
                             <div
-                                class="virtualpay-chip mt-2 w-[44px] h-[33px] rounded-md bg-gradient-to-br from-zinc-200 via-zinc-300 to-zinc-400 border border-zinc-500/90 p-1">
-                                <div
-                                    class="w-full h-full rounded-[5px] border border-zinc-500/70 flex items-center justify-center">
-                                    <span class="block h-[1px] w-full bg-zinc-500/60"></span>
-                                </div>
+                                class="absolute inset-0 opacity-[0.08] bg-[repeating-linear-gradient(90deg,transparent_0px,transparent_28px,rgba(255,255,255,0.08)_60px,transparent_100px)]">
                             </div>
 
-                            <!-- Card Number -->
-                            <p id="selectedCardNumber"
-                                class="mt-2.5 text-[15px] tracking-[0.16em] font-medium tabular-nums">
-                                4549 2416 3941 1859
-                            </p>
+                            <div class="absolute right-[-92px] top-[18%] w-[260px] h-[260px] opacity-[0.06]">
+                                <div class="w-full h-full border-[34px] border-white rounded-[40px] rotate-45"></div>
+                            </div>
 
-                            <!-- Bottom -->
-                            <div class="mt-2.5 flex items-end justify-between gap-2">
-                                <div class="grid grid-cols-3 gap-2 text-[8px] uppercase tracking-[0.11em]">
-                                    <div>
-                                        <p class="text-white/55">Card Holder</p>
-                                        <p id="selectedCardHolder"
-                                            class="mt-0.5 text-[9px] font-medium tracking-[0.09em] uppercase max-w-[5.5rem] truncate text-white/90">
-                                            {{ Auth::user()->name }}
-                                        </p>
+                            <div class="relative z-10 h-full px-3.5 py-3">
+                                <!-- Top -->
+                                <div class="flex items-start justify-between">
+                                    <p class="text-[9px] font-semibold uppercase tracking-[0.12em] text-white/75">Virtual
+                                        Card</p>
+                                </div>
+
+                                <!-- Balance -->
+                                <div class="mt-1.5">
+                                    <p class="text-[8px] uppercase tracking-[0.18em] text-white/60">Balance</p>
+                                    <div class="mt-1 flex items-center gap-1">
+                                        <span id="selectedCardBalance"
+                                            class="text-lg font-semibold tabular-nums text-white">$0.35</span>
+                                        <a id="selectedCardUpdateBalanceBtn" href="#"
+                                            class="hidden p-0.5 rounded-full hover:bg-white/10 transition" data-cardid=""
+                                            aria-disabled="true">
+                                            <svg id="selectedCardUpdateBalanceIcon" class="w-3.5 h-3.5" fill="none"
+                                                stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                            </svg>
+                                        </a>
                                     </div>
-                                    <div>
-                                        <p class="text-white/55">Expiry</p>
-                                        <p id="selectedCardExpiry"
-                                            class="mt-0.5 text-[9px] font-medium tracking-[0.08em] text-white/90">03/29
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <p class="text-white/55">CVV</p>
-                                        <p id="selectedCardCvv"
-                                            class="mt-0.5 text-[9px] font-medium tracking-[0.08em] text-white/90">703
-                                        </p>
+                                    <span id="selectedCardUpdateBalanceFeedback" class="hidden"></span>
+                                </div>
+
+                                <!-- Chip -->
+                                <div
+                                    class="virtualpay-chip mt-2 w-[44px] h-[33px] rounded-md bg-gradient-to-br from-zinc-200 via-zinc-300 to-zinc-400 border border-zinc-500/90 p-1">
+                                    <div
+                                        class="w-full h-full rounded-[5px] border border-zinc-500/70 flex items-center justify-center">
+                                        <span class="block h-[1px] w-full bg-zinc-500/60"></span>
                                     </div>
                                 </div>
 
-                                <div class="shrink-0 flex opacity-90">
-                                    <div class="w-6 h-6 bg-white/90 rounded-full"></div>
-                                    <div class="w-6 h-6 bg-white/70 rounded-full -ml-2"></div>
+                                <!-- Card Number -->
+                                <p id="selectedCardNumber"
+                                    class="mt-2.5 text-[15px] tracking-[0.16em] font-medium tabular-nums">
+                                    4549 2416 3941 1859
+                                </p>
+
+                                <!-- Bottom -->
+                                <div class="mt-2.5 flex items-end justify-between gap-2">
+                                    <div class="grid grid-cols-3 gap-2 text-[8px] uppercase tracking-[0.11em]">
+                                        <div>
+                                            <p class="text-white/55">Card Holder</p>
+                                            <p id="selectedCardHolder"
+                                                class="mt-0.5 text-[9px] font-medium tracking-[0.09em] uppercase max-w-[5.5rem] truncate text-white/90">
+                                                {{ Auth::user()->name }}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p class="text-white/55">Expiry</p>
+                                            <p id="selectedCardExpiry"
+                                                class="mt-0.5 text-[9px] font-medium tracking-[0.08em] text-white/90">03/29
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p class="text-white/55">CVV</p>
+                                            <p id="selectedCardCvv"
+                                                class="mt-0.5 text-[9px] font-medium tracking-[0.08em] text-white/90">703
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="shrink-0 flex opacity-90">
+                                        <div class="w-6 h-6 bg-white/90 rounded-full"></div>
+                                        <div class="w-6 h-6 bg-white/70 rounded-full -ml-2"></div>
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        {{-- Frozen overlay lock icon (state = 2) --}}
+                        <div
+                            class="card-frozen-lock pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-200"
+                            style="z-index: 9999;">
+                            <div class="rounded-full bg-slate-900/50 border border-white/20 backdrop-blur-sm px-3 py-2">
+                                <svg class="w-7 h-7 text-white/90" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M17 11V7a5 5 0 0 0-10 0v4" />
+                                    <rect x="5" y="11" width="14" height="10" rx="2" ry="2" />
+                                </svg>
                             </div>
                         </div>
                     </div>
@@ -515,6 +531,7 @@
             const selectedStatus = document.getElementById('selectedCardStatus');
             const selectedCardBox = document.getElementById('selectedCardBox');
             const selectedCardGradientLayer = document.getElementById('selectedCardGradientLayer');
+            const selectedCardBoxContent = document.getElementById('selectedCardBoxContent');
             const selectedCardUpdateBalanceBtn = document.getElementById('selectedCardUpdateBalanceBtn');
             const selectedCardUpdateBalanceIcon = document.getElementById('selectedCardUpdateBalanceIcon');
             const selectedCardUpdateBalanceFeedback = document.getElementById('selectedCardUpdateBalanceFeedback');
@@ -842,14 +859,24 @@
                 }
 
                 if (selectedCardBox) {
-                    selectedCardBox.classList.toggle('grayscale', isFrozen);
-                    selectedCardBox.classList.toggle('blur-sm', isFrozen);
+                    // This class is required for app.css to show/hide the lock overlay.
+                    selectedCardBox.classList.toggle('card-frozen', isFrozen);
+
+                    if (selectedCardBoxContent) {
+                        selectedCardBoxContent.classList.toggle('grayscale', isFrozen);
+                        selectedCardBoxContent.classList.toggle('blur-sm', isFrozen);
+                    } else {
+                        // Fallback: keep previous behavior if content wrapper is missing.
+                        selectedCardBox.classList.toggle('grayscale', isFrozen);
+                        selectedCardBox.classList.toggle('blur-sm', isFrozen);
+                    }
                 }
 
+                // Force-lock visibility so it behaves consistently across card themes.
                 if (selectedCardFrozenLock) {
-                    selectedCardFrozenLock.classList.toggle('invisible', !isFrozen);
-                    selectedCardFrozenLock.classList.toggle('opacity-0', !isFrozen);
-                    selectedCardFrozenLock.classList.toggle('pointer-events-none', !isFrozen);
+                    selectedCardFrozenLock.style.setProperty('display', isFrozen ? 'flex' : 'none', 'important');
+                    selectedCardFrozenLock.style.setProperty('z-index', '9999', 'important');
+                    selectedCardFrozenLock.style.setProperty('opacity', isFrozen ? '1' : '0', 'important');
                 }
 
                 if (selectedCardFrozenBadge) {
