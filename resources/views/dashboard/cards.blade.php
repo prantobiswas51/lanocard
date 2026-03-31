@@ -357,13 +357,13 @@
 
                             <div class="relative z-10 h-full px-3.5 py-3">
                                 <!-- Top -->
-                                <div class="flex items-start justify-between">
-                                    <p class="text-[9px] font-semibold uppercase tracking-[0.12em] text-white/75">Virtual
-                                        Card</p>
+                                <div class="flex items-start justify-between bg-red-500">
+                                    <p class="text-[9px] font-semibold uppercase tracking-[0.12em] text-white/75">Virtual Card</p>
                                 </div>
 
                                 <!-- Balance -->
-                                <div class="mt-1.5">
+                                <div class="mt-1.5 bg-blue-500 flex items-center justify-between">
+                                    <div class="">
                                     <p class="text-[8px] uppercase tracking-[0.18em] text-white/60">Balance</p>
                                     <div class="mt-1 flex items-center gap-1">
                                         <span id="selectedCardBalance"
@@ -379,6 +379,8 @@
                                         </a>
                                     </div>
                                     <span id="selectedCardUpdateBalanceFeedback" class="hidden"></span>
+                                    </div>
+                                    <div class="">Logo</div>
                                 </div>
 
                                 <!-- Chip -->
@@ -472,10 +474,13 @@
                                 <input id="selectedCardFreezeFormCardId" type="hidden" name="card_id" value="">
                                 <button id="selectedCardFreezeButton" type="submit"
                                     class="inline-flex items-center gap-1">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2"
-                                        viewBox="0 0 24 24" aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M12 2v20M4 7l16 10M20 7L4 17M7 4l10 16M17 4L7 20" />
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="1.9" aria-hidden="true"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 2v20" />
+                                        <path d="M4.93 4.93 19.07 19.07" />
+                                        <path d="M2 12h20" />
+                                        <path d="M4.93 19.07 19.07 4.93" />
                                     </svg>
                                     <span id="selectedCardFreezeLabel">FREEZE</span>
                                 </button>

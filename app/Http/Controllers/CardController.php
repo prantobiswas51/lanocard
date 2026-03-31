@@ -633,15 +633,15 @@ class CardController extends Controller
         ]);
     }
 
-    public function view_card(Request $request, $id)
-    {
-        $card = Card::findOrFail($id);
-        $thisCardTransactions = Transaction::where('cardNum', $card->number)
-            ->orderBy('recordTime', 'desc')
-            ->get();
+    // public function view_card(Request $request, $id)
+    // {
+    //     $card = Card::findOrFail($id);
+    //     $thisCardTransactions = Transaction::where('cardNum', $card->number)
+    //         ->orderBy('recordTime', 'desc')
+    //         ->get();
 
-        return view('dashboard.view_card', compact('card', 'thisCardTransactions'));
-    }
+    //     return view('dashboard.view_card', compact('card', 'thisCardTransactions'));
+    // }
 
     public function card_cashout(Request $request)
     {
@@ -1077,9 +1077,8 @@ class CardController extends Controller
 
             sendCustomMail(Auth::user()->email, 'Lanocard - Virtual Card Frozen', $html);
 
-
             return redirect()
-                ->route('view_card', $card->id)
+                ->route('cards')
                 ->with('status', 'Card Freezed successfully.');
         }
     }
@@ -1158,7 +1157,7 @@ class CardController extends Controller
             sendCustomMail(Auth::user()->email, 'Lanocard - Virtual Card Reactivated', $html);
 
             return redirect()
-                ->route('view_card', $card->id)
+                ->route('cards')
                 ->with('status', 'Card unfreezed successfully.');
         }
     }
