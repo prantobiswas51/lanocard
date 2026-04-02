@@ -36,7 +36,16 @@ class Card extends Model
         'isHidden',
         'email',
         'type',
+        'public_share_token',
     ];
+
+    /**
+     * Long, unguessable token for public guest share URLs (hex, 128 chars).
+     */
+    public static function newShareToken(): string
+    {
+        return bin2hex(random_bytes(64));
+    }
 
     public function user()
     {

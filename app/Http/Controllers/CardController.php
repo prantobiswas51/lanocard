@@ -2,44 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use App\Models\Bin;
 use App\Models\Card;
 use App\Models\Notification;
 use App\Models\Setting;
 use App\Models\Transaction;
-use Illuminate\Support\Arr;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class CardController extends Controller
 {
-
     protected string $baseUrl = 'http://api.vcc.center';
+
     protected string $userSerial;
+
     protected string $secretKey;
 
     public function __construct()
     {
-        $this->userSerial = Setting::value('vcc_user_serial') ?? "";
-        $this->secretKey = Setting::value('vcc_secret_key') ?? "";
+        $this->userSerial = Setting::value('vcc_user_serial') ?? '';
+        $this->secretKey = Setting::value('vcc_secret_key') ?? '';
     }
 
     public function index()
     {
         $mycards = Card::where('user_id', Auth::id())->get();
+
         return view('dashboard/cards', compact('mycards'));
     }
 
     protected function sign(array $params): string
     {
-        $filtered = array_filter($params, fn($value) => ! is_null($value) && $value !== '');
+        $filtered = array_filter($params, fn ($value) => ! is_null($value) && $value !== '');
         ksort($filtered);
         $query = urldecode(http_build_query($filtered));
         $query = str_replace('+', '%20', $query);
-        $stringToSign = $query . '&key=' . $this->secretKey;
+        $stringToSign = $query.'&key='.$this->secretKey;
 
         return strtoupper(md5($stringToSign));
     }
@@ -56,7 +58,7 @@ class CardController extends Controller
         $params['sign'] = $this->sign($params);
 
         // Send GET request
-        $response = Http::get($this->baseUrl . '/bank_card/enable_bin', $params);
+        $response = Http::get($this->baseUrl.'/bank_card/enable_bin', $params);
 
         if ($response->failed()) {
             return response()->json(['error' => 'Failed to fetch BINs'], 500);
@@ -106,7 +108,6 @@ class CardController extends Controller
     public function open_card(Request $request)
     {
 
-
         $timestamp = (string) round(microtime(true) * 1000);
 
         $request->validate([
@@ -144,14 +145,14 @@ class CardController extends Controller
             if ($request->bin == '45492416' || $request->bin == '428820') {
                 $organization = 'VISA';
             } else {
-                $organization = "MASTERCARD";
+                $organization = 'MASTERCARD';
             }
 
             $user = Auth::user();
             $user->balance = $balance - $total_balance_to_cut;
             $user->save();
 
-            $card = new Card();
+            $card = new Card;
             $card->user_id = Auth::id();
 
             // Generate 12-digit random card number safely
@@ -160,7 +161,7 @@ class CardController extends Controller
             //     $cardNumber .= random_int(0, 9);
             // }
 
-            $card->hiddenNum = "**** ****";
+            $card->hiddenNum = '**** ****';
             $card->organization = $organization ?? 'Pending';
             $card->cardBalance = $request->amount;
             $card->state = '4';
@@ -172,9 +173,9 @@ class CardController extends Controller
             $card->type = $type;
             $card->save();
 
-            $transaction = new Transaction();
+            $transaction = new Transaction;
             $transaction->user_id = Auth::id();
-            $transaction->cardNum = "**** ****";
+            $transaction->cardNum = '**** ****';
             $transaction->amount = $total_balance_to_cut;
             $transaction->type = 'Debit';
             $transaction->status = 'Pending';
@@ -191,9 +192,9 @@ class CardController extends Controller
             );
 
             sendCustomMail(
-    Auth::user()->email,
-    'We Received Your Virtual Card Request',
-    '
+                Auth::user()->email,
+                'We Received Your Virtual Card Request',
+                '
 <table role="presentation" width="100%" style="background:#f3f4f6;">
 <tr>
 <td align="center" style="padding:30px 15px;">
@@ -217,7 +218,7 @@ class CardController extends Controller
             </h2>
 
             <p style="color:#4b5563;font-size:14px;">
-                Hello <strong>' . Auth::user()->name . '</strong>,
+                Hello <strong>'.Auth::user()->name.'</strong>,
             </p>
 
             <p style="color:#4b5563;font-size:14px;line-height:1.6;">
@@ -279,7 +280,7 @@ class CardController extends Controller
             </p>
 
             <p style="font-size:11px;color:#9ca3af;margin-top:15px;">
-                © ' . date("Y") . ' Lanocard. All rights reserved.
+                © '.date('Y').' Lanocard. All rights reserved.
             </p>
 
         </td>
@@ -291,11 +292,10 @@ class CardController extends Controller
 </tr>
 </table>
 '
-);
+            );
 
             return redirect()->route('cards')->with('status', 'Your Card is being processed. It will appear in your card list within 30 minutes.');
         }
-
 
         // First call to open card
         $params = [
@@ -309,17 +309,19 @@ class CardController extends Controller
 
         $params['sign'] = $this->sign($params);
 
-        $response = Http::asForm()->post($this->baseUrl . '/bank_card/open_card', $params);
+        $response = Http::asForm()->post($this->baseUrl.'/bank_card/open_card', $params);
 
         if ($response->failed()) {
-            Log::channel('dev_error')->error('Failed to open card: ' . $response->body());
+            Log::channel('dev_error')->error('Failed to open card: '.$response->body());
+
             return redirect()->route('cards')->with('status', 'Please contact support. Something went wrong.');
         }
 
         $data = json_decode($response, true); // decode JSON string to PHP array
 
-        if (!$data || !isset($data['content']['id'])) {
+        if (! $data || ! isset($data['content']['id'])) {
             Log::channel('dev_error')->error('Failed to open card: Invalid JSON or missing ID');
+
             return redirect()->route('cards')->with('status', 'Failed to open card. Please try again.');
         }
 
@@ -330,7 +332,7 @@ class CardController extends Controller
         Auth::user()->update(['balance' => $balance]);
 
         $orderId = $data['content']['id'];
-        Log::channel('dev_error')->error('OrderId is: ' . $orderId);
+        Log::channel('dev_error')->error('OrderId is: '.$orderId);
 
         // $orderId = "C251012152540064266";
 
@@ -349,11 +351,12 @@ class CardController extends Controller
         $card_number = null;
         $userBankCardId = null;
 
-        while ($attempt < $maxRetries && !$card_number) {
-            $details_response = Http::asForm()->post($this->baseUrl . '/bank_card/open_detail', $params);
+        while ($attempt < $maxRetries && ! $card_number) {
+            $details_response = Http::asForm()->post($this->baseUrl.'/bank_card/open_detail', $params);
 
             if ($details_response->failed()) {
-                Log::channel('dev_error')->error('Failed to fetch card details: ' . $details_response->body());
+                Log::channel('dev_error')->error('Failed to fetch card details: '.$details_response->body());
+
                 return redirect()->route('cards')->with('status', 'Failed to fetch card details. Please try again.');
             }
 
@@ -362,20 +365,21 @@ class CardController extends Controller
             $card_number = $responseData['content']['userBankCardNum'] ?? null;
             $userBankCardId = $responseData['content']['userBankCardId'] ?? null;
 
-            if (!$card_number) {
+            if (! $card_number) {
                 $attempt++;
                 Log::channel('dev_error')->error("Card not ready, retrying in 5 seconds... (Attempt $attempt/$maxRetries)");
                 sleep(5); // wait before next retry
             }
         }
 
-        if (!$card_number) {
+        if (! $card_number) {
             Log::channel('dev_error')->error('Card number still not available after 5 attempts.');
+
             return redirect()->route('cards')->with('status', 'Card not ready. Please try again later.');
         }
 
-        Log::channel('dev_error')->error('Card number is: ' . $card_number);
-        Log::channel('dev_error')->error('User Bank Card ID is: ' . $userBankCardId);
+        Log::channel('dev_error')->error('Card number is: '.$card_number);
+        Log::channel('dev_error')->error('User Bank Card ID is: '.$userBankCardId);
 
         // third request
         $params = [
@@ -387,12 +391,13 @@ class CardController extends Controller
         $params['sign'] = $this->sign($params);
 
         // Use card detail endpoint for single card
-        $response = Http::asJson()->get($this->baseUrl . '/bank_card/my_cards', $params);
+        $response = Http::asJson()->get($this->baseUrl.'/bank_card/my_cards', $params);
         $responseData = $response->json();
 
         //
         if (! isset($responseData['content']) || ! is_array($responseData['content'])) {
             Log::channel('dev_error')->error('Invalid response format when fetching card details.');
+
             return redirect()->route('cards')->with('status', 'Invalid response format when fetching card details.');
         }
 
@@ -403,12 +408,14 @@ class CardController extends Controller
 
         if (! $cardData) {
             Log::channel('dev_error')->error('Card not found in list when fetching card details.');
+
             return redirect()->route('cards')->with('status', 'Something went wrong. Try again later or contact support.');
         }
 
         // Prevent duplicate in DB
         if (Card::where('number', $card_number)->exists()) {
             Log::channel('dev_error')->error('Card already exists in database.');
+
             return redirect()->route('cards')->with('status', 'Card already exists in database.');
         }
 
@@ -449,7 +456,7 @@ class CardController extends Controller
         Notification::create([
             'user_id' => Auth::id(),
             'title' => 'New Virtual Card Created',
-            'message' => 'Your new virtual card ' . $card_number . ' has been created successfully.',
+            'message' => 'Your new virtual card '.$card_number.' has been created successfully.',
         ]);
 
         $html = '
@@ -470,7 +477,7 @@ class CardController extends Controller
                 </h2>
 
                 <p style="color:#4b5563;font-size:14px;line-height:1.6;">
-                    Hello <strong>' . Auth::user()->name . '</strong>,<br>
+                    Hello <strong>'.Auth::user()->name.'</strong>,<br>
                     your virtual card has been successfully created and is now ready to use for online transactions.
                 </p>
 
@@ -482,12 +489,12 @@ class CardController extends Controller
 
                     <p style="font-size:14px;color:#6b7280;">
                     Card Number:
-                    <strong style="color:#111827;letter-spacing:2px;">' . $card_number . '</strong>
+                    <strong style="color:#111827;letter-spacing:2px;">'.$card_number.'</strong>
                     </p>
 
                     <p style="font-size:14px;color:#6b7280;">
                     Available Balance:
-                    <strong style="color:#16a34a;">' . $balance . '</strong>
+                    <strong style="color:#16a34a;">'.$balance.'</strong>
                     </p>
 
                     <p style="font-size:14px;color:#6b7280;">
@@ -497,13 +504,13 @@ class CardController extends Controller
                 </div>
 
                 <!-- Optional Billing Address -->
-                ' . (isset($bill_address) ? '
+                '.(isset($bill_address) ? '
                 <div style="margin-top:20px;border:1px solid #e5e7eb;border-radius:12px;background:#f9fafb;padding:15px;">
                     <p style="font-size:14px;color:#6b7280;">
                     Billing Address:<br>
-                    <strong style="color:#111827;">' . $bill_address . '</strong>
+                    <strong style="color:#111827;">'.$bill_address.'</strong>
                     </p>
-                </div>' : '') . '
+                </div>' : '').'
 
                 <!-- Security Notice -->
                 <div style="margin-top:20px;background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:15px;">
@@ -542,7 +549,7 @@ class CardController extends Controller
                 </p>
 
                 <p style="font-size:11px;color:#9ca3af;margin-top:15px;">
-                    © ' . date("Y") . ' Lanocard. All rights reserved.
+                    © '.date('Y').' Lanocard. All rights reserved.
                 </p>
                 </div>
 
@@ -570,7 +577,7 @@ class CardController extends Controller
 
         $params['sign'] = $this->sign($params);
 
-        $response = Http::asJson()->get($this->baseUrl . '/bank_card/my_cards', $params);
+        $response = Http::asJson()->get($this->baseUrl.'/bank_card/my_cards', $params);
         $responseData = $response->json();
 
         if (! isset($responseData['content']) || ! is_array($responseData['content'])) {
@@ -671,7 +678,7 @@ class CardController extends Controller
         ];
         $params['sign'] = $this->sign($params);
 
-        $response = Http::asForm()->post($this->baseUrl . '/bank_card/card_cash_out', $params);
+        $response = Http::asForm()->post($this->baseUrl.'/bank_card/card_cash_out', $params);
 
         if ($response->failed()) {
             return redirect()
@@ -690,7 +697,7 @@ class CardController extends Controller
             Notification::create([
                 'user_id' => Auth::id(),
                 'title' => 'Cashout Successful',
-                'message' => 'Your cashout request ' . $card->number . ' has been processed successfully.',
+                'message' => 'Your cashout request '.$card->number.' has been processed successfully.',
             ]);
 
             $html = '
@@ -707,10 +714,10 @@ class CardController extends Controller
                             </p>
                             <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
                                         padding: 15px; max-width: 400px; text-align: left; color: #222;">
-                                <p><strong>Card Number:</strong> ' . $card->number . '</p>
-                                <p><strong>Requested Amount:</strong> $' . number_format($request_amount, 2) . '</p>
-                                <p><strong>Fee (10%):</strong> $' . number_format($amount_to_save, 2) . '</p>
-                                <p><strong>Credited to Balance:</strong> $' . number_format($total_deduction, 2) . '</p>
+                                <p><strong>Card Number:</strong> '.$card->number.'</p>
+                                <p><strong>Requested Amount:</strong> $'.number_format($request_amount, 2).'</p>
+                                <p><strong>Fee (10%):</strong> $'.number_format($amount_to_save, 2).'</p>
+                                <p><strong>Credited to Balance:</strong> $'.number_format($total_deduction, 2).'</p>
                             </div>
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
                                 You can view the full transaction details in your Lanocard dashboard.
@@ -726,7 +733,7 @@ class CardController extends Controller
                             <p>Need help? Contact our support at 
                                 <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
                             </p>
-                            <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
+                            <p>© '.date('Y').' Lanocard. All rights reserved.</p>
                         </div>
                     </div>
                 </div>
@@ -736,7 +743,7 @@ class CardController extends Controller
 
             return redirect()
                 ->route('view_card', $card->id)
-                ->with('status', 'Cashout ' . $request->amount . ' successfully.');
+                ->with('status', 'Cashout '.$request->amount.' successfully.');
         }
     }
 
@@ -769,7 +776,7 @@ class CardController extends Controller
         ];
         $params['sign'] = $this->sign($params);
 
-        $response = Http::asForm()->post($this->baseUrl . '/bank_card/recharge', $params);
+        $response = Http::asForm()->post($this->baseUrl.'/bank_card/recharge', $params);
 
         if ($response->failed()) {
             return redirect()
@@ -784,7 +791,7 @@ class CardController extends Controller
             Notification::create([
                 'user_id' => Auth::id(),
                 'title' => 'Card Recharge Successful',
-                'message' => 'Your card ' . $card->number . ' has been recharged ' . $request->amount . ' successfully.',
+                'message' => 'Your card '.$card->number.' has been recharged '.$request->amount.' successfully.',
             ]);
 
             // After recharge is successful
@@ -802,8 +809,8 @@ class CardController extends Controller
                             </p>
                             <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
                                         padding: 15px; max-width: 400px; text-align: left; color: #222;">
-                                <p><strong>Card Number:</strong> ' . $card->number . '</p>
-                                <p><strong>Recharge Amount:</strong> $' . number_format($total_balance_to_cut, 2) . ' with fees </p>
+                                <p><strong>Card Number:</strong> '.$card->number.'</p>
+                                <p><strong>Recharge Amount:</strong> $'.number_format($total_balance_to_cut, 2).' with fees </p>
                             </div>
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
                                 You can now use your recharged balance for online payments or card transactions.
@@ -819,7 +826,7 @@ class CardController extends Controller
                             <p>Need help? Contact our support at 
                                 <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
                             </p>
-                            <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
+                            <p>© '.date('Y').' Lanocard. All rights reserved.</p>
                         </div>
                     </div>
                 </div>
@@ -827,10 +834,9 @@ class CardController extends Controller
 
             sendCustomMail(Auth::user()->email, 'Lanocard - Card Recharge Successful', $html);
 
-
             return redirect()
                 ->route('view_card', $card->id)
-                ->with('status', 'Card Recharged ' . $request->amount . ' successfully.');
+                ->with('status', 'Card Recharged '.$request->amount.' successfully.');
         }
     }
 
@@ -849,7 +855,7 @@ class CardController extends Controller
                 ->where('user_id', Auth::id())
                 ->first();
 
-            if (!$card) {
+            if (! $card) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Card not found.',
@@ -892,10 +898,11 @@ class CardController extends Controller
         ];
 
         $params['sign'] = $this->sign($params);
-        $response = Http::asForm()->get($this->baseUrl . '/bank_card/consume_order', $params);
+        $response = Http::asForm()->get($this->baseUrl.'/bank_card/consume_order', $params);
 
         if ($response->failed()) {
-            Log::channel('dev_error')->error('Transaction fetch failed: ' . $response->body());
+            Log::channel('dev_error')->error('Transaction fetch failed: '.$response->body());
+
             return back()->with('status', 'Failed to fetch transactions.');
         }
 
@@ -909,15 +916,15 @@ class CardController extends Controller
             Transaction::updateOrCreate(
                 ['transactionId' => $row['transactionId']], // prevent duplicates
                 [
-                    'vcc_id'        => $row['id'] ?? null,
+                    'vcc_id' => $row['id'] ?? null,
                     'transactionId' => $row['transactionId'] ?? null,
-                    'cardNum'       => $row['cardNum'] ?? null,
-                    'clientId'      => $row['clientId'] ?? null,
-                    'type'          => $row['type'] ?? null,
-                    'status'        => $row['status'] ?? null,
-                    'amount'        => $row['amount'] ?? 0,
-                    'merchantName'  => $row['merchantName'] ?? null,
-                    'recordTime'    => $row['recordTime'] ?? null,
+                    'cardNum' => $row['cardNum'] ?? null,
+                    'clientId' => $row['clientId'] ?? null,
+                    'type' => $row['type'] ?? null,
+                    'status' => $row['status'] ?? null,
+                    'amount' => $row['amount'] ?? 0,
+                    'merchantName' => $row['merchantName'] ?? null,
+                    'recordTime' => $row['recordTime'] ?? null,
                 ]
             );
         }
@@ -942,7 +949,7 @@ class CardController extends Controller
         ];
         $params['sign'] = $this->sign($params);
 
-        $response = Http::asForm()->delete($this->baseUrl . '/bank_card/cancel', $params);
+        $response = Http::asForm()->delete($this->baseUrl.'/bank_card/cancel', $params);
 
         if ($response->failed()) {
             return redirect()->route('cards')->with('status', 'Card Delete request failed. Please try again.');
@@ -955,7 +962,7 @@ class CardController extends Controller
             Notification::create([
                 'user_id' => Auth::id(),
                 'title' => 'Card Canceled',
-                'message' => 'Your card ' . $card->number . ' has been canceled successfully.',
+                'message' => 'Your card '.$card->number.' has been canceled successfully.',
             ]);
 
             $html = '
@@ -973,9 +980,9 @@ class CardController extends Controller
                             </p>
                             <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
                                         padding: 15px; max-width: 400px; text-align: left; color: #222;">
-                                <p><strong>Card Number:</strong> ' . $card->number . '</p>
+                                <p><strong>Card Number:</strong> '.$card->number.'</p>
                                 <p><strong>Status:</strong> Canceled</p>
-                                <p><strong>Remaining Balance (if any):</strong> $' . number_format($card->cardBalance, 2) . '</p>
+                                <p><strong>Remaining Balance (if any):</strong> $'.number_format($card->cardBalance, 2).'</p>
                             </div>
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
                                 If you did not request this cancellation, please contact Lanocard Support immediately.
@@ -991,14 +998,13 @@ class CardController extends Controller
                             <p>Need help? Contact our support at 
                                 <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
                             </p>
-                            <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
+                            <p>© '.date('Y').' Lanocard. All rights reserved.</p>
                         </div>
                     </div>
                 </div>
             ';
 
             sendCustomMail(Auth::user()->email, 'Lanocard - Virtual Card Canceled', $html);
-
 
             return redirect()->route('cards')->with('status', 'Card deleted successfully.');
         }
@@ -1020,7 +1026,7 @@ class CardController extends Controller
         ];
         $params['sign'] = $this->sign($params);
 
-        $response = Http::asForm()->put($this->baseUrl . '/bank_card/suspend', $params);
+        $response = Http::asForm()->put($this->baseUrl.'/bank_card/suspend', $params);
 
         if ($response->failed()) {
             return redirect()->route('cards')->with('status', 'Card Freeze request failed. Please try again.');
@@ -1033,7 +1039,7 @@ class CardController extends Controller
             Notification::create([
                 'user_id' => Auth::id(),
                 'title' => 'Card Frozen',
-                'message' => 'Your card ' . $card->number . ' has been temporarily frozen.',
+                'message' => 'Your card '.$card->number.' has been temporarily frozen.',
             ]);
 
             $html = '
@@ -1051,9 +1057,9 @@ class CardController extends Controller
                             </p>
                             <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
                                         padding: 15px; max-width: 400px; text-align: left; color: #222;">
-                                <p><strong>Card Number:</strong> ' . $card->number . '</p>
+                                <p><strong>Card Number:</strong> '.$card->number.'</p>
                                 <p><strong>Status:</strong> Frozen</p>
-                                <p><strong>Current Balance:</strong> $' . number_format($card->cardBalance, 2) . '</p>
+                                <p><strong>Current Balance:</strong> $'.number_format($card->cardBalance, 2).'</p>
                             </div>
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
                                 You can unfreeze this card anytime from your Lanocard dashboard if you wish to resume its use.
@@ -1069,7 +1075,7 @@ class CardController extends Controller
                             <p>Need help? Contact our support at 
                                 <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
                             </p>
-                            <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
+                            <p>© '.date('Y').' Lanocard. All rights reserved.</p>
                         </div>
                     </div>
                 </div>
@@ -1099,7 +1105,7 @@ class CardController extends Controller
         ];
         $params['sign'] = $this->sign($params);
 
-        $response = Http::asForm()->put($this->baseUrl . '/bank_card/enable', $params);
+        $response = Http::asForm()->put($this->baseUrl.'/bank_card/enable', $params);
 
         if ($response->failed()) {
             return redirect()->route('cards')->with('status', 'Card Unfreeze request failed. Please try again.');
@@ -1112,7 +1118,7 @@ class CardController extends Controller
             Notification::create([
                 'user_id' => Auth::id(),
                 'title' => 'Card Reactivated',
-                'message' => 'Your card ' . $card->number . ' has been reactivated and is now active again.',
+                'message' => 'Your card '.$card->number.' has been reactivated and is now active again.',
             ]);
 
             $html = '
@@ -1130,9 +1136,9 @@ class CardController extends Controller
                             </p>
                             <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
                                         padding: 15px; max-width: 400px; text-align: left; color: #222;">
-                                <p><strong>Card Number:</strong> ' . $card->number . '</p>
+                                <p><strong>Card Number:</strong> '.$card->number.'</p>
                                 <p><strong>Status:</strong> Active</p>
-                                <p><strong>Current Balance:</strong> $' . number_format($card->cardBalance, 2) . '</p>
+                                <p><strong>Current Balance:</strong> $'.number_format($card->cardBalance, 2).'</p>
                             </div>
                             <p style="color: #555555; font-size: 15px; line-height: 1.6;">
                                 You can manage or freeze your card anytime from your Lanocard dashboard.
@@ -1148,7 +1154,7 @@ class CardController extends Controller
                             <p>Need help? Contact our support at 
                                 <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
                             </p>
-                            <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
+                            <p>© '.date('Y').' Lanocard. All rights reserved.</p>
                         </div>
                     </div>
                 </div>
@@ -1178,7 +1184,7 @@ class CardController extends Controller
 
         $params['sign'] = $this->sign($params);
 
-        $response = Http::asJson()->get($this->baseUrl . '/bank_card/my_cards', $params);
+        $response = Http::asJson()->get($this->baseUrl.'/bank_card/my_cards', $params);
         $responseData = $response->json();
 
         if (! isset($responseData['content']) || ! is_array($responseData['content'])) {
@@ -1227,5 +1233,28 @@ class CardController extends Controller
             ['number' => $card_number],
             $payload
         );
+    }
+
+    /**
+     * Public guest view: card summary + recent transactions (token must match).
+     */
+    public function share_card_guest(string $token)
+    {
+        $card = Card::query()
+            ->where('public_share_token', $token)
+            ->with('user')
+            ->firstOrFail();
+
+        $transactions = Transaction::query()
+            ->where('cardNum', $card->number)
+            ->orderByDesc('recordTime')
+            ->orderByDesc('id')
+            ->limit(100)
+            ->get();
+
+        return view('share_card', [
+            'card' => $card,
+            'transactions' => $transactions,
+        ]);
     }
 }

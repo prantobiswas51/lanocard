@@ -1,14 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\KycController;
 use App\Http\Controllers\CardController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FundController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\MailerooController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\VerifyEmailController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,10 +32,12 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
+/** Guest share link (no auth) — one long token per card */
+Route::get('/share/card/{token}', [CardController::class, 'share_card_guest'])->name('share_card');
+
 Route::get('/check_mail', function () {
     return view('check_mail');
 })->name('check_mail');
-
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/email-check', [VerifyEmailController::class, 'verify'])->name('verify');
@@ -85,8 +85,7 @@ Route::middleware('auth')->group(function () {
 
     // Admin panel
     Route::get('/admin/cards/get/{id}', [CardController::class, 'get_data'])->name('get_data');
-    
 
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
