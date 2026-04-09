@@ -18,7 +18,20 @@
     $displayExpiry = $card->expiryDate ?? '—';
 @endphp
 
-<x-guest-layout>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Lanocard</title>
+</head>
+<body>
+
+    <div class="text-2xl text-center font-bold text-slate-900 pt-10 ">Gift Card</div>
+
     <div class="max-w-3xl mx-auto px-4 py-10 sm:py-14">
         <div class="mb-8 text-center space-y-2">
             <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600">Shared card</p>
@@ -48,6 +61,7 @@
                     <div>
                         <p class="text-white/55">Balance</p>
                         <p class="mt-1 text-sm font-semibold tabular-nums text-white">${{ number_format((float) ($card->cardBalance ?? 0), 2) }}</p>
+                        <div class="">Add reload button</div>
                     </div>
                     <div>
                         <p class="text-white/55">Expiry</p>
@@ -150,4 +164,6 @@
             {{ config('app.name', 'Lanocard') }}
         </p>
     </div>
-</x-guest-layout>
+</body>
+</html>
+
