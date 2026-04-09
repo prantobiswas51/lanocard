@@ -357,30 +357,46 @@
 
                             <div class="relative z-10 h-full px-3.5 py-3">
                                 <!-- Top -->
-                                <div class="flex items-start justify-between bg-red-500">
-                                    <p class="text-[9px] font-semibold uppercase tracking-[0.12em] text-white/75">Virtual Card</p>
+                                <div class="flex items-start justify-between ">
+                                    <p class="text-[9px] font-semibold uppercase tracking-[0.12em] text-white/75">
+                                        Virtual Card</p>
                                 </div>
 
                                 <!-- Balance -->
-                                <div class="mt-1.5 bg-blue-500 flex items-center justify-between">
+                                <div class="mt-1.5 flex items-center justify-between">
                                     <div class="">
-                                    <p class="text-[8px] uppercase tracking-[0.18em] text-white/60">Balance</p>
-                                    <div class="mt-1 flex items-center gap-1">
-                                        <span id="selectedCardBalance"
-                                            class="text-lg font-semibold tabular-nums text-white">$0.35</span>
-                                        <a id="selectedCardUpdateBalanceBtn" href="#"
-                                            class="hidden p-0.5 rounded-full hover:bg-white/10 transition" data-cardid=""
-                                            aria-disabled="true">
-                                            <svg id="selectedCardUpdateBalanceIcon" class="w-3.5 h-3.5" fill="none"
-                                                stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                            </svg>
-                                        </a>
+                                        <p class="text-[8px] uppercase tracking-[0.18em] text-white/60">Balance</p>
+                                        <div class="mt-1 flex items-center gap-1">
+                                            <span id="selectedCardBalance"
+                                                class="text-lg font-semibold tabular-nums text-white">$0.35</span>
+                                            <a id="selectedCardUpdateBalanceBtn" href="#"
+                                                class="hidden p-0.5 rounded-full hover:bg-white/10 transition"
+                                                data-cardid="" aria-disabled="true">
+                                                <svg id="selectedCardUpdateBalanceIcon" class="w-3.5 h-3.5" fill="none"
+                                                    stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                        <span id="selectedCardUpdateBalanceFeedback" class="hidden"></span>
                                     </div>
-                                    <span id="selectedCardUpdateBalanceFeedback" class="hidden"></span>
+                                    <div class="h-8 w-8">
+                                        <svg class="w-full h-full" viewBox="0 0 40 40" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                            <rect width="40" height="40" rx="8" fill="url(#lanocard-grad-header)">
+                                            </rect>
+                                            <path d="M10 10v20h16v-4H14V10H10z" fill="white"></path>
+                                            <circle cx="30" cy="10" r="2.5" fill="white" opacity="0.9"></circle>
+                                            <defs>
+                                                <linearGradient id="lanocard-grad-header" x1="0" y1="0" x2="40" y2="0"
+                                                    gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#1e3a5f"></stop>
+                                                    <stop offset="1" stop-color="#22c55e"></stop>
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
                                     </div>
-                                    <div class="">Logo</div>
                                 </div>
 
                                 <!-- Chip -->
@@ -400,26 +416,36 @@
 
                                 <!-- Bottom -->
                                 <div class="mt-2.5 flex items-end justify-between gap-2">
+
                                     <div class="grid grid-cols-3 gap-2 text-[8px] uppercase tracking-[0.11em]">
-                                        <div>
+
+                                        <!-- Card Holder -->
+                                        <div class="pr-4 border-r border-gray-100">
                                             <p class="text-white/55">Card Holder</p>
                                             <p id="selectedCardHolder"
-                                                class="mt-0.5 text-[9px] font-medium tracking-[0.09em] uppercase max-w-[5.5rem] truncate text-white/90">
+                                                class="mt-0.5 text-[10px] font-medium tracking-[0.09em] text-white/90 max-w-[6rem] truncate">
                                                 {{ Auth::user()->name }}
                                             </p>
                                         </div>
-                                        <div>
+
+                                        <!-- Expiry -->
+                                        <div class="border-r border-gray-100 ">
                                             <p class="text-white/55">Expiry</p>
                                             <p id="selectedCardExpiry"
-                                                class="mt-0.5 text-[9px] font-medium tracking-[0.08em] text-white/90">03/29
+                                                class="mt-0.5 text-[11px] font-medium tracking-[0.08em] text-white/90">
+                                                03/29
                                             </p>
                                         </div>
+
+                                        <!-- CVV -->
                                         <div>
                                             <p class="text-white/55">CVV</p>
                                             <p id="selectedCardCvv"
-                                                class="mt-0.5 text-[9px] font-medium tracking-[0.08em] text-white/90">703
+                                                class="mt-0.5 text-[11px] font-medium tracking-[0.08em] text-white/90">
+                                                703
                                             </p>
                                         </div>
+
                                     </div>
 
                                     <div class="shrink-0 flex opacity-90">
@@ -431,13 +457,11 @@
                         </div>
 
                         {{-- Frozen overlay lock icon (state = 2) --}}
-                        <div
-                            class="card-frozen-lock pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-200"
+                        <div class="card-frozen-lock pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-200"
                             style="z-index: 9999;">
                             <div class="rounded-full bg-slate-900/50 border border-white/20 backdrop-blur-sm px-3 py-2">
-                                <svg class="w-7 h-7 text-white/90" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" aria-hidden="true">
+                                <svg class="w-7 h-7 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <path d="M17 11V7a5 5 0 0 0-10 0v4" />
                                     <rect x="5" y="11" width="14" height="10" rx="2" ry="2" />
                                 </svg>
@@ -474,9 +498,9 @@
                                 <input id="selectedCardFreezeFormCardId" type="hidden" name="card_id" value="">
                                 <button id="selectedCardFreezeButton" type="submit"
                                     class="inline-flex items-center gap-1">
-                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="1.9" aria-hidden="true"
-                                        stroke-linecap="round" stroke-linejoin="round">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.9" aria-hidden="true" stroke-linecap="round"
+                                        stroke-linejoin="round">
                                         <path d="M12 2v20" />
                                         <path d="M4.93 4.93 19.07 19.07" />
                                         <path d="M2 12h20" />
