@@ -341,7 +341,7 @@
 
                     {{-- card design flag-8--}}
                     <div id="selectedCardBox"
-                        class="w-full min-h-[200px] max-w-full mx-auto relative overflow-hidden rounded-[20px] border border-white/10 shadow-md text-white bg-slate-900">
+                        class="w-full min-h-[230px] max-w-full mx-auto relative overflow-hidden rounded-[20px] border border-white/10 shadow-md text-white bg-slate-900">
 
                         <div id="selectedCardBoxContent" class="absolute inset-0 z-10">
                             <div id="selectedCardGradientLayer"
