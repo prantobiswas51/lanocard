@@ -125,8 +125,6 @@
     <section class="flex-1 w-full">
         <div class="max-w-6xl grid lg:grid-cols-[1.6fr,1.2fr] mx-auto px-4 sm:px-6 space-y-5">
 
-
-
             <div class=" gap-5 items-start scroll-smooth mt-6">
                 <!-- Left: search + filters + list -->
 
@@ -208,6 +206,7 @@
                             data-status="{{ $card->state }}" data-cardid="{{ $card->id }}"
                             data-totalconsume="{{ number_format($card->totalConsume, 2) }}"
                             data-organization="{{ $card->organization }}">
+                            
                             <div class="flex items-center justify-between gap-2">
                                 <div class="flex items-center gap-3">
                                     <div
@@ -215,29 +214,19 @@
                                         {{ ucfirst($card->type) }}
                                     </div>
                                     <div class="space-y-0.5 ">
-                                        <p class="text-xs font-semibold text-slate-900">{{ ucfirst($card->type) }} · {{
-                                            $card->organization }}</p>
+                                        <p class="text-xs font-semibold text-slate-900">{{ ucfirst($card->type) }} · {{ $card->organization }}</p>
                                         <p class="text-[11px] text-slate-500">{{ $card->hiddenNum }}</p>
                                     </div>
                                 </div>
                                 <div class="text-right text-sm flex items-center ">
 
                                     <div class="orga">
-                                        <div
-                                            class="h-12 w-16 flex items-center justify-center rounded-xl border border-slate-200
-                                             dark:border-slate-600 bg-gradient-to-br from-emerald-50 via-white to-emerald-50
-                                              dark:from-emerald-900/20 dark:via-slate-800 dark:to-emerald-900/20 shadow-sm">
-
-                                            @if ($card->organization == "VISA")
-                                            <img class="h-5 object-contain" src="{{ asset('images/visa-a.png') }}"
-                                                alt="Visa">
-                                            @elseif ($card->organization == "MASTERCARD")
-                                            <img class="h-6 object-contain" src="{{ asset('images/mastercard.png') }}"
-                                                alt="Mastercard">
-                                            @else
-                                            @endif
-
-                                        </div>
+                                        @if ($card->state != 4)
+                                    <button type="button"
+                                        class="btn-card-details inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-slate-700 hover:border-slate-400/80">
+                                        Details
+                                    </button>
+                                    @endif
                                     </div>
                                 </div>
                             </div>
@@ -254,7 +243,6 @@
                                         Pending
                                         @endif
                                     </span>
-                                    <span>Last top‑up · $(FLAG-4) (2d ago)</span>
                                 </div>
                                 <div class="flex items-center gap-1.5 text-[11px]">
 
@@ -274,12 +262,7 @@
                                     </div>
                                     @endif
 
-                                    @if ($card->state != 4)
-                                    <button type="button"
-                                        class="btn-card-details inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-slate-700 hover:border-slate-400/80">
-                                        Details
-                                    </button>
-                                    @endif
+                                    
 
 
                                 </div>
@@ -449,8 +432,21 @@
                                     </div>
 
                                     <div class="shrink-0 flex opacity-90">
-                                        <div class="w-6 h-6 bg-white/90 rounded-full"></div>
-                                        <div class="w-6 h-6 bg-white/70 rounded-full -ml-2"></div>
+                                        <div
+                                            class="h-12 w-16 flex items-center justify-center rounded-xl border border-slate-200
+                                             dark:border-slate-600 bg-gradient-to-br from-emerald-50 via-white to-emerald-50
+                                              dark:from-emerald-900/20 dark:via-slate-800 dark:to-emerald-900/20 shadow-sm">
+
+                                            @if ($card->organization == "VISA")
+                                            <img class="h-5 object-contain" src="{{ asset('images/visa-a.png') }}"
+                                                alt="Visa">
+                                            @elseif ($card->organization == "MASTERCARD")
+                                            <img class="h-6 object-contain" src="{{ asset('images/mastercard.png') }}"
+                                                alt="Mastercard">
+                                            @else
+                                            @endif
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1043,10 +1039,6 @@
             });
 
             cardRows.forEach((card) => {
-                card.addEventListener('click', () => {
-                    updateSelectedCardFromRow(card);
-                });
-
                 const detailsButton = card.querySelector('.btn-card-details');
                 detailsButton?.addEventListener('click', (event) => {
                     event.stopPropagation();

@@ -110,11 +110,7 @@ default => 'bg-slate-100 text-slate-700 border-slate-200',
                                     ${{ number_format((float) ($card->cardBalance ?? 0), 2) }}
                                 </p>
                             </div>
-                            <div>
-                                <p class="text-blue-100">Card Type</p>
-                                <p class="mt-1 font-semibold text-white">{{ ucfirst((string) ($card->type ?? '—')) }}
-                                </p>
-                            </div>
+                            
                         </div>
 
                         <p class="mt-4 text-right text-xl font-extrabold tracking-wide sm:mt-5 sm:text-2xl">{{
