@@ -26,6 +26,20 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script id="chatway" async="true" src="https://cdn.chatway.app/widget.js?id=ZiAPCuGL3IpX"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: { 50: '#ecfdf5', 100: '#d1fae5', 500: '#10b981', 600: '#059669' }
+          }
+        }
+      }
+    }
+    </script>
+   
 </head>
 
 <body class=" text-gray-900">
@@ -62,17 +76,17 @@
                             class="text-[#22c55e]">Card</span></span>
                 </div>
                 <nav class="flex flex-wrap items-center justify-center gap-4 text-sm text-slate-600">
-                    <a href="index.html" class="hover:text-emerald-600">Home</a>
-                    <a href="virtual-card.html" class="hover:text-emerald-600">Virtual Card</a>
-                    <a href="how-it-works.html" class="hover:text-emerald-600">How it works</a>
-                    <a href="security.html" class="hover:text-emerald-600">Security</a>
-                    <a href="pricing.html" class="hover:text-emerald-600">Pricing</a>
-                    <a href="faq.html" class="hover:text-emerald-600">FAQ</a>
-                    <a href="api-documentation.html" class="hover:text-emerald-600">API Docs</a>
-                    <a href="privacy-policy.html" class="hover:text-emerald-600">Privacy</a>
-                    <a href="terms-and-conditions.html" class="hover:text-emerald-600">Terms</a>
-                    <a href="login.html" class="hover:text-emerald-600">Log in</a>
-                    <a href="register.html" class="hover:text-emerald-600">Sign up</a>
+                    <a href="{{ route('home') }}" class="hover:text-emerald-600">Home</a>
+                    <a href="{{ route('virtual_card') }}" class="hover:text-emerald-600">Virtual Card</a>
+                    <a href="{{ route('how_it_works') }}" class="hover:text-emerald-600">How it works</a>
+                    <a href="{{ route('security') }}" class="hover:text-emerald-600">Security</a>
+                    <a href="{{ route('pricing') }}" class="hover:text-emerald-600">Pricing</a>
+                    <a href="{{ route('faq') }}" class="hover:text-emerald-600">FAQ</a>
+                    <a href="{{ route('api_documentation') }}" class="hover:text-emerald-600">API Docs</a>
+                    <a href="{{ route('privacy') }}" class="hover:text-emerald-600">Privacy</a>
+                    <a href="{{ route('service_agreement') }}" class="hover:text-emerald-600">Terms</a>
+                    <a href="{{ route('login') }}" class="hover:text-emerald-600">Log in</a>
+                    <a href="{{ route('register') }}" class="hover:text-emerald-600">Sign up</a>
                     <a href="https://www.trustpilot.com/review/virtualcardglobal.com" target="_blank"
                         rel="noopener noreferrer"
                         class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-slate-700 hover:border-emerald-300 hover:text-emerald-600 hover:bg-emerald-50 transition">

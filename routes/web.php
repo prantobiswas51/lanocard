@@ -12,9 +12,33 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::get('/virtual-card', function () {
+    return view('virtual_card');
+})->name('virtual_card');
+
+Route::get('/how-it-works', function () {
+    return view('how_it_works');
+})->name('how_it_works');
+
+Route::get('/security', function () {
+    return view('security');
+})->name('security');
+
 Route::get('/pricing', function () {
     return view('pricing');
 })->name('pricing');
+
+Route::get('/faq', function () {
+    return view('faq');
+})->name('faq');
+
+Route::get('/how-it-works', function () {
+    return view('how_it_works');
+})->name('how_it_works');
+
+Route::get('/api_documentation', function () {
+    return view('api_documentation');
+})->name('api_documentation');
 
 Route::get('/privacy', function () {
     return view('privacy');

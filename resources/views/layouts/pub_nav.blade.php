@@ -37,12 +37,12 @@
         </a>
         <nav class="hidden md:flex items-center gap-6 text-sm">
             <a href="{{ route('home') }}" class="text-emerald-600 font-medium">Home</a>
-            <a href="virtual-card.html" class="text-slate-600 hover:text-emerald-600">Virtual Card</a>
-            <a href="how-it-works.html" class="text-slate-600 hover:text-emerald-600">How it works</a>
-            <a href="security.html" class="text-slate-600 hover:text-emerald-600">Security</a>
+            <a href="{{ route('virtual_card') }}" class="text-slate-600 hover:text-emerald-600">Virtual Card</a>
+            <a href="{{ route('how_it_works') }}" class="text-slate-600 hover:text-emerald-600">How it works</a>
+            <a href="{{ route('security') }}" class="text-slate-600 hover:text-emerald-600">Security</a>
             <a href="{{ route('pricing') }}" class="text-slate-600 hover:text-emerald-600">Pricing</a>
             <a href="{{ route('faq') }}" class="text-slate-600 hover:text-emerald-600">FAQ</a>
-            <a href="api-documentation.html" class="text-slate-600 hover:text-emerald-600">API Docs</a>
+            <a href="{{ route('api_documentation') }}" class="text-slate-600 hover:text-emerald-600">API Docs</a>
         </nav>
         <div class="hidden md:flex items-center gap-2">
             @auth
@@ -82,12 +82,12 @@
         </div>
         <nav class="p-4 flex flex-col gap-1 text-sm">
             <a href="{{ route('home') }}" class="rounded-lg px-3 py-2.5 text-emerald-600 font-medium bg-emerald-50">Home</a>
-            <a href="virtual-card.html" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">Virtual Card</a>
-            <a href="how-it-works.html" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">How it works</a>
-            <a href="security.html" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">Security</a>
+            <a href="{{ route('virtual_card') }}" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">Virtual Card</a>
+            <a href="{{ route('how_it_works') }}" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">How it works</a>
+            <a href="{{ route('security') }}" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">Security</a>
             <a href="{{ route('pricing') }}" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">Pricing</a>
             <a href="{{ route('faq') }}" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">FAQ</a>
-            <a href="api-documentation.html" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">API Docs</a>
+            <a href="{{ route('api_documentation') }}" class="rounded-lg px-3 py-2.5 text-slate-700 hover:bg-slate-50">API Docs</a>
             <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-2">
                 @auth
                     <a href="{{ route('dashboard') }}"
