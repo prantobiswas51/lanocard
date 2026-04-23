@@ -25,7 +25,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script id="chatway" async="true" src="https://cdn.chatway.app/widget.js?id=ZiAPCuGL3IpX"></script>
+    <script id="chatway" async="true" src="https://cdn.chatway.app/widget.js?id=PaTdWCwk68r2"></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>

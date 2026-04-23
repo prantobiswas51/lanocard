@@ -19,7 +19,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <script id="chatway" async="true" src="https://cdn.chatway.app/widget.js?id=HRpsafNtjfJ2"></script>
+   <script id="chatway" async="true" src="https://cdn.chatway.app/widget.js?id=PaTdWCwk68r2"></script>
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])

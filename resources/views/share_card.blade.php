@@ -45,7 +45,8 @@ default => 'bg-slate-100 text-slate-700 border-slate-200',
         href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Roboto+Mono:wght@500;700&display=swap"
         rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script id="chatway" async="true" src="https://cdn.chatway.app/widget.js?id=HRpsafNtjfJ2"></script>
+
+    <script id="chatway" async="true" src="https://cdn.chatway.app/widget.js?id=PaTdWCwk68r2"></script>
     <style>
         body {
             font-family: "Manrope", "Segoe UI", Arial, sans-serif;
@@ -71,7 +72,7 @@ default => 'bg-slate-100 text-slate-700 border-slate-200',
     <main class="mx-auto w-full max-w-6xl flex-1 px-3 py-5 sm:px-4 sm:py-8">
         <div class="grid gap-6 lg:grid-cols-12">
 
-            <section class="lg:col-span-4">
+            <section class="lg:col-span-4 min-w-0">
                 <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
                     <div class="relative bg-gradient-to-br {{ $cardTheme }} p-4 text-white sm:p-5">
                         <div
@@ -83,7 +84,7 @@ default => 'bg-slate-100 text-slate-700 border-slate-200',
                         </div>
 
                         <p
-                            class="card-digits mt-2 whitespace-nowrap text-[0.98rem] font-semibold leading-tight tracking-[0.08em] sm:text-[1.12rem] sm:tracking-[0.1em] lg:text-[1.2rem]">
+                            class="card-digits mt-2 max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-[0.98rem] font-semibold leading-tight tracking-[0.08em] sm:text-[1.12rem] sm:tracking-[0.1em] lg:text-[1.2rem]">
                             {{ $displayNumber }}
                         </p>
 
@@ -110,11 +111,16 @@ default => 'bg-slate-100 text-slate-700 border-slate-200',
                                     ${{ number_format((float) ($card->cardBalance ?? 0), 2) }}
                                 </p>
                             </div>
-                            
+
                         </div>
 
-                        <p class="mt-4 text-right text-xl font-extrabold tracking-wide sm:mt-5 sm:text-2xl">{{
-                            $organization !== '' ? $organization : 'CARD' }}</p>
+                        <p class="mt-4 text-right text-xl font-extrabold tracking-wide sm:mt-5 sm:text-2xl">
+                            @if($organization == 'VISA')
+                                <img src="{{ asset('images/visa-a.png') }}" alt="Visa" class="inline-block h-6 w-auto sm:h-7">
+                            @else
+                                <img src="{{ asset('images/mastercard.png') }}" alt="Visa" class="inline-block h-6 w-auto sm:h-7">
+                            @endif
+                        </p>
                     </div>
 
                     <div class="space-y-2 p-4">
@@ -141,7 +147,7 @@ default => 'bg-slate-100 text-slate-700 border-slate-200',
                 </div>
             </section>
 
-            <section class="lg:col-span-8 space-y-4">
+            <section class="lg:col-span-8 min-w-0 space-y-4">
 
 
                 <div class="rounded-xl border border-blue-100 bg-blue-50 px-3 py-3 sm:px-4">
@@ -189,8 +195,7 @@ default => 'bg-slate-100 text-slate-700 border-slate-200',
                 </div>
 
 
-
-                <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                <div class="min-w-0 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
                     <div class="flex items-center justify-between border-b border-slate-200 px-3 py-3 sm:px-4">
                         <h2 class="text-sm font-semibold text-slate-800">Recent transactions</h2>
                         <span class="text-xs text-slate-500">{{ $transactions->count() }} shown</span>
@@ -201,11 +206,11 @@ default => 'bg-slate-100 text-slate-700 border-slate-200',
                         No transactions recorded for this card yet.
                     </div>
                     @else
-                    <div class="overflow-x-auto">
-                        <table class="min-w-[720px] text-left text-xs sm:min-w-full sm:text-sm">
+                    <div class="max-w-full overflow-x-auto overscroll-x-contain">
+                        <table class="min-w-[720px] w-full text-left text-xs sm:text-sm">
                             <thead class="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-500">
                                 <tr>
-                                    <th class="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">Date</th>
+                                    <th class="px-3 py-2.5 font-semibold sm:px-4 sm:py-3 whitespace-nowrap">Date</th>
                                     <th class="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">Merchant</th>
                                     <th class="px-3 py-2.5 font-semibold sm:px-4 sm:py-3">Type</th>
                                     <th class="px-3 py-2.5 font-semibold sm:px-4 sm:py-3 text-right">Amount</th>
@@ -239,9 +244,11 @@ default => 'bg-slate-100 text-slate-700 border-slate-200',
                                 @endphp
                                 <tr>
                                     <td class="px-3 py-2.5 sm:px-4 sm:py-3 whitespace-nowrap">{{ $dateStr }}</td>
-                                    <td class="px-3 py-2.5 sm:px-4 sm:py-3">{{ $tx->merchantName ?? '—' }}</td>
-                                    <td class="px-3 py-2.5 sm:px-4 sm:py-3">{{ $tx->type ?? '—' }}</td>
-                                    <td class="px-3 py-2.5 sm:px-4 sm:py-3 text-right card-digits">${{
+                                    <td class="px-3 py-2.5 sm:px-4 sm:py-3 max-w-[8rem] truncate"
+                                        title="{{ $tx->merchantName ?? '' }}">{{ $tx->merchantName ?? '—' }}</td>
+                                    <td class="px-3 py-2.5 sm:px-4 sm:py-3 whitespace-nowrap">{{ $tx->type ?? '—' }}
+                                    </td>
+                                    <td class="px-3 py-2.5 sm:px-4 sm:py-3 text-right card-digits whitespace-nowrap">${{
                                         number_format(abs($amount), 2) }}</td>
                                     <td class="px-3 py-2.5 sm:px-4 sm:py-3">
                                         <span class="rounded-full px-2 py-1 text-xs font-medium {{ $txStatusClass }}">{{
@@ -254,6 +261,8 @@ default => 'bg-slate-100 text-slate-700 border-slate-200',
                     </div>
                     @endif
                 </div>
+
+            
             </section>
         </div>
     </main>
