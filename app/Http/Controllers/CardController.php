@@ -596,7 +596,7 @@ class CardController extends Controller
         }
 
         $payload = [
-            'user_id' => Auth::id(),
+            'user_id' => $card->user_id,
             'number' => Arr::get($cardData, 'number', $card_number),
             'expiryDate' => Arr::get($cardData, 'expiryDate'),
             'cvv' => Arr::get($cardData, 'cvv'),
@@ -623,6 +623,85 @@ class CardController extends Controller
         ];
 
         // 🧩 Update if exists, otherwise create new
+        $updatedCard = Card::updateOrCreate(
+            ['number' => $card_number],
+            $payload
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Card updated successfully.',
+            'card' => [
+                'id' => $card->id,
+                'cardBalance' => number_format((float) $updatedCard->cardBalance, 2, '.', ''),
+                'state' => (int) $updatedCard->state,
+                'totalConsume' => number_format((float) ($updatedCard->totalConsume ?? 0), 2, '.', ''),
+            ],
+        ]);
+    }
+
+    public function update_balance_guest(string $token)
+    {
+        $card = Card::query()
+            ->where('public_share_token', $token)
+            ->firstOrFail();
+
+        $timestamp = round(microtime(true) * 1000);
+        $card_number = $card->number;
+
+        $params = [
+            'userSerial' => $this->userSerial,
+            'timeStamp' => $timestamp,
+            'userBankNum' => $card_number,
+        ];
+
+        $params['sign'] = $this->sign($params);
+
+        $response = Http::asJson()->get($this->baseUrl.'/bank_card/my_cards', $params);
+        $responseData = $response->json();
+
+        if (! isset($responseData['content']) || ! is_array($responseData['content'])) {
+            return response()->json(['success' => false, 'status' => 'Invalid response format'], 400);
+        }
+
+        $cardData = collect($responseData['content'])->first(function ($item) use ($card_number) {
+            return $item['number'] === $card_number || $item['hiddenNum'] === substr($card_number, -5);
+        });
+
+        if (! $cardData) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Card has been canceled for multiple failed transactions. For more info, contact support.',
+            ], 404);
+        }
+
+        $payload = [
+            'user_id' => $card->user_id,
+            'number' => Arr::get($cardData, 'number', $card_number),
+            'expiryDate' => Arr::get($cardData, 'expiryDate'),
+            'cvv' => Arr::get($cardData, 'cvv'),
+            'vcc_id' => Arr::get($cardData, 'id'),
+            'bin' => Arr::get($cardData, 'bin'),
+            'binId' => Arr::get($cardData, 'binId'),
+            'organization' => Arr::get($cardData, 'organization'),
+            'state' => Arr::get($cardData, 'state', 'Active'),
+            'remark' => Arr::get($cardData, 'remark'),
+            'createTime' => Arr::get($cardData, 'createTime') ? Carbon::parse($cardData['createTime']) : null,
+            'modifyTime' => Arr::get($cardData, 'modifyTime') ? Carbon::parse($cardData['modifyTime']) : null,
+            'cardBalance' => is_numeric(Arr::get($cardData, 'cardBalance')) ? (float) $cardData['cardBalance'] : 0,
+            'adapterSign' => Arr::get($cardData, 'adapterSign'),
+            'totalConsume' => is_numeric(Arr::get($cardData, 'totalConsume')) ? (float) $cardData['totalConsume'] : null,
+            'totalRefund' => is_numeric(Arr::get($cardData, 'totalRefund')) ? (float) $cardData['totalRefund'] : null,
+            'totalRecharge' => is_numeric(Arr::get($cardData, 'totalRecharge')) ? (float) $cardData['totalRecharge'] : null,
+            'totalCashOut' => is_numeric(Arr::get($cardData, 'totalCashOut')) ? (float) $cardData['totalCashOut'] : null,
+            'bankCardId' => Arr::get($cardData, 'bankCardId') ?: Arr::get($cardData, 'binId') ?: Arr::get($cardData, 'id'),
+            'hiddenNum' => Arr::get($cardData, 'hiddenNum'),
+            'hiddenCvv' => Arr::get($cardData, 'hiddenCvv'),
+            'hiddenDate' => Arr::get($cardData, 'hiddenDate'),
+            'isHidden' => Arr::get($cardData, 'isHidden') ? true : false,
+            'email' => Arr::get($cardData, 'email'),
+        ];
+
         $updatedCard = Card::updateOrCreate(
             ['number' => $card_number],
             $payload

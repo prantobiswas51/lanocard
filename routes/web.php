@@ -58,6 +58,7 @@ Route::get('/contact', function () {
 
 /** Guest share link (no auth) — one long token per card */
 Route::get('/share/card/{token}', [CardController::class, 'share_card_guest'])->name('share_card');
+Route::get('/share/card/{token}/update-balance', [CardController::class, 'update_balance_guest'])->name('share_card_update_balance');
 
 Route::get('/check_mail', function () {
     return view('check_mail');

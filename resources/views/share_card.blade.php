@@ -278,7 +278,7 @@ default => 'bg-slate-100 text-slate-700 border-slate-200',
             var balanceValue = document.getElementById('balanceValue');
             if (!reloadBtn) return;
 
-            var updateBalanceUrl = @json(route('update_balance', ['id' => $card->id]));
+            var updateBalanceUrl = @json(route('share_card_update_balance', ['token' => $card->public_share_token]));
 
             reloadBtn.addEventListener('click', async function () {
                 if (reloadBtn.dataset.loading === '1') return;
