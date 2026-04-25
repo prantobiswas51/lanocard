@@ -44,7 +44,7 @@ class AuthenticatedSessionController extends Controller
             // Secure signed verification URL (Laravel default way)
             $verifyUrl = URL::temporarySignedRoute(
                 'verify',
-                Carbon::now()->addMinutes(10),
+                Carbon::now()->addHours(24),
                 [
                     'token' => $user->email_verification_token,
                     'email' => $user->email,

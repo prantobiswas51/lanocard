@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -44,7 +45,14 @@ class RegisteredUserController extends Controller
         $user->save();
 
         // Generate verification link
-        $verifyUrl = URL::to('/email-check?token=' . $user->email_verification_token . '&email=' . urlencode($user->email));
+        $verifyUrl = URL::temporarySignedRoute(
+            'verify',
+            Carbon::now()->addHours(24),
+            [
+                'token' => $user->email_verification_token,
+                'email' => $user->email,
+            ]
+        );
         // Email content
         $html =
             '

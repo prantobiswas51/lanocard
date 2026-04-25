@@ -67,6 +67,7 @@ Route::get('/check_mail', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/email-check', [VerifyEmailController::class, 'verify'])->name('verify');
+Route::get('/email-change-check', [VerifyEmailController::class, 'verifyPendingEmail'])->name('verify.pending-email');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

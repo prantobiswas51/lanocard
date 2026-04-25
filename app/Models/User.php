@@ -17,6 +17,9 @@ class User extends Authenticatable implements FilamentUser
     protected $fillable = [
         'name',
         'email',
+        'pending_email',
+        'pending_email_verification_token',
+        'pending_email_verification_sent_at',
         'phone',
         'country',
         'password',
@@ -41,6 +44,7 @@ class User extends Authenticatable implements FilamentUser
     {
         return [
             'email_verified_at' => 'datetime',
+            'pending_email_verification_sent_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
