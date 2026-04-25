@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FundController;
@@ -94,19 +95,21 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/getrate', [FundController::class, 'getTrxToUsdtRate']);
 
+    // account and api
+    Route::get('/account', [AccountController::class, 'index'])->name('account');
+    Route::patch('/account/profile', [AccountController::class, 'updateProfile'])->name('account.profile.update');
+    Route::patch('/account/password', [AccountController::class, 'updatePassword'])->name('account.password.update');
+    Route::post('/account/api-key/regenerate', [AccountController::class, 'regenerateApiKey'])->name('account.api.regenerate');
+
     // Notifications
     Route::get('/notifications', [DashboardController::class, 'notifications'])->name('notifications');
     Route::post('/notifications/mark-as-read/{id}', [DashboardController::class, 'mark_as_read'])->name('mark_as_read');
-
     Route::get('/fundings', [FundController::class, 'index'])->name('fundings');
     Route::post('/fundings/deposit', [FundController::class, 'check_deposit'])->name('check_deposit');
-
     Route::post('/fundings/manual/deposit', [FundController::class, 'manual_payment'])->name('manual_payment');
     Route::post('/fundings/bkash/deposit', [FundController::class, 'bkash_manual_deposit'])->name('bkash_manual_deposit');
-
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
-
-    Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
+    Route::get('/settings', [AccountController::class, 'index'])->name('settings');
 
     // Admin panel
     Route::get('/admin/cards/get/{id}', [CardController::class, 'get_data'])->name('get_data');

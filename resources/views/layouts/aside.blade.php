@@ -84,20 +84,13 @@
   </a>
 
 
-  <button id="navGetApi"
-    class="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200 transition">
-    <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-violet-100 text-violet-600">
-      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-      </svg>
-    </span>
-    Get API Access
-  </button>
 
-
-
-  <button id="navSettings"
-    class="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200 transition">
+  <a href="{{ route('account') }}"
+    @class([ 'w-full flex items-center gap-3 rounded-lg px-3 py-2 font-medium border transition' , 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-100 
+    dark:border-emerald-800'=>request()->routeIs('account'),
+    'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700
+    dark:hover:text-slate-200 border-transparent' => !request()->routeIs('account'),
+    ])>
     <span
       class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">
       <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
@@ -106,8 +99,9 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
       </svg>
     </span>
-    Account Settings
-  </button>
+    My Account & API
+  </a>
+
 </nav>
 
 <div
