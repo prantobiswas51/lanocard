@@ -191,108 +191,107 @@ class CardController extends Controller
             '
             );
 
-            sendCustomMail(
-                Auth::user()->email,
-                'We Received Your Virtual Card Request',
-                '
-<table role="presentation" width="100%" style="background:#f3f4f6;">
-<tr>
-<td align="center" style="padding:30px 15px;">
+            // New mail template
+            $html = '
+            <table role="presentation" width="100%" style="background:#f3f4f6;">
+            <tr>
+            <td align="center" style="padding:30px 15px;">
 
-<table width="600" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.05);font-family:Arial,sans-serif;">
+            <table width="600" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.05);font-family:Arial,sans-serif;">
 
-    <!-- Header -->
-    <tr>
-        <td style="background:#4f46e5;text-align:center;padding:25px;">
-            <h1 style="color:#ffffff;margin:0;font-size:22px;">Lanocard</h1>
-            <p style="color:#c7d2fe;font-size:13px;margin-top:5px;">Secure Virtual Card Service</p>
-        </td>
-    </tr>
-
-    <!-- Body -->
-    <tr>
-        <td style="padding:30px;">
-
-            <h2 style="color:#1f2937;margin-bottom:10px;">
-                Card Creation Request Received 💳
-            </h2>
-
-            <p style="color:#4b5563;font-size:14px;">
-                Hello <strong>'.Auth::user()->name.'</strong>,
-            </p>
-
-            <p style="color:#4b5563;font-size:14px;line-height:1.6;">
-                We have successfully received your request to create a new virtual card on your Lanocard account.
-                Our system is currently processing your request.
-            </p>
-
-            <!-- Request Details -->
-            <table width="100%" style="margin-top:20px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:15px;">
+                <!-- Header -->
                 <tr>
-                    <td style="padding:10px;">
-                        <strong style="color:#374151;">Request Details</strong>
-
-                        <p style="font-size:14px;color:#6b7280;">
-                            Status:
-                            <strong style="color:#d97706;">Processing</strong>
-                        </p>
+                    <td style="background:#4f46e5;text-align:center;padding:25px;">
+                        <h1 style="color:#ffffff;margin:0;font-size:22px;">Lanocard</h1>
+                        <p style="color:#c7d2fe;font-size:13px;margin-top:5px;">Secure Virtual Card Service</p>
                     </td>
                 </tr>
+
+                <!-- Body -->
+                <tr>
+                    <td style="padding:30px;">
+
+                        <h2 style="color:#1f2937;margin-bottom:10px;">
+                            Card Creation Request Received 💳
+                        </h2>
+
+                        <p style="color:#4b5563;font-size:14px;">
+                            Hello <strong>'.Auth::user()->name.'</strong>,
+                        </p>
+
+                        <p style="color:#4b5563;font-size:14px;line-height:1.6;">
+                            We have successfully received your request to create a new virtual card on your Lanocard account.
+                            Our system is currently processing your request.
+                        </p>
+
+                        <!-- Request Details -->
+                        <table width="100%" style="margin-top:20px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:15px;">
+                            <tr>
+                                <td style="padding:10px;">
+                                    <strong style="color:#374151;">Request Details</strong>
+
+                                    <p style="font-size:14px;color:#6b7280;">
+                                        Status:
+                                        <strong style="color:#d97706;">Processing</strong>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Info Message -->
+                        <div style="margin-top:20px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:15px;">
+                            <p style="font-size:13px;color:#1d4ed8;margin:0;">
+                                Your virtual card is currently being generated. You will receive another notification once your card is successfully created.
+                            </p>
+                        </div>
+
+                        <!-- Button -->
+                        <div style="text-align:center;margin-top:30px;">
+                            <a href="https://lanocard.com/dashboard"
+                            style="background:#4f46e5;color:#ffffff;text-decoration:none;
+                                    padding:14px 28px;border-radius:8px;font-size:14px;font-weight:bold;display:inline-block;">
+                                View Dashboard
+                            </a>
+                        </div>
+
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td style="background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;padding:25px;">
+
+                        <h3 style="margin:0;color:#111827;">LanoCard</h3>
+
+                        <p style="font-size:13px;color:#6b7280;margin-top:5px;">
+                            Safer Virtual Cards Worldwide
+                        </p>
+
+                        <p style="font-size:13px;color:#4b5563;margin-top:15px;">
+                            275 New North Road, Islington<br>
+                            N1 7AA, London, United Kingdom
+                        </p>
+
+                        <p style="font-size:13px;color:#4b5563;">
+                            ✉️ hi@lanocard.com<br>
+                            🌐 lanocard.com
+                        </p>
+
+                        <p style="font-size:11px;color:#9ca3af;margin-top:15px;">
+                            © '.date('Y').' Lanocard. All rights reserved.
+                        </p>
+
+                    </td>
+                </tr>
+
             </table>
 
-            <!-- Info Message -->
-            <div style="margin-top:20px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:15px;">
-                <p style="font-size:13px;color:#1d4ed8;margin:0;">
-                    Your virtual card is currently being generated. You will receive another notification once your card is successfully created.
-                </p>
-            </div>
+            </td>
+            </tr>
+            </table>
+            ';
 
-            <!-- Button -->
-            <div style="text-align:center;margin-top:30px;">
-                <a href="https://lanocard.com/dashboard"
-                   style="background:#4f46e5;color:#ffffff;text-decoration:none;
-                          padding:14px 28px;border-radius:8px;font-size:14px;font-weight:bold;display:inline-block;">
-                    View Dashboard
-                </a>
-            </div>
-
-        </td>
-    </tr>
-
-    <!-- Footer -->
-    <tr>
-        <td style="background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;padding:25px;">
-
-            <h3 style="margin:0;color:#111827;">LanoCard</h3>
-
-            <p style="font-size:13px;color:#6b7280;margin-top:5px;">
-                Safer Virtual Cards Worldwide
-            </p>
-
-            <p style="font-size:13px;color:#4b5563;margin-top:15px;">
-                275 New North Road, Islington<br>
-                N1 7AA, London, United Kingdom
-            </p>
-
-            <p style="font-size:13px;color:#4b5563;">
-                ✉️ hi@lanocard.com<br>
-                🌐 lanocard.com
-            </p>
-
-            <p style="font-size:11px;color:#9ca3af;margin-top:15px;">
-                © '.date('Y').' Lanocard. All rights reserved.
-            </p>
-
-        </td>
-    </tr>
-
-</table>
-
-</td>
-</tr>
-</table>
-'
-            );
+            sendCustomMail(Auth::user()->email, 'We Received Your Virtual Card Request', $html);
 
             return redirect()->route('cards')->with('status', 'Your Card is being processed. It will appear in your card list within 30 minutes.');
         }
@@ -459,6 +458,7 @@ class CardController extends Controller
             'message' => 'Your new virtual card '.$card_number.' has been created successfully.',
         ]);
 
+        // new mail template
         $html = '
             <div style="font-family: Arial, sans-serif; background:#f3f4f6; padding:20px;">
             <div style="max-width:600px;margin:auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.05);">
@@ -555,7 +555,7 @@ class CardController extends Controller
 
             </div>
             </div>
-            ';
+        ';
 
         sendCustomMail(Auth::user()->email, 'New Virtual Card Created', $html);
 
@@ -779,43 +779,144 @@ class CardController extends Controller
                 'message' => 'Your cashout request '.$card->number.' has been processed successfully.',
             ]);
 
+            // new mail template
+
             $html = '
-                <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
-                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
-                                box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
-                        <div style="background-color: #4a90e2; color: #ffffff; padding: 20px; text-align: center;">
-                            <h1 style="margin: 0; font-size: 22px;">Card Cashout Successful</h1>
-                        </div>
-                        <div style="padding: 30px; text-align: center;">
-                            <h2 style="color: #333333;">Cashout Completed Successfully!</h2>
-                            <p style="color: #555555; font-size: 16px; line-height: 1.6;">
-                                Your recent cashout from your virtual card has been completed.
-                            </p>
-                            <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
-                                        padding: 15px; max-width: 400px; text-align: left; color: #222;">
-                                <p><strong>Card Number:</strong> '.$card->number.'</p>
-                                <p><strong>Requested Amount:</strong> $'.number_format($request_amount, 2).'</p>
-                                <p><strong>Fee (10%):</strong> $'.number_format($amount_to_save, 2).'</p>
-                                <p><strong>Credited to Balance:</strong> $'.number_format($total_deduction, 2).'</p>
-                            </div>
-                            <p style="color: #555555; font-size: 15px; line-height: 1.6;">
-                                You can view the full transaction details in your Lanocard dashboard.
-                            </p>
-                            <a href="https://lanocard.com/dashboard" 
-                            style="display: inline-block; background-color: #4a90e2; color: #ffffff;
-                                    padding: 12px 25px; border-radius: 6px; text-decoration: none;
-                                    font-weight: bold; margin-top: 15px;">
-                                View Transaction
-                            </a>
-                        </div>
-                        <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
-                            <p>Need help? Contact our support at 
-                                <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
-                            </p>
-                            <p>© '.date('Y').' Lanocard. All rights reserved.</p>
-                        </div>
-                    </div>
-                </div>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f3f4f6;">
+                    <tr>
+                        <td align="center" style="padding: 40px 20px;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600"
+                                style="background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden;">
+
+                                <!-- Header -->
+                                <tr>
+                                    <td style="background: linear-gradient(to right, #2563eb, #4f46e5); text-align: center; padding: 28px 20px;">
+                                        <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff;">Lanocard</h1>
+                                        <p style="margin: 6px 0 0; font-size: 13px; color: #bfdbfe;">Secure Virtual Card Service</p>
+                                    </td>
+                                </tr>
+
+                                <!-- Body -->
+                                <tr>
+                                    <td style="padding: 36px 32px;">
+                                        <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 600; color: #1f2937;">
+                                            Cashout Successful 🎉
+                                        </h2>
+                                        <p style="margin: 0; font-size: 14px; color: #6b7280; line-height: 1.6;">
+                                            Hello <strong style="color: #111827;">' . e(Auth::user()->name) . '</strong>,
+                                            your recent cashout from your virtual card has been completed successfully.
+                                        </p>
+
+                                        <!-- Transaction Details Box -->
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                                            style="margin-top: 24px; border: 1px solid #e5e7eb; border-radius: 12px; background-color: #f9fafb;">
+                                            <tr>
+                                                <td style="padding: 20px;">
+                                                    <p style="margin: 0 0 14px; font-size: 14px; font-weight: 600; color: #374151;">
+                                                        Transaction Details
+                                                    </p>
+                                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                        <tr>
+                                                            <td style="padding: 6px 0; font-size: 14px; color: #6b7280; border-bottom: 1px solid #e5e7eb;">
+                                                                Card Number
+                                                            </td>
+                                                            <td style="padding: 6px 0; font-size: 14px; font-weight: 600; color: #111827;
+                                                                    text-align: right; letter-spacing: 0.05em; border-bottom: 1px solid #e5e7eb;">
+                                                                ' . e($card->number) . '
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 6px 0; font-size: 14px; color: #6b7280; border-bottom: 1px solid #e5e7eb;">
+                                                                Requested Amount
+                                                            </td>
+                                                            <td style="padding: 6px 0; font-size: 14px; font-weight: 600; color: #111827;
+                                                                    text-align: right; border-bottom: 1px solid #e5e7eb;">
+                                                                $' . number_format($request_amount, 2) . '
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 6px 0; font-size: 14px; color: #6b7280; border-bottom: 1px solid #e5e7eb;">
+                                                                Fee (10%)
+                                                            </td>
+                                                            <td style="padding: 6px 0; font-size: 14px; font-weight: 600; color: #dc2626;
+                                                                    text-align: right; border-bottom: 1px solid #e5e7eb;">
+                                                                -$' . number_format($amount_to_save, 2) . '
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 10px 0 0; font-size: 14px; font-weight: 600; color: #374151;">
+                                                                Credited to Balance
+                                                            </td>
+                                                            <td style="padding: 10px 0 0; font-size: 16px; font-weight: 700; color: #16a34a;
+                                                                    text-align: right;">
+                                                                $' . number_format($total_deduction, 2) . '
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <!-- Security Notice -->
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                                            style="margin-top: 24px;">
+                                            <tr>
+                                                <td style="background-color: #fefce8; border: 1px solid #fde68a;
+                                                        border-radius: 8px; padding: 14px 16px;">
+                                                    <p style="margin: 0; font-size: 12px; color: #92400e; line-height: 1.6;">
+                                                        ⚠️ If you did not initiate this cashout, please contact our support team immediately.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <!-- CTA Button -->
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                                            style="margin-top: 32px;">
+                                            <tr>
+                                                <td align="center">
+                                                    <a href="https://lanocard.com/dashboard"
+                                                        style="display: inline-block; background-color: #2563eb; color: #ffffff;
+                                                            font-size: 14px; font-weight: 600; padding: 12px 32px;
+                                                            border-radius: 8px; text-decoration: none;
+                                                            box-shadow: 0 4px 6px rgba(37,99,235,0.3);">
+                                                        View Transaction
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- Footer -->
+                                <tr>
+                                    <td style="background-color: #f9fafb; border-top: 1px solid #e5e7eb; padding: 28px 24px; text-align: center;">
+                                        <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #1f2937;">LanoCard</h3>
+                                        <p style="margin: 4px 0 0; font-size: 13px; color: #9ca3af;">Safer Virtual Cards Worldwide</p>
+                                        <div style="margin-top: 14px; font-size: 13px; color: #6b7280; line-height: 1.8;">
+                                            <p style="margin: 0;">275 New North Road, Islington<br>N1 7AA, London, United Kingdom</p>
+                                            <p style="margin: 4px 0 0;">
+                                                ✉️ <a href="mailto:hi@lanocard.com" style="color: #2563eb; text-decoration: none;">hi@lanocard.com</a>
+                                            </p>
+                                            <p style="margin: 4px 0 0;">
+                                                🌐 <a href="https://lanocard.com" style="color: #2563eb; text-decoration: none;">lanocard.com</a>
+                                            </p>
+                                        </div>
+                                        <div style="margin-top: 14px; font-size: 12px; color: #9ca3af;">
+                                            <a href="https://lanocard.com/privacy" style="color: #9ca3af; text-decoration: none; margin-right: 8px;">Privacy Policy</a>
+                                            <span>|</span>
+                                            <a href="https://lanocard.com/terms" style="color: #9ca3af; text-decoration: none; margin-left: 8px;">Terms</a>
+                                        </div>
+                                        <p style="margin: 16px 0 0; font-size: 11px; color: #d1d5db;">
+                                            © ' . date("Y") . ' Lanocard. All rights reserved.
+                                        </p>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                </table>
             ';
 
             sendCustomMail(Auth::user()->email, 'Lanocard - Cashout Successful', $html);
@@ -1044,43 +1145,135 @@ class CardController extends Controller
                 'message' => 'Your card '.$card->number.' has been canceled successfully.',
             ]);
 
+            // new mail template
             $html = '
-                <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
-                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
-                                box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
-                        <div style="background-color: #d9534f; color: #ffffff; padding: 20px; text-align: center;">
-                            <h1 style="margin: 0; font-size: 22px;">Virtual Card Canceled</h1>
-                        </div>
-                        <div style="padding: 30px; text-align: center;">
-                            <h2 style="color: #333333;">Card Successfully Canceled</h2>
-                            <p style="color: #555555; font-size: 16px; line-height: 1.6;">
-                                This is to confirm that your virtual card has been <strong>successfully canceled</strong>.
-                                You will no longer be able to use it for any transactions.
-                            </p>
-                            <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
-                                        padding: 15px; max-width: 400px; text-align: left; color: #222;">
-                                <p><strong>Card Number:</strong> '.$card->number.'</p>
-                                <p><strong>Status:</strong> Canceled</p>
-                                <p><strong>Remaining Balance (if any):</strong> $'.number_format($card->cardBalance, 2).'</p>
-                            </div>
-                            <p style="color: #555555; font-size: 15px; line-height: 1.6;">
-                                If you did not request this cancellation, please contact Lanocard Support immediately.
-                            </p>
-                            <a href="https://lanocard.com/dashboard"
-                            style="display: inline-block; background-color: #4a90e2; color: #ffffff;
-                                    padding: 12px 25px; border-radius: 6px; text-decoration: none;
-                                    font-weight: bold; margin-top: 15px;">
-                                Go to Dashboard
-                            </a>
-                        </div>
-                        <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
-                            <p>Need help? Contact our support at 
-                                <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
-                            </p>
-                            <p>© '.date('Y').' Lanocard. All rights reserved.</p>
-                        </div>
-                    </div>
-                </div>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f3f4f6;">
+                    <tr>
+                        <td align="center" style="padding: 40px 20px;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600"
+                                style="background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden;">
+
+                                <!-- Header -->
+                                <tr>
+                                    <td style="background: linear-gradient(to right, #dc2626, #b91c1c); text-align: center; padding: 28px 20px;">
+                                        <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff;">Lanocard</h1>
+                                        <p style="margin: 6px 0 0; font-size: 13px; color: #fecaca;">Secure Virtual Card Service</p>
+                                    </td>
+                                </tr>
+
+                                <!-- Body -->
+                                <tr>
+                                    <td style="padding: 36px 32px;">
+                                        <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 600; color: #1f2937;">
+                                            Virtual Card Canceled ❌
+                                        </h2>
+                                        <p style="margin: 0; font-size: 14px; color: #6b7280; line-height: 1.6;">
+                                            Hello <strong style="color: #111827;">' . e(Auth::user()->name) . '</strong>,
+                                            this is to confirm that your virtual card has been <strong style="color: #111827;">successfully canceled</strong>.
+                                            You will no longer be able to use it for any transactions.
+                                        </p>
+
+                                        <!-- Card Details Box -->
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                                            style="margin-top: 24px; border: 1px solid #e5e7eb; border-radius: 12px; background-color: #f9fafb;">
+                                            <tr>
+                                                <td style="padding: 20px;">
+                                                    <p style="margin: 0 0 14px; font-size: 14px; font-weight: 600; color: #374151;">
+                                                        Card Details
+                                                    </p>
+                                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                        <tr>
+                                                            <td style="padding: 6px 0; font-size: 14px; color: #6b7280; border-bottom: 1px solid #e5e7eb;">
+                                                                Card Number
+                                                            </td>
+                                                            <td style="padding: 6px 0; font-size: 14px; font-weight: 600; color: #111827;
+                                                                    text-align: right; letter-spacing: 0.05em; border-bottom: 1px solid #e5e7eb;">
+                                                                ' . e($card->number) . '
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 6px 0; font-size: 14px; color: #6b7280; border-bottom: 1px solid #e5e7eb;">
+                                                                Status
+                                                            </td>
+                                                            <td style="padding: 6px 0; font-size: 14px; font-weight: 600; color: #dc2626;
+                                                                    text-align: right; border-bottom: 1px solid #e5e7eb;">
+                                                                Canceled
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 10px 0 0; font-size: 14px; color: #6b7280;">
+                                                                Remaining Balance
+                                                            </td>
+                                                            <td style="padding: 10px 0 0; font-size: 16px; font-weight: 700; color: #111827;
+                                                                    text-align: right;">
+                                                                $' . number_format($card->cardBalance, 2) . '
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <!-- Security Notice -->
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                                            style="margin-top: 24px;">
+                                            <tr>
+                                                <td style="background-color: #fef2f2; border: 1px solid #fecaca;
+                                                        border-radius: 8px; padding: 14px 16px;">
+                                                    <p style="margin: 0; font-size: 12px; color: #991b1b; line-height: 1.6;">
+                                                        ⚠️ If you did not request this cancellation, please contact our support team immediately.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <!-- CTA Button -->
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                                            style="margin-top: 32px;">
+                                            <tr>
+                                                <td align="center">
+                                                    <a href="https://lanocard.com/dashboard"
+                                                        style="display: inline-block; background-color: #2563eb; color: #ffffff;
+                                                            font-size: 14px; font-weight: 600; padding: 12px 32px;
+                                                            border-radius: 8px; text-decoration: none;
+                                                            box-shadow: 0 4px 6px rgba(37,99,235,0.3);">
+                                                        Go to Dashboard
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- Footer -->
+                                <tr>
+                                    <td style="background-color: #f9fafb; border-top: 1px solid #e5e7eb; padding: 28px 24px; text-align: center;">
+                                        <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #1f2937;">LanoCard</h3>
+                                        <p style="margin: 4px 0 0; font-size: 13px; color: #9ca3af;">Safer Virtual Cards Worldwide</p>
+                                        <div style="margin-top: 14px; font-size: 13px; color: #6b7280; line-height: 1.8;">
+                                            <p style="margin: 0;">275 New North Road, Islington<br>N1 7AA, London, United Kingdom</p>
+                                            <p style="margin: 4px 0 0;">
+                                                ✉️ <a href="mailto:hi@lanocard.com" style="color: #2563eb; text-decoration: none;">hi@lanocard.com</a>
+                                            </p>
+                                            <p style="margin: 4px 0 0;">
+                                                🌐 <a href="https://lanocard.com" style="color: #2563eb; text-decoration: none;">lanocard.com</a>
+                                            </p>
+                                        </div>
+                                        <div style="margin-top: 14px; font-size: 12px; color: #9ca3af;">
+                                            <a href="https://lanocard.com/privacy" style="color: #9ca3af; text-decoration: none; margin-right: 8px;">Privacy Policy</a>
+                                            <span>|</span>
+                                            <a href="https://lanocard.com/terms" style="color: #9ca3af; text-decoration: none; margin-left: 8px;">Terms</a>
+                                        </div>
+                                        <p style="margin: 16px 0 0; font-size: 11px; color: #d1d5db;">
+                                            © ' . date("Y") . ' Lanocard. All rights reserved.
+                                        </p>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                </table>
             ';
 
             sendCustomMail(Auth::user()->email, 'Lanocard - Virtual Card Canceled', $html);
@@ -1121,43 +1314,136 @@ class CardController extends Controller
                 'message' => 'Your card '.$card->number.' has been temporarily frozen.',
             ]);
 
+            // New mail template
+
             $html = '
-                <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
-                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
-                                box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
-                        <div style="background-color: #f0ad4e; color: #ffffff; padding: 20px; text-align: center;">
-                            <h1 style="margin: 0; font-size: 22px;">Virtual Card Frozen</h1>
-                        </div>
-                        <div style="padding: 30px; text-align: center;">
-                            <h2 style="color: #333333;">Your Card Has Been Temporarily Frozen</h2>
-                            <p style="color: #555555; font-size: 16px; line-height: 1.6;">
-                                Your virtual card has been <strong>temporarily frozen</strong> for security reasons.
-                                While frozen, this card cannot be used for any transactions until reactivated.
-                            </p>
-                            <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
-                                        padding: 15px; max-width: 400px; text-align: left; color: #222;">
-                                <p><strong>Card Number:</strong> '.$card->number.'</p>
-                                <p><strong>Status:</strong> Frozen</p>
-                                <p><strong>Current Balance:</strong> $'.number_format($card->cardBalance, 2).'</p>
-                            </div>
-                            <p style="color: #555555; font-size: 15px; line-height: 1.6;">
-                                You can unfreeze this card anytime from your Lanocard dashboard if you wish to resume its use.
-                            </p>
-                            <a href="https://lanocard.com/dashboard"
-                            style="display: inline-block; background-color: #4a90e2; color: #ffffff;
-                                    padding: 12px 25px; border-radius: 6px; text-decoration: none;
-                                    font-weight: bold; margin-top: 15px;">
-                                Manage My Card
-                            </a>
-                        </div>
-                        <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
-                            <p>Need help? Contact our support at 
-                                <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
-                            </p>
-                            <p>© '.date('Y').' Lanocard. All rights reserved.</p>
-                        </div>
-                    </div>
-                </div>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f3f4f6;">
+                <tr>
+                    <td align="center" style="padding: 40px 20px;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600"
+                            style="background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden;">
+
+                            <!-- Header -->
+                            <tr>
+                                <td style="background: linear-gradient(to right, #d97706, #b45309); text-align: center; padding: 28px 20px;">
+                                    <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff;">Lanocard</h1>
+                                    <p style="margin: 6px 0 0; font-size: 13px; color: #fde68a;">Secure Virtual Card Service</p>
+                                </td>
+                            </tr>
+
+                            <!-- Body -->
+                            <tr>
+                                <td style="padding: 36px 32px;">
+                                    <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 600; color: #1f2937;">
+                                        Your Card Has Been Frozen 🧊
+                                    </h2>
+                                    <p style="margin: 0; font-size: 14px; color: #6b7280; line-height: 1.6;">
+                                        Hello <strong style="color: #111827;">' . e(Auth::user()->name) . '</strong>,
+                                        your virtual card has been <strong style="color: #111827;">temporarily frozen</strong> for security reasons.
+                                        While frozen, this card cannot be used for any transactions until reactivated.
+                                    </p>
+
+                                    <!-- Card Details Box -->
+                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                                        style="margin-top: 24px; border: 1px solid #e5e7eb; border-radius: 12px; background-color: #f9fafb;">
+                                        <tr>
+                                            <td style="padding: 20px;">
+                                                <p style="margin: 0 0 14px; font-size: 14px; font-weight: 600; color: #374151;">
+                                                    Card Details
+                                                </p>
+                                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                    <tr>
+                                                        <td style="padding: 6px 0; font-size: 14px; color: #6b7280; border-bottom: 1px solid #e5e7eb;">
+                                                            Card Number
+                                                        </td>
+                                                        <td style="padding: 6px 0; font-size: 14px; font-weight: 600; color: #111827;
+                                                                text-align: right; letter-spacing: 0.05em; border-bottom: 1px solid #e5e7eb;">
+                                                            ' . e($card->number) . '
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 6px 0; font-size: 14px; color: #6b7280; border-bottom: 1px solid #e5e7eb;">
+                                                            Status
+                                                        </td>
+                                                        <td style="padding: 6px 0; font-size: 14px; font-weight: 600; color: #d97706;
+                                                                text-align: right; border-bottom: 1px solid #e5e7eb;">
+                                                            Frozen
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 10px 0 0; font-size: 14px; color: #6b7280;">
+                                                            Current Balance
+                                                        </td>
+                                                        <td style="padding: 10px 0 0; font-size: 16px; font-weight: 700; color: #111827;
+                                                                text-align: right;">
+                                                            $' . number_format($card->cardBalance, 2) . '
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <!-- Info Notice -->
+                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                                        style="margin-top: 24px;">
+                                        <tr>
+                                            <td style="background-color: #fffbeb; border: 1px solid #fde68a;
+                                                    border-radius: 8px; padding: 14px 16px;">
+                                                <p style="margin: 0; font-size: 12px; color: #92400e; line-height: 1.6;">
+                                                    ⚠️ You can unfreeze this card anytime from your Lanocard dashboard. If you did not request this action, please contact our support team immediately.
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <!-- CTA Button -->
+                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                                        style="margin-top: 32px;">
+                                        <tr>
+                                            <td align="center">
+                                                <a href="https://lanocard.com/dashboard"
+                                                    style="display: inline-block; background-color: #2563eb; color: #ffffff;
+                                                        font-size: 14px; font-weight: 600; padding: 12px 32px;
+                                                        border-radius: 8px; text-decoration: none;
+                                                        box-shadow: 0 4px 6px rgba(37,99,235,0.3);">
+                                                    Manage My Card
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <!-- Footer -->
+                            <tr>
+                                <td style="background-color: #f9fafb; border-top: 1px solid #e5e7eb; padding: 28px 24px; text-align: center;">
+                                    <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #1f2937;">LanoCard</h3>
+                                    <p style="margin: 4px 0 0; font-size: 13px; color: #9ca3af;">Safer Virtual Cards Worldwide</p>
+                                    <div style="margin-top: 14px; font-size: 13px; color: #6b7280; line-height: 1.8;">
+                                        <p style="margin: 0;">275 New North Road, Islington<br>N1 7AA, London, United Kingdom</p>
+                                        <p style="margin: 4px 0 0;">
+                                            ✉️ <a href="mailto:hi@lanocard.com" style="color: #2563eb; text-decoration: none;">hi@lanocard.com</a>
+                                        </p>
+                                        <p style="margin: 4px 0 0;">
+                                            🌐 <a href="https://lanocard.com" style="color: #2563eb; text-decoration: none;">lanocard.com</a>
+                                        </p>
+                                    </div>
+                                    <div style="margin-top: 14px; font-size: 12px; color: #9ca3af;">
+                                        <a href="https://lanocard.com/privacy" style="color: #9ca3af; text-decoration: none; margin-right: 8px;">Privacy Policy</a>
+                                        <span>|</span>
+                                        <a href="https://lanocard.com/terms" style="color: #9ca3af; text-decoration: none; margin-left: 8px;">Terms</a>
+                                    </div>
+                                    <p style="margin: 16px 0 0; font-size: 11px; color: #d1d5db;">
+                                        © ' . date("Y") . ' Lanocard. All rights reserved.
+                                    </p>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </td>
+                </tr>
+            </table>
             ';
 
             sendCustomMail(Auth::user()->email, 'Lanocard - Virtual Card Frozen', $html);
@@ -1200,43 +1486,137 @@ class CardController extends Controller
                 'message' => 'Your card '.$card->number.' has been reactivated and is now active again.',
             ]);
 
+            // New mail template
+
             $html = '
-                <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
-                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
-                                box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
-                        <div style="background-color: #5cb85c; color: #ffffff; padding: 20px; text-align: center;">
-                            <h1 style="margin: 0; font-size: 22px;">Virtual Card Reactivated</h1>
-                        </div>
-                        <div style="padding: 30px; text-align: center;">
-                            <h2 style="color: #333333;">Your Card Is Active Again</h2>
-                            <p style="color: #555555; font-size: 16px; line-height: 1.6;">
-                                Good news! Your virtual card has been <strong>successfully unfrozen</strong> and is now active again.
-                                You can continue using it for all your online transactions.
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f3f4f6;">
+    <tr>
+        <td align="center" style="padding: 40px 20px;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600"
+                style="background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden;">
+
+                <!-- Header -->
+                <tr>
+                    <td style="background: linear-gradient(to right, #16a34a, #15803d); text-align: center; padding: 28px 20px;">
+                        <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff;">Lanocard</h1>
+                        <p style="margin: 6px 0 0; font-size: 13px; color: #bbf7d0;">Secure Virtual Card Service</p>
+                    </td>
+                </tr>
+
+                <!-- Body -->
+                <tr>
+                    <td style="padding: 36px 32px;">
+                        <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 600; color: #1f2937;">
+                            Your Card Is Active Again ✅
+                        </h2>
+                        <p style="margin: 0; font-size: 14px; color: #6b7280; line-height: 1.6;">
+                            Hello <strong style="color: #111827;">' . e(Auth::user()->name) . '</strong>,
+                            great news! Your virtual card has been <strong style="color: #111827;">successfully unfrozen</strong>
+                            and is now active again. You can continue using it for all your online transactions.
+                        </p>
+
+                        <!-- Card Details Box -->
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                            style="margin-top: 24px; border: 1px solid #e5e7eb; border-radius: 12px; background-color: #f9fafb;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <p style="margin: 0 0 14px; font-size: 14px; font-weight: 600; color: #374151;">
+                                        Card Details
+                                    </p>
+                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                        <tr>
+                                            <td style="padding: 6px 0; font-size: 14px; color: #6b7280; border-bottom: 1px solid #e5e7eb;">
+                                                Card Number
+                                            </td>
+                                            <td style="padding: 6px 0; font-size: 14px; font-weight: 600; color: #111827;
+                                                       text-align: right; letter-spacing: 0.05em; border-bottom: 1px solid #e5e7eb;">
+                                                ' . e($card->number) . '
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 6px 0; font-size: 14px; color: #6b7280; border-bottom: 1px solid #e5e7eb;">
+                                                Status
+                                            </td>
+                                            <td style="padding: 6px 0; font-size: 14px; font-weight: 600; color: #16a34a;
+                                                       text-align: right; border-bottom: 1px solid #e5e7eb;">
+                                                Active
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 10px 0 0; font-size: 14px; color: #6b7280;">
+                                                Current Balance
+                                            </td>
+                                            <td style="padding: 10px 0 0; font-size: 16px; font-weight: 700; color: #111827;
+                                                       text-align: right;">
+                                                $' . number_format($card->cardBalance, 2) . '
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Info Notice -->
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                            style="margin-top: 24px;">
+                            <tr>
+                                <td style="background-color: #f0fdf4; border: 1px solid #bbf7d0;
+                                           border-radius: 8px; padding: 14px 16px;">
+                                    <p style="margin: 0; font-size: 12px; color: #166534; line-height: 1.6;">
+                                        ✅ You can manage, freeze, or cancel your card anytime from your Lanocard dashboard.
+                                        If you did not request this reactivation, please contact our support team immediately.
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- CTA Button -->
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                            style="margin-top: 32px;">
+                            <tr>
+                                <td align="center">
+                                    <a href="https://lanocard.com/dashboard"
+                                        style="display: inline-block; background-color: #2563eb; color: #ffffff;
+                                               font-size: 14px; font-weight: 600; padding: 12px 32px;
+                                               border-radius: 8px; text-decoration: none;
+                                               box-shadow: 0 4px 6px rgba(37,99,235,0.3);">
+                                        Manage My Card
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td style="background-color: #f9fafb; border-top: 1px solid #e5e7eb; padding: 28px 24px; text-align: center;">
+                        <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #1f2937;">LanoCard</h3>
+                        <p style="margin: 4px 0 0; font-size: 13px; color: #9ca3af;">Safer Virtual Cards Worldwide</p>
+                        <div style="margin-top: 14px; font-size: 13px; color: #6b7280; line-height: 1.8;">
+                            <p style="margin: 0;">275 New North Road, Islington<br>N1 7AA, London, United Kingdom</p>
+                            <p style="margin: 4px 0 0;">
+                                ✉️ <a href="mailto:hi@lanocard.com" style="color: #2563eb; text-decoration: none;">hi@lanocard.com</a>
                             </p>
-                            <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
-                                        padding: 15px; max-width: 400px; text-align: left; color: #222;">
-                                <p><strong>Card Number:</strong> '.$card->number.'</p>
-                                <p><strong>Status:</strong> Active</p>
-                                <p><strong>Current Balance:</strong> $'.number_format($card->cardBalance, 2).'</p>
-                            </div>
-                            <p style="color: #555555; font-size: 15px; line-height: 1.6;">
-                                You can manage or freeze your card anytime from your Lanocard dashboard.
+                            <p style="margin: 4px 0 0;">
+                                🌐 <a href="https://lanocard.com" style="color: #2563eb; text-decoration: none;">lanocard.com</a>
                             </p>
-                            <a href="https://lanocard.com/dashboard"
-                            style="display: inline-block; background-color: #4a90e2; color: #ffffff;
-                                    padding: 12px 25px; border-radius: 6px; text-decoration: none;
-                                    font-weight: bold; margin-top: 15px;">
-                                Manage My Card
-                            </a>
                         </div>
-                        <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
-                            <p>Need help? Contact our support at 
-                                <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
-                            </p>
-                            <p>© '.date('Y').' Lanocard. All rights reserved.</p>
+                        <div style="margin-top: 14px; font-size: 12px; color: #9ca3af;">
+                            <a href="https://lanocard.com/privacy" style="color: #9ca3af; text-decoration: none; margin-right: 8px;">Privacy Policy</a>
+                            <span>|</span>
+                            <a href="https://lanocard.com/terms" style="color: #9ca3af; text-decoration: none; margin-left: 8px;">Terms</a>
                         </div>
-                    </div>
-                </div>
+                        <p style="margin: 16px 0 0; font-size: 11px; color: #d1d5db;">
+                            © ' . date("Y") . ' Lanocard. All rights reserved.
+                        </p>
+                    </td>
+                </tr>
+
+            </table>
+        </td>
+    </tr>
+</table>
             ';
 
             sendCustomMail(Auth::user()->email, 'Lanocard - Virtual Card Reactivated', $html);

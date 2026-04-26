@@ -97,8 +97,11 @@ class CardsTable
                     ->action(function ($record) {
 
                         // Get card owner's email + card number
-                        $email = $record->email;
+                        $email = $record->user->email;
+                        $user_name = $record->user->name;
                         $card_number = $record->number;
+
+                        // dd($user_name, $email, $card_number);
 
                         \App\Models\Notification::create([
                             'user_id' => $record->user_id,
@@ -106,43 +109,75 @@ class CardsTable
                             'message' => "Congratulations! Your new virtual card ($card_number) has been created successfully.",
                         ]);
 
+                        // new mail template
                         $html = '
                                 <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
-                                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; 
-                                                box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
-                                        <div style="background-color: #4a90e2; color: #ffffff; padding: 20px; text-align: center;">
-                                            <h1 style="margin: 0; font-size: 22px;">New Virtual Card Created</h1>
+                                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden;">
+                                        
+                                        <!-- Header -->
+                                        <div style="background: linear-gradient(to right, #2563eb, #4f46e5); text-align: center; padding: 28px 20px;">
+                                            <h1 style="margin: 0; font-size: 24px; font-weight: bold; color: #ffffff;">Lanocard</h1>
+                                            <p style="margin: 6px 0 0; font-size: 13px; color: #bfdbfe;">Secure Virtual Card Service</p>
                                         </div>
-                                        <div style="padding: 30px; text-align: center;">
-                                            <h2 style="color: #333333;">Your Card Is Ready!</h2>
-                                            <p style="color: #555555; font-size: 16px; line-height: 1.6;">
-                                                Congratulations! Your new virtual card has been created successfully.
+
+                                        <!-- Body -->
+                                        <div style="padding: 36px 32px;">
+                                            <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 600; color: #1f2937;">Your Virtual Card is Ready 🎉</h2>
+                                            <p style="margin: 0; font-size: 14px; color: #6b7280; line-height: 1.6;">
+                                                Hello <strong style="color: #111827;">' . $user_name . '</strong>,
+                                                your virtual card has been successfully created and is now ready to use for online transactions.
                                             </p>
-                                            <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px; 
-                                                        padding: 15px; max-width: 400px; font-size: 18px; color: #222; font-weight: bold;">
-                                                Card Number: ' . $card_number . '
+
+                                            <!-- Card Info Box -->
+                                            <div style="margin-top: 24px; border: 1px solid #e5e7eb; border-radius: 12px; background-color: #f9fafb; padding: 20px;">
+                                                <p style="margin: 0 0 12px; font-size: 14px; font-weight: 600; color: #374151;">Card Information</p>
+                                                <p style="margin: 0; font-size: 14px; color: #6b7280;">
+                                                    Card Number:
+                                                    <span style="color: #111827; font-weight: 700; letter-spacing: 0.1em;">' . $card_number . '</span>
+                                                </p>
                                             </div>
-                                            <p style="color: #555555; font-size: 15px; line-height: 1.6;">
-                                                You can now use this card for secure online transactions directly through your Lanocard dashboard.
-                                            </p>
-                                            <a href="https://lanocard.com/cards" 
-                                            style="display: inline-block; background-color: #4a90e2; color: #ffffff; 
-                                                    padding: 12px 25px; border-radius: 6px; text-decoration: none; 
-                                                    font-weight: bold; margin-top: 15px;">
-                                                View My Cards
-                                            </a>
+
+                                            <!-- Security Notice -->
+                                            <div style="margin-top: 20px; background-color: #fefce8; border: 1px solid #fde68a; border-radius: 8px; padding: 14px 16px;">
+                                                <p style="margin: 0; font-size: 12px; color: #92400e; line-height: 1.5;">
+                                                    ⚠️ For security reasons, never share your card details with anyone.
+                                                    If you did not create this card, please contact our support team immediately.
+                                                </p>
+                                            </div>
+
+                                            <!-- CTA Button -->
+                                            <div style="text-align: center; margin-top: 32px;">
+                                                <a href="https://lanocard.com/cards"
+                                                style="display: inline-block; background-color: #2563eb; color: #ffffff; font-size: 14px;
+                                                        font-weight: 600; padding: 12px 28px; border-radius: 8px; text-decoration: none;">
+                                                    View Your Card
+                                                </a>
+                                            </div>
                                         </div>
-                                        <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
-                                            <p>Need help? Contact our support at 
-                                                <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
-                                            </p>
-                                            <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
+
+                                        <!-- Footer -->
+                                        <div style="background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center; padding: 28px 24px;">
+                                            <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #1f2937;">LanoCard</h3>
+                                            <p style="margin: 4px 0 0; font-size: 13px; color: #9ca3af;">Safer Virtual Cards Worldwide</p>
+                                            <div style="margin-top: 14px; font-size: 13px; color: #6b7280; line-height: 1.8;">
+                                                <p style="margin: 0;">275 New North Road, Islington<br>N1 7AA, London, United Kingdom</p>
+                                                <p style="margin: 4px 0 0;">✉️ <a href="mailto:hi@lanocard.com" style="color: #2563eb; text-decoration: none;">hi@lanocard.com</a></p>
+                                                <p style="margin: 4px 0 0;">🌐 <a href="https://lanocard.com" style="color: #2563eb; text-decoration: none;">lanocard.com</a></p>
+                                            </div>
+                                            <div style="margin-top: 14px; font-size: 12px; color: #9ca3af;">
+                                                <a href="https://lanocard.com/privacy" style="color: #9ca3af; text-decoration: none; margin-right: 8px;">Privacy Policy</a>
+                                                <span>|</span>
+                                                <a href="https://lanocard.com/terms" style="color: #9ca3af; text-decoration: none; margin-left: 8px;">Terms</a>
+                                            </div>
+                                            <p style="margin: 16px 0 0; font-size: 11px; color: #d1d5db;">© ' . date("Y") . ' Lanocard. All rights reserved.</p>
                                         </div>
+
                                     </div>
                                 </div>
-                            ';
+                        ';
 
-                        // Send email to card owner
+                        
+                            // Send email to card owner
                         sendCustomMail($email, 'New Virtual Card Created', $html);
 
                         Notification::make()

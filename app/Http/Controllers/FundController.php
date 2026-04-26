@@ -105,47 +105,138 @@ class FundController extends Controller
             'status' => 'PENDING',
         ]);
 
-        
+
+        // New mail template
 
         $html = '
-            <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
-                <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
-                            box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
-                    <div style="background-color: #f0ad4e; color: #ffffff; padding: 20px; text-align: center;">
-                        <h1 style="margin: 0; font-size: 22px;">Manual Payment Request Received</h1>
-                    </div>
-                    <div style="padding: 30px; text-align: center;">
-                        <h2 style="color: #333333;">We\'ve Received Your Payment Request</h2>
-                        <p style="color: #555555; font-size: 16px; line-height: 1.6;">
-                            Thank you for submitting your manual payment request. Our finance team has received your request 
-                            and it is currently <strong>pending verification</strong>.
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f3f4f6;">
+    <tr>
+        <td align="center" style="padding: 40px 20px;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600"
+                style="background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden;">
+
+                <!-- Header -->
+                <tr>
+                    <td style="background: linear-gradient(to right, #2563eb, #4f46e5); text-align: center; padding: 28px 20px;">
+                        <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff;">Lanocard</h1>
+                        <p style="margin: 6px 0 0; font-size: 13px; color: #bfdbfe;">Secure Virtual Card Service</p>
+                    </td>
+                </tr>
+
+                <!-- Body -->
+                <tr>
+                    <td style="padding: 36px 32px;">
+                        <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 600; color: #1f2937;">
+                            Payment Request Received 🕐
+                        </h2>
+                        <p style="margin: 0; font-size: 14px; color: #6b7280; line-height: 1.6;">
+                            Hello <strong style="color: #111827;">' . e(Auth::user()->name) . '</strong>,
+                            thank you for submitting your manual payment request. Our finance team has received it
+                            and it is currently <strong style="color: #111827;">pending verification</strong>.
                         </p>
-                        <div style="margin: 25px auto; background-color: #f1f3f5; border-radius: 8px;
-                                    padding: 15px; max-width: 400px; text-align: left; color: #222;">
-                            <p><strong>Requested Amount:</strong> $' . number_format($request->amount, 2) . '</p>
-                            <p><strong>Status:</strong> Pending Review</p>
-                            <p><strong>Date Submitted:</strong> ' . now()->format("F j, Y, g:i A") . '</p>
+
+                        <!-- Payment Details Box -->
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                            style="margin-top: 24px; border: 1px solid #e5e7eb; border-radius: 12px; background-color: #f9fafb;">
+                            <tr>
+                                <td style="padding: 20px;">
+                                    <p style="margin: 0 0 14px; font-size: 14px; font-weight: 600; color: #374151;">
+                                        Payment Details
+                                    </p>
+                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                        <tr>
+                                            <td style="padding: 6px 0; font-size: 14px; color: #6b7280; border-bottom: 1px solid #e5e7eb;">
+                                                Requested Amount
+                                            </td>
+                                            <td style="padding: 6px 0; font-size: 14px; font-weight: 600; color: #111827;
+                                                       text-align: right; border-bottom: 1px solid #e5e7eb;">
+                                                $' . number_format($request->amount, 2) . '
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 6px 0; font-size: 14px; color: #6b7280; border-bottom: 1px solid #e5e7eb;">
+                                                Status
+                                            </td>
+                                            <td style="padding: 6px 0; font-size: 14px; font-weight: 600; color: #d97706;
+                                                       text-align: right; border-bottom: 1px solid #e5e7eb;">
+                                                Pending Review
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 10px 0 0; font-size: 14px; color: #6b7280;">
+                                                Date Submitted
+                                            </td>
+                                            <td style="padding: 10px 0 0; font-size: 14px; font-weight: 600; color: #111827;
+                                                       text-align: right;">
+                                                ' . now()->format("F j, Y, g:i A") . '
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Info Notice -->
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                            style="margin-top: 24px;">
+                            <tr>
+                                <td style="background-color: #fffbeb; border: 1px solid #fde68a;
+                                           border-radius: 8px; padding: 14px 16px;">
+                                    <p style="margin: 0; font-size: 12px; color: #92400e; line-height: 1.6;">
+                                        🕐 You will receive another email once our team verifies and approves your payment.
+                                        If you have already made the transfer, please upload proof of payment or contact our support team.
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- CTA Button -->
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                            style="margin-top: 32px;">
+                            <tr>
+                                <td align="center">
+                                    <a href="https://lanocard.com/dashboard"
+                                        style="display: inline-block; background-color: #2563eb; color: #ffffff;
+                                               font-size: 14px; font-weight: 600; padding: 12px 32px;
+                                               border-radius: 8px; text-decoration: none;
+                                               box-shadow: 0 4px 6px rgba(37,99,235,0.3);">
+                                        View Payment Status
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td style="background-color: #f9fafb; border-top: 1px solid #e5e7eb; padding: 28px 24px; text-align: center;">
+                        <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #1f2937;">LanoCard</h3>
+                        <p style="margin: 4px 0 0; font-size: 13px; color: #9ca3af;">Safer Virtual Cards Worldwide</p>
+                        <div style="margin-top: 14px; font-size: 13px; color: #6b7280; line-height: 1.8;">
+                            <p style="margin: 0;">275 New North Road, Islington<br>N1 7AA, London, United Kingdom</p>
+                            <p style="margin: 4px 0 0;">
+                                ✉️ <a href="mailto:hi@lanocard.com" style="color: #2563eb; text-decoration: none;">hi@lanocard.com</a>
+                            </p>
+                            <p style="margin: 4px 0 0;">
+                                🌐 <a href="https://lanocard.com" style="color: #2563eb; text-decoration: none;">lanocard.com</a>
+                            </p>
                         </div>
-                        <p style="color: #555555; font-size: 15px; line-height: 1.6;">
-                            You will receive another email once our team verifies and approves your payment. 
-                            Please allow some time for processing.
+                        <div style="margin-top: 14px; font-size: 12px; color: #9ca3af;">
+                            <a href="https://lanocard.com/privacy" style="color: #9ca3af; text-decoration: none; margin-right: 8px;">Privacy Policy</a>
+                            <span>|</span>
+                            <a href="https://lanocard.com/terms" style="color: #9ca3af; text-decoration: none; margin-left: 8px;">Terms</a>
+                        </div>
+                        <p style="margin: 16px 0 0; font-size: 11px; color: #d1d5db;">
+                            © ' . date("Y") . ' Lanocard. All rights reserved.
                         </p>
-                        <a href="https://lanocard.com/dashboard"
-                        style="display: inline-block; background-color: #4a90e2; color: #ffffff;
-                                padding: 12px 25px; border-radius: 6px; text-decoration: none;
-                                font-weight: bold; margin-top: 15px;">
-                            View Payment Status
-                        </a>
-                    </div>
-                    <div style="background-color: #f1f3f5; padding: 15px; text-align: center; font-size: 13px; color: #777;">
-                        <p>If you have already made the transfer, please upload proof of payment or contact support.</p>
-                        <p>Need help? Email us at 
-                            <a href="mailto:support@lanocard.com" style="color: #4a90e2;">support@lanocard.com</a>
-                        </p>
-                        <p>© ' . date("Y") . ' Lanocard. All rights reserved.</p>
-                    </div>
-                </div>
-            </div>
+                    </td>
+                </tr>
+
+            </table>
+        </td>
+    </tr>
+</table>
         ';
 
         sendCustomMail(Auth::user()->email, 'Lanocard - Manual Payment Request Received', $html);

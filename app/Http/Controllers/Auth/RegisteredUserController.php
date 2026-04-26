@@ -53,106 +53,120 @@ class RegisteredUserController extends Controller
                 'email' => $user->email,
             ]
         );
+
+        // new mail template
         // Email content
         $html =
             '
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f3f4f6;">
                 <tr>
                     <td align="center" style="padding: 40px 20px;">
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" 
-                            style="background-color: #ffffff; border-radius: 12px; 
-                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600"
+                            style="background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden;">
 
-                            <!-- Header -->
+                            <!-- Header Image -->
                             <tr>
-                                <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                                    padding: 40px 30px; text-align: center;">
-                                    <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">
-                                        Lanocard Limited
-                                    </h1>
-                                    <p style="margin: 8px 0 0 0; color: #e0e7ff; font-size: 14px; font-weight: 400;">
-                                        Welcome to our platform, ' . e($user->name) . '
-                                    </p>
+                                <td>
+                                    <img src="https://i.postimg.cc/1Xv8rYj6/welcome.png" width="600"
+                                        style="display: block; width: 100%; height: 250px; object-fit: cover;" alt="Welcome to Lanocard">
                                 </td>
                             </tr>
-                            
-                            <!-- Content -->
+
+                            <!-- Body -->
                             <tr>
-                                <td style="padding: 40px 30px;">
-                                    <h2 style="margin: 0 0 20px 0; color: #1f2937; font-size: 24px; font-weight: 600;">
-                                        Activate Your Account
+                                <td style="padding: 36px 32px;">
+                                    <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 600; color: #1f2937;">
+                                        Welcome to Lanocard 🎉
                                     </h2>
-                                    
-                                    <p style="margin: 0 0 20px 0; color: #4b5563; font-size: 16px; line-height: 1.6;">
-                                        Thank you for registering with 
-                                        <strong style="color: #667eea;">Lanocard Limited</strong>! We\'re excited to have you on board.
+                                    <p style="margin: 0 0 8px; font-size: 14px; color: #6b7280; line-height: 1.6;">
+                                        Hello <strong style="color: #111827;">' . e($user->name) . '</strong>,
                                     </p>
-                                    
-                                    <p style="margin: 0 0 30px 0; color: #4b5563; font-size: 16px; line-height: 1.6;">
-                                        To complete your registration and start using your account, click the button below:
+                                    <p style="margin: 0; font-size: 14px; color: #6b7280; line-height: 1.6;">
+                                        Thank you for creating an account with <strong style="color: #111827;">Lanocard</strong>.
+                                        Before you can start creating and using virtual cards, please confirm your email address.
                                     </p>
-                                    
-                                    <!-- Activation Button -->
-                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+
+                                    <!-- Account Details Box -->
+                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                                        style="margin-top: 24px; border: 1px solid #e5e7eb; border-radius: 12px; background-color: #f9fafb;">
                                         <tr>
-                                            <td align="center" style="padding: 0 0 30px 0;">
-                                                <a href="' . e($verifyUrl) . '" 
-                                                    style="display: inline-block; padding: 16px 40px; 
-                                                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                                                    color: #ffffff; text-decoration: none; border-radius: 8px; 
-                                                    font-weight: 600; font-size: 16px; 
-                                                    box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3); 
-                                                    transition: all 0.3s ease;">
-                                                    Activate Account
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    
-                                    <!-- Alternative Link -->
-                                    <p style="margin: 0 0 30px 0; color: #6b7280; font-size: 14px; 
-                                        line-height: 1.6; text-align: center;">
-                                        Or copy and paste this link into your browser:<br>
-                                        <a href="' . e($verifyUrl) . '" 
-                                            style="color: #667eea; text-decoration: underline; word-break: break-all;">
-                                            ' . e($verifyUrl) . '
-                                        </a>
-                                    </p>
-                                    
-                                    <!-- Info Box -->
-                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                                        <tr>
-                                            <td style="background-color: #f0f9ff; border-left: 4px solid #667eea; 
-                                                padding: 20px; border-radius: 6px;">
-                                                <p style="margin: 0; color: #1e40af; font-size: 14px; line-height: 1.6;">
-                                                    <strong>⚠️ Important:</strong> This activation link will expire in 24 hours. 
-                                                    If you didn\'t create an account with us, you can safely ignore this email.
+                                            <td style="padding: 20px;">
+                                                <p style="margin: 0 0 12px; font-size: 14px; font-weight: 600; color: #374151;">
+                                                    Account Details
+                                                </p>
+                                                <p style="margin: 0 0 8px; font-size: 14px; color: #6b7280;">
+                                                    Email Address:
+                                                    <span style="color: #111827; font-weight: 500;">' . e($user->email) . '</span>
+                                                </p>
+                                                <p style="margin: 0; font-size: 14px; color: #6b7280;">
+                                                    Account Status:
+                                                    <span style="color: #d97706; font-weight: 600;">Pending Activation</span>
                                                 </p>
                                             </td>
                                         </tr>
                                     </table>
 
-                                </td>
-                            </tr>
-                            
-                            <!-- Footer -->
-                            <tr>
-                                <td style="background-color: #f9fafb; padding: 30px; text-align: center; 
-                                    border-top: 1px solid #e5e7eb;">
-                                    <p style="margin: 0 0 10px 0; color: #6b7280; font-size: 14px;">
-                                        Need help? Contact us at 
-                                        <a href="mailto:support@lanocard.com" 
-                                            style="color: #667eea; text-decoration: none;">
-                                            support@lanocard.com
+                                    <!-- Activation Button -->
+                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                                        style="margin-top: 32px;">
+                                        <tr>
+                                            <td align="center">
+                                                <a href="' . e($verifyUrl) . '"
+                                                    style="display: inline-block; background-color: #2563eb; color: #ffffff;
+                                                        font-size: 14px; font-weight: 600; padding: 12px 32px;
+                                                        border-radius: 8px; text-decoration: none;
+                                                        box-shadow: 0 4px 6px rgba(37,99,235,0.3);">
+                                                    Activate Your Account
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <!-- Fallback Link -->
+                                    <p style="margin: 24px 0 0; font-size: 12px; color: #9ca3af; line-height: 1.6; word-break: break-all;">
+                                        If the button above does not work, copy and paste this link into your browser:<br>
+                                        <a href="' . e($verifyUrl) . '" style="color: #2563eb; text-decoration: none;">
+                                            ' . e($verifyUrl) . '
                                         </a>
                                     </p>
 
-                                    <p style="margin: 0; color: #9ca3af; font-size: 12px;">
-                                        © ' . date("Y") . ' Lanocard Limited. All rights reserved.
-                                    </p>
+                                    <!-- Security Notice -->
+                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                                        style="margin-top: 24px;">
+                                        <tr>
+                                            <td style="background-color: #eff6ff; border: 1px solid #bfdbfe;
+                                                    border-radius: 8px; padding: 14px 16px;">
+                                                <p style="margin: 0; font-size: 12px; color: #1d4ed8; line-height: 1.6;">
+                                                    For security reasons, this activation link may expire. If you did not create this account,
+                                                    please ignore this email or contact our support team.
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
 
-                                    <p style="margin: 15px 0 0 0; color: #9ca3af; font-size: 12px;">
-                                        This is an automated email, please do not reply.
+                            <!-- Footer -->
+                            <tr>
+                                <td style="background-color: #f9fafb; border-top: 1px solid #e5e7eb; padding: 28px 24px; text-align: center;">
+                                    <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #1f2937;">LanoCard</h3>
+                                    <p style="margin: 4px 0 0; font-size: 13px; color: #9ca3af;">Safer Virtual Cards Worldwide</p>
+                                    <div style="margin-top: 14px; font-size: 13px; color: #6b7280; line-height: 1.8;">
+                                        <p style="margin: 0;">275 New North Road, Islington<br>N1 7AA, London, United Kingdom</p>
+                                        <p style="margin: 4px 0 0;">
+                                            ✉️ <a href="mailto:hi@lanocard.com" style="color: #2563eb; text-decoration: none;">hi@lanocard.com</a>
+                                        </p>
+                                        <p style="margin: 4px 0 0;">
+                                            🌐 <a href="https://lanocard.com" style="color: #2563eb; text-decoration: none;">lanocard.com</a>
+                                        </p>
+                                    </div>
+                                    <div style="margin-top: 14px; font-size: 12px; color: #9ca3af;">
+                                        <a href="https://lanocard.com/privacy" style="color: #9ca3af; text-decoration: none; margin-right: 8px;">Privacy Policy</a>
+                                        <span>|</span>
+                                        <a href="https://lanocard.com/terms" style="color: #9ca3af; text-decoration: none; margin-left: 8px;">Terms</a>
+                                    </div>
+                                    <p style="margin: 16px 0 0; font-size: 11px; color: #d1d5db;">
+                                        © ' . date("Y") . ' Lanocard. All rights reserved.
                                     </p>
                                 </td>
                             </tr>

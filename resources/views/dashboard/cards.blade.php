@@ -436,15 +436,8 @@
                                             class="h-12 w-16 flex items-center justify-center rounded-xl border border-slate-200
                                              dark:border-slate-600 bg-gradient-to-br from-emerald-50 via-white to-emerald-50
                                               dark:from-emerald-900/20 dark:via-slate-800 dark:to-emerald-900/20 shadow-sm">
-
-                                            @if ($card->organization == "VISA")
-                                            <img class="h-5 object-contain" src="{{ asset('images/visa-a.png') }}"
-                                                alt="Visa">
-                                            @elseif ($card->organization == "MASTERCARD")
-                                            <img class="h-6 object-contain" src="{{ asset('images/mastercard.png') }}"
-                                                alt="Mastercard">
-                                            @else
-                                            @endif
+                                            <img id="selectedCardBrandLogo" class="hidden object-contain"
+                                                src="" alt="Card brand">
 
                                         </div>
                                     </div>
@@ -560,6 +553,7 @@
             const selectedCardUpdateBalanceBtn = document.getElementById('selectedCardUpdateBalanceBtn');
             const selectedCardUpdateBalanceIcon = document.getElementById('selectedCardUpdateBalanceIcon');
             const selectedCardUpdateBalanceFeedback = document.getElementById('selectedCardUpdateBalanceFeedback');
+            const selectedCardBrandLogo = document.getElementById('selectedCardBrandLogo');
             const selectedCardFrozenLock = document.querySelector('#selectedCardBox .card-frozen-lock');
             const selectedCardFrozenBadge = document.querySelector('#selectedCardBox .card-frozen-badge');
             const selectedCardFreezeForm = document.getElementById('selectedCardFreezeForm');
@@ -593,6 +587,8 @@
             const getTransactionsRoute = @json(route('get_transactions'));
             const freezeCardRoute = @json(route('freeze_card'));
             const unfreezeCardRoute = @json(route('unfreeze_card'));
+            const visaLogoUrl = @json(asset('images/visa-a.png'));
+            const mastercardLogoUrl = @json(asset('images/mastercard.png'));
 
             let activeTypeFilter = 'all';
             let selectedCardId = '';
@@ -870,6 +866,27 @@
                 if (selectedHolder) selectedHolder.innerText = holder;
                 if (selectedSpent) selectedSpent.innerText = '$' + totalconsume;
                 if (selectedTitle) selectedTitle.innerText = type.charAt(0).toUpperCase() + type.slice(1) + ' Card';
+
+                if (selectedCardBrandLogo) {
+                    const org = String(organization || '').toUpperCase();
+
+                    if (org === 'VISA') {
+                        selectedCardBrandLogo.src = visaLogoUrl;
+                        selectedCardBrandLogo.alt = 'Visa';
+                        selectedCardBrandLogo.classList.remove('hidden', 'h-6');
+                        selectedCardBrandLogo.classList.add('h-5');
+                    } else if (org === 'MASTERCARD') {
+                        selectedCardBrandLogo.src = mastercardLogoUrl;
+                        selectedCardBrandLogo.alt = 'Mastercard';
+                        selectedCardBrandLogo.classList.remove('hidden', 'h-5');
+                        selectedCardBrandLogo.classList.add('h-6');
+                    } else {
+                        selectedCardBrandLogo.src = '';
+                        selectedCardBrandLogo.alt = 'Card brand';
+                        selectedCardBrandLogo.classList.add('hidden');
+                        selectedCardBrandLogo.classList.remove('h-5', 'h-6');
+                    }
+                }
 
                 applySelectedCardTheme(organization);
 

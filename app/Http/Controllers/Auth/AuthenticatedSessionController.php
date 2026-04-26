@@ -51,6 +51,9 @@ class AuthenticatedSessionController extends Controller
                 ]
             );
 
+
+            // new mail template
+
             $html = '
 <table role="presentation" width="100%" style="background:#f3f4f6;">
 <tr>

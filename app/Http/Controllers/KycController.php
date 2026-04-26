@@ -51,6 +51,8 @@ class KycController extends Controller
             ]
         );
 
+        // no need to update this
+
         $html = '
             <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
                 <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px;
