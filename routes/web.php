@@ -38,7 +38,7 @@ Route::get('/how-it-works', function () {
 })->name('how_it_works');
 
 Route::get('/api_documentation', function () {
-    return view('api_documentation');
+    return view('api_doc');
 })->name('api_documentation');
 
 Route::get('/privacy', function () {
