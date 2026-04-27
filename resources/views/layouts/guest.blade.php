@@ -42,18 +42,18 @@
    
 </head>
 
-<body class=" text-gray-900">
+<body class="min-h-screen flex flex-col text-gray-900">
 
     {{-- client design --}}
     @include('layouts.pub_nav')
 
 
-    <div class="bg-gray-100">
+    <main class="flex-1 bg-gray-100">
         {{ $slot }}
-    </div>
+    </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-200 bg-slate-50 py-10">
+    <footer class="mt-auto border-t border-slate-200 bg-slate-50 py-10">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div class="flex items-center gap-2 text-slate-800">
